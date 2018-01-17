@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.zxing.activity.CaptureActivity;
 import com.utils.CommonUtil;
+import com.wifi.WifiAdmin;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnTestScan = findViewById(R.id.btnTestScan);
         tvScanResult = findViewById(R.id.tvScanResult);
         btnTestScan.setOnClickListener(this);
+
+        WifiAdmin wifiAdmin = new WifiAdmin(this);
+        wifiAdmin.openWifi();
+        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
 
     }
 
