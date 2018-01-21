@@ -3,18 +3,17 @@ package com.grean.dustguest.presenter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.google.zxing.StartScanForResult;
-import com.google.zxing.activity.CaptureActivity;
-import com.grean.dustguest.MainActivity;
 import com.grean.dustguest.R;
-import com.utils.CommonUtil;
 
 /**
  * Created by weifeng on 2018/1/21.
@@ -23,14 +22,16 @@ import com.utils.CommonUtil;
 public class PopWindow extends PopupWindow implements View.OnClickListener{
     private View conentView;
     private Context mContext;
+    private PopWindowListener listener;
 
     private StartScanForResult startScanForResult;
-    public PopWindow(final Activity context,StartScanForResult startScanForResult){
+    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener){
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         conentView = inflater.inflate(R.layout.popup_window, null);
         this.mContext = context;
         this.startScanForResult = startScanForResult;
+        this.listener = listener;
         int h = context.getWindowManager().getDefaultDisplay().getHeight();
         int w = context.getWindowManager().getDefaultDisplay().getWidth();
         // 设置SelectPicPopupWindow的View
@@ -94,7 +95,14 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                 }
                 break;
             case R.id.tvInputID:
-
+                final EditText et = new EditText(mContext);
+                new AlertDialog.Builder(mContext).setTitle("请输入设备ID").setView(et)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                listener.OnInputIdComplete(et.getText().toString());
+                            }
+                        }).setNegativeButton("取消",null).show();
                 break;
             case R.id.tvLastId:
 

@@ -14,11 +14,12 @@ import android.widget.Toast;
 import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
 import com.grean.dustguest.presenter.PopWindow;
+import com.grean.dustguest.presenter.PopWindowListener;
 import com.utils.CommonUtil;
 import com.wifi.WifiAdmin;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,StartScanForResult{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,StartScanForResult,PopWindowListener{
     private static final String tag = "MainActivity";
     //打开扫描界面请求码
     private int REQUEST_CODE = 0x01;
@@ -62,9 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-
             case R.id.btnMoreFunction:
-                PopWindow popWindow = new PopWindow(this,this);
+                PopWindow popWindow = new PopWindow(this,this,this);
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             default:
@@ -82,5 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             Toast.makeText(this,"摄像头权限",Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void OnInputIdComplete(String string) {
+        tvState.setText(string);
     }
 }
