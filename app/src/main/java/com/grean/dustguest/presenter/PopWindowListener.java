@@ -6,4 +6,6 @@ package com.grean.dustguest.presenter;
 
 public interface PopWindowListener {
     void OnInputIdComplete(String string);
+    String[] getLastIdList();
+
 }

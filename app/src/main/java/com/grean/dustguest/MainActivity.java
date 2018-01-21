@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
+import com.grean.dustguest.model.LastDevicesInfo;
 import com.grean.dustguest.presenter.PopWindow;
 import com.grean.dustguest.presenter.PopWindowListener;
 import com.utils.CommonUtil;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int REQUEST_CODE = 0x01;
     //扫描成功返回码
     private int RESULT_OK = 0xA1;
+    private LastDevicesInfo lastDevicesInfo;
 
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
     private TextView tvScanResult,tvState;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
 
         findViewById(R.id.btnMoreFunction).setOnClickListener(this);
+        lastDevicesInfo = new LastDevicesInfo(this);
     }
 
     @Override
@@ -87,5 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnInputIdComplete(String string) {
         tvState.setText(string);
+    }
+
+    @Override
+    public String[] getLastIdList() {
+        return lastDevicesInfo.getLastDevicesList();
     }
 }

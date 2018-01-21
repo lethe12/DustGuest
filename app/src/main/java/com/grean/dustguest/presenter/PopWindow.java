@@ -105,7 +105,14 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                         }).setNegativeButton("取消",null).show();
                 break;
             case R.id.tvLastId:
-
+                AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle("请选择需要连接的设备").
+                        setSingleChoiceItems(listener.getLastIdList(), -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                listener.OnInputIdComplete(listener.getLastIdList()[which]);
+                                dialog.dismiss();
+                            }
+                        }).show();
                 break;
             case R.id.tvSearchData:
 
