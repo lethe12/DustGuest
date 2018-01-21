@@ -3,23 +3,34 @@ package com.grean.dustguest.presenter;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
+import com.google.zxing.StartScanForResult;
+import com.google.zxing.activity.CaptureActivity;
+import com.grean.dustguest.MainActivity;
 import com.grean.dustguest.R;
+import com.utils.CommonUtil;
 
 /**
  * Created by weifeng on 2018/1/21.
  */
 
-public class PopWindow extends PopupWindow {
+public class PopWindow extends PopupWindow implements View.OnClickListener{
     private View conentView;
-    public PopWindow(final Activity context){
+    private Context mContext;
+
+    private StartScanForResult startScanForResult;
+    public PopWindow(final Activity context,StartScanForResult startScanForResult){
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         conentView = inflater.inflate(R.layout.popup_window, null);
+        this.mContext = context;
+        this.startScanForResult = startScanForResult;
         int h = context.getWindowManager().getDefaultDisplay().getHeight();
         int w = context.getWindowManager().getDefaultDisplay().getWidth();
         // 设置SelectPicPopupWindow的View
@@ -41,31 +52,20 @@ public class PopWindow extends PopupWindow {
         // 设置SelectPicPopupWindow弹出窗体动画效果
         this.setAnimationStyle(R.style.AnimationPreview);
 
-        conentView.findViewById(R.id.about);
-        conentView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                //do something you need here
-                PopWindow.this.dismiss();
-            }
-        });
-        conentView.findViewById(R.id.ability_logout);
-        conentView.setOnClickListener(new View.OnClickListener() {
+        conentView.findViewById(R.id.tvScanId).setOnClickListener(this);
+        conentView.findViewById(R.id.tvInputID).setOnClickListener(this);
+        conentView.findViewById(R.id.tvLastId).setOnClickListener(this);
+        conentView.findViewById(R.id.tvSearchData).setOnClickListener(this);
+        conentView.findViewById(R.id.tvSearchLog).setOnClickListener(this);
+        conentView.findViewById(R.id.tvAdvanceSetting).setOnClickListener(this);
+        conentView.findViewById(R.id.about).setOnClickListener(this);
+        conentView.findViewById(R.id.settings).setOnClickListener(this);
+        conentView.findViewById(R.id.ability_logout).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
                 // do something before signing out
-                context.finish();
-                PopWindow.this.dismiss();
-            }
-        });
-        conentView.findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                // do something you need here
-
+                context.finish();//退出
                 PopWindow.this.dismiss();
             }
         });
@@ -83,5 +83,42 @@ public class PopWindow extends PopupWindow {
         } else {
             this.dismiss();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tvScanId:
+                if(startScanForResult!=null) {
+                    startScanForResult.startScan();
+                }
+                break;
+            case R.id.tvInputID:
+
+                break;
+            case R.id.tvLastId:
+
+                break;
+            case R.id.tvSearchData:
+
+                break;
+            case R.id.tvSearchLog:
+
+                break;
+            case R.id.settings:
+
+                break;
+            case R.id.tvAdvanceSetting:
+
+
+                break;
+            case R.id.about:
+
+                break;
+            default:
+
+                break;
+        }
+        PopWindow.this.dismiss();
     }
 }

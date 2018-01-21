@@ -22,21 +22,6 @@
         app:layout_constraintVertical_bias="0.142"
         android:layout_marginStart="8dp" />
 
-    <Button
-        android:id="@+id/btnTestScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="扫描二维码"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintVertical_bias="0.012"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnInputId" />
-
     <com.curve.HealthyTablesView
         style="@style/healthyview_style"
         android:layout_height="688dp"
@@ -61,61 +46,14 @@
         android:layout_marginStart="8dp" />
 
     <Button
-        android:id="@+id/btnInputId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="手动输入ID"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <Button
-        android:id="@+id/btnSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:layout_marginTop="18dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearchData"
-        app:layout_constraintRight_toLeftOf="@+id/btnTestScan"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <Button
-        android:id="@+id/btnTestVideo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="视频"
-        android:layout_marginTop="13dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnSetting"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="8dp" />
-
-    <Button
-        android:id="@+id/btnSearchData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="数据"
-        android:layout_marginLeft="372dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btnInputId"
-        android:layout_marginRight="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="372dp"
-        android:layout_marginEnd="8dp" />
-
-    <Button
         android:id="@+id/btnMoreFunction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:text="更多功能"
-        app:layout_constraintRight_toLeftOf="@+id/btnTestVideo"
-        app:layout_constraintTop_toBottomOf="@+id/btnSetting" />
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>

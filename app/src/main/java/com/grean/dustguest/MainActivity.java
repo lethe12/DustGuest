@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
+import com.grean.dustguest.presenter.PopWindow;
 import com.utils.CommonUtil;
 import com.wifi.WifiAdmin;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,StartScanForResult{
     private static final String tag = "MainActivity";
     //打开扫描界面请求码
     private int REQUEST_CODE = 0x01;
@@ -24,8 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int RESULT_OK = 0xA1;
 
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
-    private Button btnTestScan;
-    private TextView tvScanResult;
+    private TextView tvScanResult,tvState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -34,10 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        btnTestScan = findViewById(R.id.btnTestScan);
         tvScanResult = findViewById(R.id.tvScanResult);
-        btnTestScan.setOnClickListener(this);
-
+        tvState = findViewById(R.id.tvState);
         WifiAdmin wifiAdmin = new WifiAdmin(this);
         wifiAdmin.openWifi();
         wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(tag,"回调");
+       // Log.d(tag,"回调");
         super.onActivityResult(requestCode, resultCode, data);
 //扫描结果回调
         if (resultCode == RESULT_OK) { //RESULT_OK = -1
@@ -63,23 +62,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.btnTestScan:
-                Log.d(tag,"开始扫描");
 
-                if(CommonUtil.isCameraCanUse()){
-                    Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-                    startActivityForResult(intent, REQUEST_CODE);
-                }else{
-                    Toast.makeText(this,"摄像头权限",Toast.LENGTH_LONG).show();
-                }
-                break;
             case R.id.btnMoreFunction:
-
+                PopWindow popWindow = new PopWindow(this,this);
+                popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             default:
                 break;
 
         }
 
+    }
+
+    @Override
+    public void startScan() {
+        if(CommonUtil.isCameraCanUse()){
+            Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }else{
+            Toast.makeText(this,"摄像头权限",Toast.LENGTH_LONG).show();
+        }
     }
 }
