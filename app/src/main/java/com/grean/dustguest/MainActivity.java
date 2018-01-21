@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         wifiAdmin.openWifi();
         wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
 
+        findViewById(R.id.btnMoreFunction).setOnClickListener(this);
     }
 
     @Override
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this,"摄像头权限",Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.btnMoreFunction:
+
+                break;
+            default:
+                break;
+
         }
 
     }
