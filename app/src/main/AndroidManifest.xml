@@ -23,6 +23,8 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name="com.grean.dustguest.presenter.LogActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+        <activity android:name="com.grean.dustguest.presenter.SettingActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->

@@ -70,6 +70,15 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/tvVideoPreView"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="视频预览"
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/about"
         android:layout_width="match_parent"
         android:layout_height="45dp"

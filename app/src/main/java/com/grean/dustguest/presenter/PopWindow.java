@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.google.zxing.StartScanForResult;
 import com.grean.dustguest.MainActivity;
@@ -62,6 +64,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
         conentView.findViewById(R.id.tvAdvanceSetting).setOnClickListener(this);
         conentView.findViewById(R.id.about).setOnClickListener(this);
         conentView.findViewById(R.id.settings).setOnClickListener(this);
+        conentView.findViewById(R.id.tvVideoPreView).setOnClickListener(this);
         conentView.findViewById(R.id.ability_logout).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -89,6 +92,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()){
             case R.id.tvScanId:
                 if(startScanForResult!=null) {
@@ -116,25 +120,45 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                         }).show();
                 break;
             case R.id.tvSearchData:
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setClass(mContext,DataActivity.class);
                 mContext.startActivity(intent);
-                //listener.go2Activity(intent);
                 break;
             case R.id.tvSearchLog:
-                Intent intent2 = new Intent();
-                intent2.setClass(mContext,LogActivity.class);
-                mContext.startActivity(intent2);
+                intent = new Intent();
+                intent.setClass(mContext,LogActivity.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.settings:
-
+                intent = new Intent();
+                intent.setClass(mContext,SettingActivity.class);
+                mContext.startActivity(intent);
                 break;
             case R.id.tvAdvanceSetting:
-
+                final EditText password = new EditText(mContext);
+                password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                final AlertDialog passwordDialog = new AlertDialog.Builder(mContext).setTitle("请输入密码").setView(password).
+                        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(password.getText().toString().equals("1")){
+                                    Intent intent = new Intent();
+                                    intent.setClass(mContext,SettingActivity.class);
+                                    intent.putExtra("isAdvance",true);
+                                    mContext.startActivity(intent);
+                                }else{
+                                    Toast.makeText(mContext,"密码错误",Toast.LENGTH_SHORT).show();
+                                }
+                                dismiss();
+                            }
+                        }).setNegativeButton("取消",null).show();
 
                 break;
             case R.id.about:
 
+                break;
+            case R.id.tvVideoPreView:
+                mContext.startActivity(mContext.getPackageManager().getLaunchIntentForPackage("com.mcu.iVMSHD"));
                 break;
             default:
 
