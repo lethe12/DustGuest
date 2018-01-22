@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
 import com.grean.dustguest.model.LastDevicesInfo;
+import com.grean.dustguest.presenter.DataActivity;
 import com.grean.dustguest.presenter.PopWindow;
 import com.grean.dustguest.presenter.PopWindowListener;
 import com.utils.CommonUtil;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnMoreFunction:
+
                 PopWindow popWindow = new PopWindow(this,this,this);
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
@@ -95,5 +97,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public String[] getLastIdList() {
         return lastDevicesInfo.getLastDevicesList();
+    }
+
+    @Override
+    public void go2Activity(Intent intent) {
+        startActivity(intent);
     }
 }

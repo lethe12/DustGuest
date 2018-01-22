@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 
 import com.google.zxing.StartScanForResult;
+import com.grean.dustguest.MainActivity;
 import com.grean.dustguest.R;
 
 /**
@@ -115,10 +116,15 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                         }).show();
                 break;
             case R.id.tvSearchData:
-
+                Intent intent = new Intent();
+                intent.setClass(mContext,DataActivity.class);
+                mContext.startActivity(intent);
+                //listener.go2Activity(intent);
                 break;
             case R.id.tvSearchLog:
-
+                Intent intent2 = new Intent();
+                intent2.setClass(mContext,LogActivity.class);
+                mContext.startActivity(intent2);
                 break;
             case R.id.settings:
 
