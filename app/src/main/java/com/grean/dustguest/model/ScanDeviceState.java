@@ -43,8 +43,26 @@ public class ScanDeviceState implements SettingInfo{
      * 停止查询实时数据，断开本地服务链接
      */
     public void stopRun() {
-        run =false;
-        SocketTask.getInstance().stopSocketHeart();
+        if(run) {
+            run = false;
+            SocketTask.getInstance().stopSocketHeart();
+        }
+    }
+
+    /**
+     * 停止扫描
+     */
+    public void stopScan(){
+        run = false;
+    }
+
+    /**
+     * 重启扫描
+     */
+    public void restartScan(){
+        if(!run) {
+            new ScanRealTimeData().start();
+        }
     }
 
     private class ScanRealTimeData extends Thread{
@@ -85,8 +103,9 @@ public class ScanDeviceState implements SettingInfo{
                 }
                 clientProtocol.sendScanCommand();
             }
-            SocketTask.getInstance().stopSocketHeart();
             run = false;
         }
     }
+
+
 }

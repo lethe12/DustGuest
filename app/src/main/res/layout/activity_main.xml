@@ -48,6 +48,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="8dp" />
 
+    <TextView
+        android:id="@+id/tvTableInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="500dp"
+        android:text="Nan"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TableLayout
         android:layout_width="584dp"
         android:layout_height="wrap_content"

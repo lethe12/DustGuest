@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView [] tvNames = new TextView[8],tvValues = new TextView[8],tvUnits=new TextView[8];
     private View [] layouts = new View[7];
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
-    private TextView tvScanResult,tvState,tvLocalServer;
+    private TextView tvTableInfo,tvState,tvLocalServer;
     private LocalServerManager localServerManager;
     private AlertDialog dialog;
     private ProgressBar pb;
@@ -118,11 +118,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastDevicesInfo = new LastDevicesInfo(this);
         localServerManager = new LocalServerManager(this,this);
         ProtocolLib.getInstance().getClientProtocol().setRealTimeDisplay(this);
+
+        //tablesView.invalidate();//跟新view
     }
 
     private void initView(){
         tablesView = findViewById(R.id.tableView);
-        tvScanResult = findViewById(R.id.tvScanResult);
+        tvTableInfo = findViewById(R.id.tvTableInfo);
         tvState = findViewById(R.id.tvState);
         tvLocalServer = findViewById(R.id.tvLocalServerState);
         tvNames[0] = findViewById(R.id.tvName1);
@@ -187,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnMoreFunction:
                 PopWindow popWindow = new PopWindow(this,this,this,localServerManager.isConnect());
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
+                break;
+            case R.id.layout1:
+                tablesView.invalidate();
                 break;
             default:
                 break;

@@ -245,6 +245,7 @@ public class HealthyTablesView extends View{
     @Override
     protected void onDraw(Canvas canvas)
     {
+        Log.d(TAG,"onDraw");
         super.onDraw(canvas);
         XScale = (mWidth - getPaddingRight() - getPaddingLeft() - 40) / 6;
         canvas.drawColor(mBgColor);
