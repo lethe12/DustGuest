@@ -1,36 +1,106 @@
 package com.grean.dustguest;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.curve.HealthyTablesView;
 import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
 import com.grean.dustguest.model.LastDevicesInfo;
+import com.grean.dustguest.model.LocalServerListener;
+import com.grean.dustguest.model.LocalServerManager;
 import com.grean.dustguest.presenter.DataActivity;
 import com.grean.dustguest.presenter.PopWindow;
 import com.grean.dustguest.presenter.PopWindowListener;
+import com.grean.dustguest.presenter.RealTimeDataDisplay;
+import com.grean.dustguest.protocol.ProtocolLib;
+import com.grean.dustguest.protocol.RealTimeDataFormat;
+import com.tools;
 import com.utils.CommonUtil;
 import com.wifi.WifiAdmin;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,StartScanForResult,PopWindowListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,StartScanForResult,PopWindowListener,LocalServerListener,RealTimeDataDisplay{
     private static final String tag = "MainActivity";
     //打开扫描界面请求码
     private int REQUEST_CODE = 0x01;
     //扫描成功返回码
     private int RESULT_OK = 0xA1;
     private LastDevicesInfo lastDevicesInfo;
-
+    private HealthyTablesView tablesView;
+    private TextView [] tvNames = new TextView[8],tvValues = new TextView[8],tvUnits=new TextView[8];
+    private View [] layouts = new View[7];
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
-    private TextView tvScanResult,tvState;
+    private TextView tvScanResult,tvState,tvLocalServer;
+    private LocalServerManager localServerManager;
+    private AlertDialog dialog;
+    private ProgressBar pb;
+    private boolean connectResult;
+    private RealTimeDataFormat dataFormat;
+    private String dustName;
+    private static final int msgConnectResult = 1,msgShowRealTimeData=2,msgShowDustName=3;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case msgConnectResult:
+                    if(dialog!=null){
+                        dialog.dismiss();
+                    }
+                    if(connectResult){
+                        tvLocalServer.setText("已连接设备");
+                        Toast.makeText(MainActivity.this,"已连接成功！",Toast.LENGTH_SHORT).show();
+                    }else{
+                        tvLocalServer.setText("未连接设备");
+                        Toast.makeText(MainActivity.this,"连接失败，请重试！",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case msgShowRealTimeData:
+                    String serverConnectString;
+                    if(dataFormat.isServerConnected()){
+                        serverConnectString = "  已连接服务器";
+                    }else{
+                        serverConnectString = "  未连接服务器";
+                    }
+                    tvState.setText("当前状态:"+dataFormat.getState()+serverConnectString);
+                    if(dataFormat.isAlarm()){
+                        layouts[0].setBackgroundColor(getColor(R.color.red));
+                    }else{
+                        layouts[0].setBackgroundColor(getColor(R.color.background));
+                    }
+                    tvValues[0].setText(tools.float2String3(dataFormat.getDust()));
+                    tvValues[1].setText(tools.float2String1(dataFormat.getTemperature()));
+                    tvValues[2].setText(tools.float2String1(dataFormat.getHumidity()));
+                    tvValues[3].setText(tools.float2String0(dataFormat.getPressure()));
+                    tvValues[4].setText(tools.float2String1(dataFormat.getWindForce()));
+                    tvValues[5].setText(tools.float2String0(dataFormat.getWindDirection()));
+                    tvValues[6].setText(tools.float2String1(dataFormat.getNoise()));
+                    break;
+                case msgShowDustName:
+                    tvNames[0].setText(dustName);
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,14 +109,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        tvScanResult = findViewById(R.id.tvScanResult);
-        tvState = findViewById(R.id.tvState);
-        WifiAdmin wifiAdmin = new WifiAdmin(this);
+        initView();
+        /*WifiAdmin wifiAdmin = new WifiAdmin(this);
         wifiAdmin.openWifi();
-        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
+        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));*/
 
         findViewById(R.id.btnMoreFunction).setOnClickListener(this);
         lastDevicesInfo = new LastDevicesInfo(this);
+        localServerManager = new LocalServerManager(this,this);
+        ProtocolLib.getInstance().getClientProtocol().setRealTimeDisplay(this);
+    }
+
+    private void initView(){
+        tablesView = findViewById(R.id.tableView);
+        tvScanResult = findViewById(R.id.tvScanResult);
+        tvState = findViewById(R.id.tvState);
+        tvLocalServer = findViewById(R.id.tvLocalServerState);
+        tvNames[0] = findViewById(R.id.tvName1);
+        tvNames[1] = findViewById(R.id.tvName2);
+        tvNames[2] = findViewById(R.id.tvName3);
+        tvNames[3] = findViewById(R.id.tvName4);
+        tvNames[4] = findViewById(R.id.tvName5);
+        tvNames[5] = findViewById(R.id.tvName6);
+        tvNames[6] = findViewById(R.id.tvName7);
+        tvNames[7] = findViewById(R.id.tvName8);
+        tvValues[0] = findViewById(R.id.tvValue1);
+        tvValues[1] = findViewById(R.id.tvValue2);
+        tvValues[2] = findViewById(R.id.tvValue3);
+        tvValues[3] = findViewById(R.id.tvValue4);
+        tvValues[4] = findViewById(R.id.tvValue5);
+        tvValues[5] = findViewById(R.id.tvValue6);
+        tvValues[6] = findViewById(R.id.tvValue7);
+        tvValues[7] = findViewById(R.id.tvValue8);
+        tvUnits[0] = findViewById(R.id.tvUnit1);
+        tvUnits[1] = findViewById(R.id.tvUnit2);
+        tvUnits[2] = findViewById(R.id.tvUnit3);
+        tvUnits[3] = findViewById(R.id.tvUnit4);
+        tvUnits[4] = findViewById(R.id.tvUnit5);
+        tvUnits[5] = findViewById(R.id.tvUnit6);
+        tvUnits[6] = findViewById(R.id.tvUnit7);
+        tvUnits[7] = findViewById(R.id.tvUnit8);
+        layouts[0] = findViewById(R.id.layout1);
+        layouts[0].setOnClickListener(this);
+        layouts[1] = findViewById(R.id.layout2);
+        layouts[1].setOnClickListener(this);
+        layouts[2] = findViewById(R.id.layout3);
+        layouts[2].setOnClickListener(this);
+        layouts[3] = findViewById(R.id.layout4);
+        layouts[3].setOnClickListener(this);
+        layouts[4] = findViewById(R.id.layout5);
+        layouts[4].setOnClickListener(this);
+        layouts[5] = findViewById(R.id.layout6);
+        layouts[5].setOnClickListener(this);
+        layouts[6] = findViewById(R.id.layout7);
+        layouts[6].setOnClickListener(this);
     }
 
     @Override
@@ -58,8 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString("qr_scan_result");
             //将扫描出的信息显示出来
-            Log.d(tag,scanResult);
-            tvScanResult.setText(scanResult);
+            //Log.d(tag,scanResult);
+            //tvScanResult.setText(scanResult);
+            startNewLocalServer(scanResult);
         }
 
     }
@@ -68,8 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnMoreFunction:
-
-                PopWindow popWindow = new PopWindow(this,this,this);
+                PopWindow popWindow = new PopWindow(this,this,this,localServerManager.isConnect());
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             default:
@@ -89,9 +205,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void startNewLocalServer(String id){
+        pb = new ProgressBar(this);
+        dialog = new AlertDialog.Builder(this).setTitle("正在连接设备").setView(pb).setCancelable(false).show();
+        Log.d(tag,"获取ID为:"+id);
+        localServerManager.startLocalServer(id);
+    }
+
     @Override
     public void OnInputIdComplete(String string) {
-        tvState.setText(string);
+
+        startNewLocalServer(string);
+
+        //tvState.setText(string);
     }
 
     @Override
@@ -99,8 +225,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return lastDevicesInfo.getLastDevicesList();
     }
 
+
+
     @Override
-    public void go2Activity(Intent intent) {
-        startActivity(intent);
+    public void OnLocalServerResult(boolean result) {
+        connectResult = result;
+        handler.sendEmptyMessage(msgConnectResult);
     }
+
+
+    @Override
+    public void show(RealTimeDataFormat format) {
+        this.dataFormat = format;
+        handler.sendEmptyMessage(msgShowRealTimeData);
+    }
+
+    @Override
+    public void showDustName(String name) {
+        dustName = name;
+        handler.sendEmptyMessage(msgShowDustName);
+    }
+
 }

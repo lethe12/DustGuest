@@ -28,7 +28,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
     private PopWindowListener listener;
 
     private StartScanForResult startScanForResult;
-    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener){
+    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener,boolean isConnect){
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         conentView = inflater.inflate(R.layout.popup_window, null);
@@ -59,12 +59,20 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
         conentView.findViewById(R.id.tvScanId).setOnClickListener(this);
         conentView.findViewById(R.id.tvInputID).setOnClickListener(this);
         conentView.findViewById(R.id.tvLastId).setOnClickListener(this);
-        conentView.findViewById(R.id.tvSearchData).setOnClickListener(this);
-        conentView.findViewById(R.id.tvSearchLog).setOnClickListener(this);
-        conentView.findViewById(R.id.tvAdvanceSetting).setOnClickListener(this);
         conentView.findViewById(R.id.about).setOnClickListener(this);
-        conentView.findViewById(R.id.settings).setOnClickListener(this);
-        conentView.findViewById(R.id.tvVideoPreView).setOnClickListener(this);
+        if(isConnect) {
+            conentView.findViewById(R.id.tvSearchData).setOnClickListener(this);
+            conentView.findViewById(R.id.tvSearchLog).setOnClickListener(this);
+            conentView.findViewById(R.id.tvAdvanceSetting).setOnClickListener(this);
+            conentView.findViewById(R.id.settings).setOnClickListener(this);
+            conentView.findViewById(R.id.tvVideoPreView).setOnClickListener(this);
+        }else{
+            conentView.findViewById(R.id.tvSearchData).setClickable(false);
+            conentView.findViewById(R.id.tvSearchLog).setClickable(false);
+            conentView.findViewById(R.id.tvAdvanceSetting).setClickable(false);
+            conentView.findViewById(R.id.settings).setClickable(false);
+            conentView.findViewById(R.id.tvVideoPreView).setClickable(false);
+        }
         conentView.findViewById(R.id.ability_logout).setOnClickListener(new View.OnClickListener() {
 
             @Override

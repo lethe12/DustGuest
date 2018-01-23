@@ -38,6 +38,13 @@ public class LogActivity extends Activity implements AbsListView.OnScrollListene
         setContentView(R.layout.activity_log);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
 
+        findViewById(R.id.log_toolbar_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.main_srl);
         lv = (ListView) findViewById(R.id.main_lv);
 

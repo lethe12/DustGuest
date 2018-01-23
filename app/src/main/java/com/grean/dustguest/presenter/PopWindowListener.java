@@ -9,5 +9,5 @@ import android.content.Intent;
 public interface PopWindowListener {
     void OnInputIdComplete(String string);
     String[] getLastIdList();
-    void go2Activity(Intent intent);
+
 }
