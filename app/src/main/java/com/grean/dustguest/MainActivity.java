@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.curve.HealthyTablesView;
 import com.google.zxing.StartScanForResult;
 import com.google.zxing.activity.CaptureActivity;
+import com.grean.dustguest.model.LastDataInfo;
 import com.grean.dustguest.model.LastDevicesInfo;
 import com.grean.dustguest.model.LocalServerListener;
 import com.grean.dustguest.model.LocalServerManager;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
     private TextView tvTableInfo,tvState,tvLocalServer;
     private LocalServerManager localServerManager;
+    private LastDataInfo dataInfo;
     private AlertDialog dialog;
     private ProgressBar pb;
     private boolean connectResult;
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastDevicesInfo = new LastDevicesInfo(this);
         localServerManager = new LocalServerManager(this,this);
         ProtocolLib.getInstance().getClientProtocol().setRealTimeDisplay(this);
-
+        dataInfo = new LastDataInfo(this);
         //tablesView.invalidate();//跟新view
     }
 
@@ -191,7 +193,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             case R.id.layout1:
-                tablesView.invalidate();
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText(dustName);
+                    dataInfo.getLastMinData(LastDataInfo.Dust);
+                }
+                /*String[] date = new String[]{"12:00","12:01","12:02","12:03","12:04","12:05","12:06","12:07","12:06","12:07","12:00","12:01","12:02","12:03","12:04"};
+                float [] data = new float[]{21.0f,34.1f,56.2f,2.3f,78.4f,79.5f,12.6f,12.7f,12.6f,12.7f,21.0f,34.1f,56.2f,2.3f,78.4f};
+                tablesView.updateTableData(date,data);
+                tablesView.invalidate();*/
                 break;
             default:
                 break;
@@ -249,6 +258,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showDustName(String name) {
         dustName = name;
         handler.sendEmptyMessage(msgShowDustName);
+    }
+
+    @Override
+    public void showLastData(String[] date, float[] data) {
+        tablesView.updateTableData(date,data);
+        tablesView.postInvalidate();
     }
 
 }

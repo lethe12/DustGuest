@@ -9,4 +9,5 @@ import com.grean.dustguest.protocol.RealTimeDataFormat;
 public interface RealTimeDataDisplay {
     void show(RealTimeDataFormat format);
     void showDustName(String name);
+    void showLastData(String[] date,float [] data);
 }

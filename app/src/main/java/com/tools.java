@@ -224,7 +224,14 @@ import android.annotation.SuppressLint;
 		}
 		return l;
 	}
-	
+	/*将时间戳转化为字符串
+	 * */
+	public static String timestamp2StringHHMM(long l){
+		SimpleDateFormat sDateFormat = new SimpleDateFormat("HH:mm");
+		String string = sDateFormat.format(new Date(l));
+		return string;
+
+	}
 	/*将时间戳转化为字符串
 	 * */
 	public static String timestamp2string(long l){

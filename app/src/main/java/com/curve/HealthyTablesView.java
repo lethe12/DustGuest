@@ -15,6 +15,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import com.grean.dustguest.R;
+import com.tools;
+
 import java.text.DecimalFormat;
 /**
  * Created by weifeng on 2018/1/18.
@@ -85,7 +87,8 @@ public class HealthyTablesView extends View{
 
     private Paint textPaint;
 
-    private int[] values;
+    private float[] values=new float[]{ 0, 0, 0, 0, 0, 0, 0 };
+    private int drawNum = 6;
 
     private Paint linePaint;
 
@@ -174,8 +177,8 @@ public class HealthyTablesView extends View{
     {
 
         weeks = new String[]
-                { "02", "03", "04", "05", "06", "07", "08" };
-        values = new int[7];
+                { "1", "2", "3", "4", "5", "6", "7" };
+        values = new float[7];
 
         xyPaint = new Paint();
         xyPaint.setAntiAlias(true);
@@ -238,7 +241,7 @@ public class HealthyTablesView extends View{
         {
             mHeight = 230;
         }
-        Log.i(TAG, "width=" + mWidth + "...height=" + mHeight);
+        //Log.i(TAG, "width=" + mWidth + "...height=" + mHeight);
         setMeasuredDimension(mWidth, mHeight);
     }
 
@@ -247,7 +250,7 @@ public class HealthyTablesView extends View{
     {
         Log.d(TAG,"onDraw");
         super.onDraw(canvas);
-        XScale = (mWidth - getPaddingRight() - getPaddingLeft() - 40) / 6;
+        XScale = (mWidth - getPaddingRight() - getPaddingLeft() - 40) / drawNum;
         canvas.drawColor(mBgColor);
         drawCoordinates(canvas);
         drawCoordinatesXvalues(canvas);
@@ -258,7 +261,7 @@ public class HealthyTablesView extends View{
     private void drawTypeValues(Canvas canvas)
     {
 
-        switch (mDrawType)
+       /* switch (mDrawType)
         {
             case "activity":
                 values = new int[]
@@ -281,10 +284,10 @@ public class HealthyTablesView extends View{
                         { 67, 66, 68, 74, 77, 128, 98 };
                 break;
 
-        }
+        }*/
 
-        int[] YValues = cacluterYValues(getArrayMax(), getArrayMin());
-        if (mDrawType.equals("sleep"))
+        float[] YValues = cacluterYValues(getArrayMax(), getArrayMin());
+       /* if (mDrawType.equals("sleep"))
         {
             values = new int[]
                     { 7, 5, 9, 5, 6, 6, 8 };
@@ -302,10 +305,19 @@ public class HealthyTablesView extends View{
         for (int i = 0; i < YValues.length; i++)
         {
             Log.i(TAG, mDrawType + YValues[i]);
-        }
+        }*/
         // YValues[4]-YValues[0] 差值就是全部高度
-        drawYValues(canvas, YValues[4] - YValues[0], YValues);
-        drawLine(canvas, YValues[4] - YValues[0], YValues[0]);
+        drawYValues(canvas, YValues[5] - YValues[0], YValues);
+        drawLine(canvas, YValues[5] - YValues[0], YValues[0]);
+
+    }
+
+    public void updateTableData(String[] xValues,float [] yValues){
+        if((xValues.length == yValues.length)&&(xValues.length>1)) {
+            drawNum = xValues.length;
+            weeks = xValues;
+            values = yValues;
+        }
 
     }
 
@@ -331,7 +343,7 @@ public class HealthyTablesView extends View{
             /**
              * 画折线
              */
-            if (i < 6)
+            if (i < (values.length-1))
             {
                 int textScale = (int) (values[i + 1] - yMin);
                 j = i + 1;
@@ -342,7 +354,8 @@ public class HealthyTablesView extends View{
                         linePaint);
             }
 
-            String text = String.valueOf(values[i]);
+            //String text = String.valueOf(values[i]);
+            String text = tools.float2String2(values[i]);
             textPaint.getTextBounds(text, 0, text.length(), textBound);
             canvas.drawText(text,
                     getPaddingLeft() + (XScale * i) - textBound.width() / 2,
@@ -368,18 +381,19 @@ public class HealthyTablesView extends View{
      *
      * @param canvas
      */
-    private void drawYValues(Canvas canvas, float max, int[] value)
+    private void drawYValues(Canvas canvas, float max, float[] value)
     {
         // 这里除以max这个最大值是为了有多大的去见就分成多少等分,是的后面折线的点更精准,否者就会对不齐刻度,
         float YScale = ((float) mHeight - getPaddingBottom() - getPaddingTop()
                 - 40) / max;
         for (int i = 0; i < value.length; i++)
         {
-            Log.i(TAG, "activity=" + value[i] / 1000f);
+            //Log.i(TAG, "activity=" + value[i] / 1000f);
 
-            String text = mDrawType.equals("activity") ? String.format("%.1f",value[i] / 1000f) + "k"
-                    : value[i] + "";
-            int scale = value[i] - value[0];
+            //String text = mDrawType.equals("activity") ? String.format("%.1f",value[i] / 1000f) + "k": value[i] + "";
+            String text = tools.float2String2(value[i]);
+            Log.i(TAG, "activity=" + text);
+            float scale = value[i] - value[0];
             textPaint.getTextBounds(text, 0, text.length(), textBound);
             // +textBound.height()/2 主要是为了让字体和间断线居中
             canvas.drawText(text,
@@ -468,7 +482,7 @@ public class HealthyTablesView extends View{
         float max = 0;
         for (int i = 0; i < values.length; i++)
         {
-            float pre = Float.parseFloat(values[i] + "");
+            float pre = values[i];
             max = Math.max(max, pre);
         }
         return max;
@@ -484,7 +498,7 @@ public class HealthyTablesView extends View{
         float min = 999999;
         for (int i = 0; i < values.length; i++)
         {
-            float pre = Float.parseFloat(values[i] + "");
+            float pre = values[i];
             min = Math.min(min, pre);
         }
 
@@ -498,20 +512,16 @@ public class HealthyTablesView extends View{
      * @param min
      * @return
      */
-    private int[] cacluterYValues(float max, float min)
+    private float[] cacluterYValues(float max, float min)
     {
-        int[] values;
+        /*int[] values;
         int min1;
         int max1;
         int resultNum = getResultNum(min); // 计算出的最小值
         max1 = getResultNum(max); // 计算出最大值
-        if (resultNum <= 20) // 如果小于等于20 就不要减20,否则Y最小值是0了
-        {
+        if (resultNum <= 20){ // 如果小于等于20 就不要减20,否则Y最小值是0了
             min1 = resultNum - 10;
-        }
-        else
-        {
-
+        }else{
             min1 = resultNum - 20;
         }
 
@@ -531,8 +541,20 @@ public class HealthyTablesView extends View{
         values = new int[]
                 { min1, (int) (min1 + ceil), (int) (min1 + ceil * 2),
                         (int) (min1 + ceil * 3), (int) (min1 + ceil * 4) };
+        return values;*/
+        float extremum = (max-min)/0.8f,scale,range = 0.01f;
+        while(extremum > range){
+            range *= 5f;
+            if(extremum <= range){
+                break;
+            }
+            range *= 2f;
+        }
+        scale = range / 5;
+        float minScale = (float) (Math.floor(min/scale)*scale);
+        Log.d(TAG,"range="+String.valueOf(range)+";min="+String.valueOf(minScale)+";scale="+String.valueOf(scale));
+        float [] values = new float[]{minScale,minScale+scale,minScale+scale*2,minScale+scale*3,minScale+scale*4,minScale+scale*5};
         return values;
-
     }
 
     /**

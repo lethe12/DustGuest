@@ -14,6 +14,7 @@ public interface GeneralClientProtocol {
     boolean sendGetOperateInit();
     void setRealTimeDisplay(RealTimeDataDisplay display);
     void sendLoadSetting(SettingInfo info);
+    void sendLastData(long startDate,long endDate,HistoryDataListener listener);
     /*void sendCalDust(ShowOperateInfo info,float target);
     void sendSetDustMeterParaK(float parameter);
     void sendUploadSetting(SettingFormat format);

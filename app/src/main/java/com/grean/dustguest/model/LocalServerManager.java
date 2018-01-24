@@ -3,6 +3,7 @@ package com.grean.dustguest.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.grean.dustguest.protocol.HistoryDataListener;
 import com.wifi.WifiAdmin;
 
 import static android.R.attr.tag;
@@ -26,6 +27,8 @@ public class LocalServerManager {
     public boolean isConnect() {
         return connect;
     }
+
+
 
     /**
      * 启动本地服务

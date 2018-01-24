@@ -17,11 +17,12 @@ public class ClientProtocol implements GeneralClientProtocol{
     private static final String tag = "ClientProtocol";
     private SocketTask socketTask;
     private RealTimeDataDisplay realTimeDataDisplay;
+    private HistoryDataListener historyDataListener;
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
     }
     @Override
-    public void handleReceiveData(String rec) {
+    synchronized public void handleReceiveData(String rec) {
 
         try {
             JSONObject jsonObject = new JSONObject(rec);
@@ -33,10 +34,14 @@ public class ClientProtocol implements GeneralClientProtocol{
                     realTimeDataDisplay.show(dataFormat);
                 }
             }else if(type.equals("operateInit")){
-                Log.d(tag,rec);
                 String name = JSON.getDustName(jsonObject);
                 if(realTimeDataDisplay!=null){
                     realTimeDataDisplay.showDustName(name);
+                }
+            }else if(type.equals("historyData")){
+                Log.d(tag,rec);
+                if(historyDataListener!=null){
+                   historyDataListener.setHistoryData(JSON.getHistoryData(jsonObject));
                 }
             }else{
                 Log.d(tag,rec);
@@ -49,7 +54,7 @@ public class ClientProtocol implements GeneralClientProtocol{
 
 
     @Override
-    public boolean sendScanCommand() {
+    synchronized public boolean sendScanCommand() {
         try {
             return socketTask.send(JSON.readRealTimeData());
         } catch (JSONException e) {
@@ -76,5 +81,15 @@ public class ClientProtocol implements GeneralClientProtocol{
     @Override
     public void sendLoadSetting(SettingInfo info) {
 
+    }
+
+    @Override
+    public void sendLastData(long startDate, long endDate, HistoryDataListener listener) {
+        try {
+            this.historyDataListener = listener;
+            socketTask.send(JSON.readHistoryData(startDate,endDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

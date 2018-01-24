@@ -1,5 +1,9 @@
 package com.grean.dustguest.protocol;
 
+import android.util.Log;
+
+import com.tools;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,5 +89,37 @@ public class JSON {
             return names[name];
         }
         return "TSP";
+    }
+
+    public static byte[] readHistoryData(long startDate,long endDate) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","historyData");
+        object.put("startDate",startDate);
+        object.put("endDate",endDate);
+        return object.toString().getBytes();
+    }
+
+    public static GeneralHistoryData getHistoryData(JSONObject jsonObject) throws JSONException {
+        GeneralHistoryData historyData = new GeneralHistoryData();
+        int arraySize = jsonObject.getInt("DateSize");
+        if(arraySize>0) {
+            JSONArray array = jsonObject.getJSONArray("ArrayData");
+            Log.d(tag, "json size=" + String.valueOf(arraySize) + ";array size = " + String.valueOf(array.length()));
+            GeneralMinData minData;
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject item = array.getJSONObject(i);
+                minData = new GeneralMinData();
+                minData.setDate(item.getLong("date"));
+                minData.setDust((float) item.getDouble("dust"));
+                minData.setTemperate((float) item.getDouble("temperature"));
+                minData.setHumidity((float) item.getDouble("humidity"));
+                minData.setPressure((float) item.getDouble("pressure"));
+                minData.setWindForce((float) item.getDouble("windForce"));
+                minData.setWindDirection((float) item.getDouble("windDirection"));
+                minData.setNoise((float) item.getDouble("noise"));
+                historyData.add(minData);
+            }
+        }
+        return historyData;
     }
 }
