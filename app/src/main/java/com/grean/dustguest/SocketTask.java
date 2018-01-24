@@ -94,13 +94,14 @@ public class SocketTask {
                 socketClient.setTcpNoDelay(true);
                 socketClient.setSoLinger(true,30);
                 socketClient.setSendBufferSize(10240);
+                socketClient.setReceiveBufferSize(10240);
                 socketClient.setKeepAlive(true);
                 receive = socketClient.getInputStream();
                 send = socketClient.getOutputStream();
                 socketClient.setOOBInline(true);
                 connected = true;
                 int count;
-                byte[] readBuff = new byte[40960];
+                byte[] readBuff = new byte[20480];
                 /*if(notifyProcessDialogInfo!=null){
                     notifyProcessDialogInfo.showInfo("已链接");
                 }
@@ -112,11 +113,39 @@ public class SocketTask {
                 }*/
                 while (connected){
                     if (socketClient.isConnected()){
+                        String content=null;
+                        int index=0;
                         while ((count = receive.read(readBuff))!=-1 && connected){
-                            String content = new String(readBuff,0,count);
-                            //Log.d(tag,"TCP Content:"+content);
+                            if(readBuff[count-1]=='}') {//正常结尾
+                                if(content==null) {
+                                    content = new String(readBuff, 0, count);
+                                }else{
+                                    content=content + new String(readBuff, index, count);
+                                }
+                                index = 0;
+                                //Log.d(tag,"TCP Content:"+content);
 
-                            clientProtocol.handleReceiveData(content);
+                                clientProtocol.handleReceiveData(content);
+                                content=null;
+                            }else{
+                                Log.d(tag,"异常");
+                                if(readBuff[0]=='{'){//正常包头，异常包尾
+                                    content = new String(readBuff, 0, count);
+                                    index = count;
+                                }else{//包头、包尾皆异常
+                                    if(content!=null){
+                                        content = content+new String(readBuff,index,count);
+                                        index+=count;
+                                        if(index>10240){//超长包舍弃
+                                            index = 0;
+                                            content = null;
+                                        }
+                                    }else{//如未由正常包头，舍弃
+                                        content = null;
+                                        index = 0;
+                                    }
+                                }
+                            }
                         }
                         connected = false;
                         break;

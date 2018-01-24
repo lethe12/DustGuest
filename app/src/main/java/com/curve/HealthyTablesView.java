@@ -324,20 +324,20 @@ public class HealthyTablesView extends View{
     /**
      *
      * @param canvas
-     * @param arraymax
-     * @param yMin
+     * @param arraymax y轴坐标轴最大及最小之差
+     * @param yMin y轴最小值刻度
      */
     private void drawLine(Canvas canvas, float arraymax, float yMin)
     {
 
-        // 这里是整个Y轴可用高度除以最大值,就是每个值占有刻度上的几等分;
+        // 这里是整个Y轴可用高度除以最大值,就是每个值占有刻度上的几等分; dp/单位
         float YScale = ((mHeight - getPaddingBottom() - getPaddingTop() - 40))
                 / arraymax;
         for (int i = 0; i < values.length; i++)
         {
             // 为什么是values[i] - arraymin(数据值-Y坐标最小值)?
             // 因为圆点是以数据值来画得,数据值和Y轴坐标最小值的差就是整个数据的区间;
-            int scale = (int) (values[i] - yMin);
+            float scale = values[i] - yMin;
 
             int j;
             /**
@@ -355,7 +355,7 @@ public class HealthyTablesView extends View{
             }
 
             //String text = String.valueOf(values[i]);
-            String text = tools.float2String2(values[i]);
+            String text = tools.float2String3(values[i]);
             textPaint.getTextBounds(text, 0, text.length(), textBound);
             canvas.drawText(text,
                     getPaddingLeft() + (XScale * i) - textBound.width() / 2,
