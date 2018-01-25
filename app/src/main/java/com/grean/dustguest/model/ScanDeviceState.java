@@ -5,6 +5,7 @@ import android.content.Context;
 import com.grean.dustguest.SocketTask;
 import com.grean.dustguest.presenter.SettingInfo;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
+import com.grean.dustguest.protocol.GeneralHistoryData;
 import com.grean.dustguest.protocol.HistoryDataListener;
 import com.grean.dustguest.protocol.ProtocolLib;
 
@@ -39,8 +40,8 @@ public class ScanDeviceState implements SettingInfo{
         return run;
     }
 
-    public void getHistoryData(long startDate,long endDate,HistoryDataListener historyDataListener){
-        clientProtocol.sendLastData(startDate,endDate,historyDataListener);
+    public void getHistoryData(long startDate, long endDate, HistoryDataListener historyDataListener, GeneralHistoryData historyData){
+        clientProtocol.sendLastData(startDate,endDate,historyDataListener,historyData);
     }
 
 

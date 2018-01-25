@@ -248,7 +248,7 @@ public class HealthyTablesView extends View{
     @Override
     protected void onDraw(Canvas canvas)
     {
-        Log.d(TAG,"onDraw");
+        //Log.d(TAG,"onDraw");
         super.onDraw(canvas);
         XScale = (mWidth - getPaddingRight() - getPaddingLeft() - 40) / drawNum;
         canvas.drawColor(mBgColor);
@@ -345,7 +345,7 @@ public class HealthyTablesView extends View{
              */
             if (i < (values.length-1))
             {
-                int textScale = (int) (values[i + 1] - yMin);
+                float textScale = values[i + 1] - yMin;
                 j = i + 1;
                 canvas.drawLine(getPaddingLeft() + (XScale * i),
                         mHeight - getPaddingBottom() - (YScale * scale),
@@ -392,7 +392,7 @@ public class HealthyTablesView extends View{
 
             //String text = mDrawType.equals("activity") ? String.format("%.1f",value[i] / 1000f) + "k": value[i] + "";
             String text = tools.float2String2(value[i]);
-            Log.i(TAG, "activity=" + text);
+            //Log.i(TAG, "activity=" + text);
             float scale = value[i] - value[0];
             textPaint.getTextBounds(text, 0, text.length(), textBound);
             // +textBound.height()/2 主要是为了让字体和间断线居中
@@ -448,7 +448,7 @@ public class HealthyTablesView extends View{
     {
 
         // X轴
-        Log.i(TAG, "drawCoordinates");
+        //Log.i(TAG, "drawCoordinates");
         canvas.drawLine(getPaddingLeft(), mHeight - getPaddingBottom(),
                 mWidth - getPaddingRight(), mHeight - getPaddingBottom(),
                 xyPaint);
@@ -552,7 +552,7 @@ public class HealthyTablesView extends View{
         }
         scale = range / 5;
         float minScale = (float) (Math.floor(min/scale)*scale);
-        Log.d(TAG,"range="+String.valueOf(range)+";min="+String.valueOf(minScale)+";scale="+String.valueOf(scale));
+        //Log.d(TAG,"range="+String.valueOf(range)+";min="+String.valueOf(minScale)+";scale="+String.valueOf(scale));
         float [] values = new float[]{minScale,minScale+scale,minScale+scale*2,minScale+scale*3,minScale+scale*4,minScale+scale*5};
         return values;
     }

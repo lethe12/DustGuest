@@ -202,6 +202,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tablesView.updateTableData(date,data);
                 tablesView.invalidate();*/
                 break;
+            case R.id.layout2:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("温度 单位:℃");
+                    dataInfo.getLastMinData(LastDataInfo.Temperate);
+                }
+                break;
+            case R.id.layout3:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("湿度 单位:%");
+                    dataInfo.getLastMinData(LastDataInfo.Humidity);
+                }
+                break;
+            case R.id.layout4:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("大气压 单位:hPa");
+                    dataInfo.getLastMinData(LastDataInfo.Pressure);
+                }
+                break;
+            case R.id.layout5:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("风速 单位:m/s");
+                    dataInfo.getLastMinData(LastDataInfo.WindForce);
+                }
+                break;
+            case R.id.layout6:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("风向 单位:°");
+                    dataInfo.getLastMinData(LastDataInfo.WindDirection);
+                }
+                break;
+            case R.id.layout7:
+                if(localServerManager.isConnect()) {
+                    tvTableInfo.setText("噪声 单位:dB");
+                    dataInfo.getLastMinData(LastDataInfo.Noise);
+                }
+                break;
             default:
                 break;
 

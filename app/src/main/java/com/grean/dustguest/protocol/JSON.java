@@ -99,8 +99,8 @@ public class JSON {
         return object.toString().getBytes();
     }
 
-    public static GeneralHistoryData getHistoryData(JSONObject jsonObject) throws JSONException {
-        GeneralHistoryData historyData = new GeneralHistoryData();
+    public static void getHistoryData(JSONObject jsonObject,GeneralHistoryData historyData) throws JSONException {
+        historyData.clear();
         int arraySize = jsonObject.getInt("DateSize");
         if(arraySize>0) {
             JSONArray array = jsonObject.getJSONArray("ArrayData");
@@ -120,6 +120,5 @@ public class JSON {
                 historyData.add(minData);
             }
         }
-        return historyData;
     }
 }

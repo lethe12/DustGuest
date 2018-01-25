@@ -117,10 +117,13 @@ public class SocketTask {
                         int index=0;
                         while ((count = receive.read(readBuff))!=-1 && connected){
                             if(readBuff[count-1]=='}') {//正常结尾
+
                                 if(content==null) {
+                                    //Log.d(tag,"处理一");
                                     content = new String(readBuff, 0, count);
                                 }else{
-                                    content=content + new String(readBuff, index, count);
+                                    Log.d(tag,"处理二");
+                                    content=content + new String(readBuff, 0, count);
                                 }
                                 index = 0;
                                 //Log.d(tag,"TCP Content:"+content);
@@ -134,7 +137,7 @@ public class SocketTask {
                                     index = count;
                                 }else{//包头、包尾皆异常
                                     if(content!=null){
-                                        content = content+new String(readBuff,index,count);
+                                        content = content+new String(readBuff,0,count);
                                         index+=count;
                                         if(index>10240){//超长包舍弃
                                             index = 0;

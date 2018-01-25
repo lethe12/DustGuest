@@ -18,6 +18,7 @@ public class ClientProtocol implements GeneralClientProtocol{
     private SocketTask socketTask;
     private RealTimeDataDisplay realTimeDataDisplay;
     private HistoryDataListener historyDataListener;
+    private GeneralHistoryData historyData;
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
     }
@@ -28,7 +29,7 @@ public class ClientProtocol implements GeneralClientProtocol{
             JSONObject jsonObject = new JSONObject(rec);
             String type = JSON.getProtocolType(jsonObject);
             if(type.equals("realTimeData")){
-                //Log.d(tag,rec);
+               // Log.d(tag,"实时");
                 RealTimeDataFormat dataFormat = JSON.getRealTimeData(jsonObject);
                 if(realTimeDataDisplay!=null) {
                     realTimeDataDisplay.show(dataFormat);
@@ -39,14 +40,16 @@ public class ClientProtocol implements GeneralClientProtocol{
                     realTimeDataDisplay.showDustName(name);
                 }
             }else if(type.equals("historyData")){
-                Log.d(tag,rec);
-                if(historyDataListener!=null){
-                   historyDataListener.setHistoryData(JSON.getHistoryData(jsonObject));
+                //Log.d(tag,rec);
+                if((historyDataListener!=null)&&(historyData!=null)){
+                    JSON.getHistoryData(jsonObject,historyData);
+                    historyDataListener.setHistoryData();
                 }
             }else{
-                Log.d(tag,rec);
+                Log.d(tag,"协议异常"+rec);
             }
         } catch (JSONException e) {
+            Log.d(tag,"json异常"+rec);
             e.printStackTrace();
         }
     }
@@ -84,8 +87,9 @@ public class ClientProtocol implements GeneralClientProtocol{
     }
 
     @Override
-    public void sendLastData(long startDate, long endDate, HistoryDataListener listener) {
+    public void sendLastData(long startDate, long endDate, HistoryDataListener listener,GeneralHistoryData historyData) {
         try {
+            this.historyData = historyData;
             this.historyDataListener = listener;
             socketTask.send(JSON.readHistoryData(startDate,endDate));
         } catch (JSONException e) {

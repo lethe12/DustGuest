@@ -5,5 +5,5 @@ package com.grean.dustguest.protocol;
  */
 
 public interface HistoryDataListener {
-    void setHistoryData(GeneralHistoryData historyData);
+    void setHistoryData();
 }
