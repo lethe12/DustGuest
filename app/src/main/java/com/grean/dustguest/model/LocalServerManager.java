@@ -19,6 +19,8 @@ public class LocalServerManager {
     private LocalServerListener listener;
     private WifiAdmin wifiAdmin;
     private boolean connect = false;
+    private String deviceId;
+
     public LocalServerManager(Context context,LocalServerListener listener){
         this.listener = listener;
         this.context = context;
@@ -35,6 +37,7 @@ public class LocalServerManager {
      * @param id 目标设备ID
      */
     public void startLocalServer(String id){
+        deviceId = id;
         connect = false;
         if(wifiAdmin==null){
             wifiAdmin = new WifiAdmin(context);
@@ -67,7 +70,7 @@ public class LocalServerManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            state.startScan(context);
+            state.startScan(context,deviceId);
             for (int i=0;i<10;i++){
                 try {
                     sleep(1000);

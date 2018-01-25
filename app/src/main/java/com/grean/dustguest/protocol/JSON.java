@@ -77,18 +77,8 @@ public class JSON {
         }
     }
 
-    public static String getDustName(JSONObject jsonObject) throws JSONException {
-        JSONArray array = jsonObject.getJSONArray("dustNames");
-        int size = array.length();
-        if(size!=0){
-            String[] names = new String[size];
-            for(int i=0;i<size;i++){
-                names[i] = array.getString(i);
-            }
-            int name = jsonObject.getInt("dustName");
-            return names[name];
-        }
-        return "TSP";
+    public static void getDustName(JSONObject jsonObject,GeneralConfig config) throws JSONException {
+        config.setDustNameContent(jsonObject);
     }
 
     public static byte[] readHistoryData(long startDate,long endDate) throws JSONException {
@@ -97,6 +87,26 @@ public class JSON {
         object.put("startDate",startDate);
         object.put("endDate",endDate);
         return object.toString().getBytes();
+    }
+
+    public static byte[] readSetting() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","downloadSetting");
+        return object.toString().getBytes();
+    }
+
+    public static byte[] readDustMeterInfo() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterInfo",true);
+        return object.toString().getBytes();
+    }
+
+    public static void getDustMeterInfo(JSONObject jsonObject,GeneralConfig config) throws JSONException {
+        config.setDustMeterInfoContent(jsonObject);
+    }
+    public static void getSetting(JSONObject jsonObject,GeneralConfig config) throws JSONException {
+        config.setConfigContent(jsonObject);
     }
 
     public static void getHistoryData(JSONObject jsonObject,GeneralHistoryData historyData) throws JSONException {

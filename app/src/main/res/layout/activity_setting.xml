@@ -625,7 +625,7 @@
                 android:orientation="horizontal">
 
                 <Switch
-                    android:id="@+id/switch6"
+                    android:id="@+id/swDustMeter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -633,7 +633,7 @@
                     android:text="粉尘仪" />
 
                 <Switch
-                    android:id="@+id/switch5"
+                    android:id="@+id/swRelay1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -641,7 +641,7 @@
                     android:text="球阀" />
 
                 <Switch
-                    android:id="@+id/switch4"
+                    android:id="@+id/swRelay2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -649,7 +649,7 @@
                     android:text="风扇" />
 
                 <Switch
-                    android:id="@+id/switch3"
+                    android:id="@+id/swRealy3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -657,7 +657,7 @@
                     android:text="Ext1" />
 
                 <Switch
-                    android:id="@+id/switch2"
+                    android:id="@+id/swRelay4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -665,7 +665,7 @@
                     android:text="Ext2" />
 
                 <Switch
-                    android:id="@+id/switch1"
+                    android:id="@+id/swRelay5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -690,7 +690,7 @@
                     android:text="步进电机参数: 角度" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/etMotorSetp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -704,7 +704,7 @@
                     android:text="步(1.8°); 时间：" />
 
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/etMotorTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

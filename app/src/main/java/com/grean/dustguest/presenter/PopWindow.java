@@ -118,14 +118,18 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                         }).setNegativeButton("取消",null).show();
                 break;
             case R.id.tvLastId:
-                AlertDialog dialog = new AlertDialog.Builder(mContext).setTitle("请选择需要连接的设备").
-                        setSingleChoiceItems(listener.getLastIdList(), -1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listener.OnInputIdComplete(listener.getLastIdList()[which]);
-                                dialog.dismiss();
-                            }
-                        }).show();
+                if(listener.getLastIdList()!=null) {
+                    new AlertDialog.Builder(mContext).setTitle("请选择需要连接的设备").
+                            setSingleChoiceItems(listener.getLastIdList(), -1, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    listener.OnInputIdComplete(listener.getLastIdList()[which]);
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }else{
+                    Toast.makeText(mContext,"无最近连接设备",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tvSearchData:
                 intent = new Intent();
@@ -144,12 +148,12 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                 break;
             case R.id.tvAdvanceSetting:
                 final EditText password = new EditText(mContext);
-                password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                final AlertDialog passwordDialog = new AlertDialog.Builder(mContext).setTitle("请输入密码").setView(password).
+                password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                new AlertDialog.Builder(mContext).setTitle("请输入密码").setView(password).
                         setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(password.getText().toString().equals("1")){
+                                if(password.getText().toString().equals("q")){
                                     Intent intent = new Intent();
                                     intent.setClass(mContext,SettingActivity.class);
                                     intent.putExtra("isAdvance",true);

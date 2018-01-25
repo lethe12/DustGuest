@@ -3,8 +3,8 @@ package com.grean.dustguest.model;
 import android.content.Context;
 
 import com.grean.dustguest.SocketTask;
-import com.grean.dustguest.presenter.SettingInfo;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
+import com.grean.dustguest.protocol.GeneralConfig;
 import com.grean.dustguest.protocol.GeneralHistoryData;
 import com.grean.dustguest.protocol.HistoryDataListener;
 import com.grean.dustguest.protocol.ProtocolLib;
@@ -13,12 +13,17 @@ import com.grean.dustguest.protocol.ProtocolLib;
  * Created by weifeng on 2018/1/21.
  */
 
-public class ScanDeviceState implements SettingInfo{
+public class ScanDeviceState {
     private static ScanDeviceState instance = new ScanDeviceState();
+    private GeneralConfig config = new GeneralConfig();
     private boolean run;
     private GeneralClientProtocol clientProtocol;
     private ScanDeviceState() {
 
+    }
+
+    public GeneralConfig getConfig() {
+        return config;
     }
 
     public static ScanDeviceState getInstance() {
@@ -29,7 +34,8 @@ public class ScanDeviceState implements SettingInfo{
      * 启动扫描
      *
      */
-    public void startScan(Context context){
+    public void startScan(Context context,String id){
+        config.setDevicesId(id);
         clientProtocol = ProtocolLib.getInstance().getClientProtocol();
         SocketTask.getInstance().startSocketHeart("192.168.1.100",8888,context, clientProtocol);
         new ScanRealTimeData().start();
@@ -83,29 +89,34 @@ public class ScanDeviceState implements SettingInfo{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (!clientProtocol.sendGetOperateInit()) {
+                if (!clientProtocol.sendGetOperateInit(config)) {
                     times++;
                     if(times > 3){
                         run = false;
                         break;
                     }
                 }else {
+
                     clientProtocol.sendScanCommand();
                     run = true;
                     break;
                 }
             }
             try {
-                sleep(1000);
+                sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            clientProtocol.sendLoadSetting(instance);
+            clientProtocol.sendLoadSetting(config);
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            clientProtocol.sendDustMeterInfo(config);
             while (run&&(!interrupted())){
                 try {
-                    sleep(1000);
-
-                    sleep(1000);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

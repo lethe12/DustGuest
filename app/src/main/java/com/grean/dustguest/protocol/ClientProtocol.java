@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.grean.dustguest.SocketTask;
 import com.grean.dustguest.presenter.RealTimeDataDisplay;
-import com.grean.dustguest.presenter.SettingInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +18,7 @@ public class ClientProtocol implements GeneralClientProtocol{
     private RealTimeDataDisplay realTimeDataDisplay;
     private HistoryDataListener historyDataListener;
     private GeneralHistoryData historyData;
+    private GeneralConfig config;
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
     }
@@ -35,8 +35,9 @@ public class ClientProtocol implements GeneralClientProtocol{
                     realTimeDataDisplay.show(dataFormat);
                 }
             }else if(type.equals("operateInit")){
-                String name = JSON.getDustName(jsonObject);
-                if(realTimeDataDisplay!=null){
+                if((realTimeDataDisplay!=null)&&(config!=null)){
+                    JSON.getDustName(jsonObject,config);
+                    String name = config.getDustNames()[config.getDustName()];
                     realTimeDataDisplay.showDustName(name);
                 }
             }else if(type.equals("historyData")){
@@ -44,6 +45,16 @@ public class ClientProtocol implements GeneralClientProtocol{
                 if((historyDataListener!=null)&&(historyData!=null)){
                     JSON.getHistoryData(jsonObject,historyData);
                     historyDataListener.setHistoryData();
+                }
+            }else if(type.equals("downloadSetting")){
+                if(config!=null){
+                    JSON.getSetting(jsonObject,config);
+                }
+            }else if(type.equals("operate")){
+                if(jsonObject.has("DustMeterInfo")){
+                    if(config!=null){
+                        JSON.getDustMeterInfo(jsonObject,config);
+                    }
                 }
             }else{
                 Log.d(tag,"协议异常"+rec);
@@ -67,8 +78,9 @@ public class ClientProtocol implements GeneralClientProtocol{
     }
 
     @Override
-    public boolean sendGetOperateInit() {
+    public boolean sendGetOperateInit(GeneralConfig config) {
         try {
+            this.config = config;
             return socketTask.send(JSON.readOperateInit());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -81,10 +93,7 @@ public class ClientProtocol implements GeneralClientProtocol{
         realTimeDataDisplay = display;
     }
 
-    @Override
-    public void sendLoadSetting(SettingInfo info) {
 
-    }
 
     @Override
     public void sendLastData(long startDate, long endDate, HistoryDataListener listener,GeneralHistoryData historyData) {
@@ -92,6 +101,26 @@ public class ClientProtocol implements GeneralClientProtocol{
             this.historyData = historyData;
             this.historyDataListener = listener;
             socketTask.send(JSON.readHistoryData(startDate,endDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendLoadSetting(GeneralConfig config) {
+        try {
+            this.config = config;
+            socketTask.send(JSON.readSetting());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendDustMeterInfo(GeneralConfig config) {
+        try {
+            this.config = config;
+            socketTask.send(JSON.readDustMeterInfo());
         } catch (JSONException e) {
             e.printStackTrace();
         }

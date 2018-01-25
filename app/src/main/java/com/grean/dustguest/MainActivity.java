@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //tvScanResult.setText(scanResult);
             startNewLocalServer(scanResult);
         }
-
     }
 
     @Override
@@ -197,10 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tvTableInfo.setText(dustName);
                     dataInfo.getLastMinData(LastDataInfo.Dust);
                 }
-                /*String[] date = new String[]{"12:00","12:01","12:02","12:03","12:04","12:05","12:06","12:07","12:06","12:07","12:00","12:01","12:02","12:03","12:04"};
-                float [] data = new float[]{21.0f,34.1f,56.2f,2.3f,78.4f,79.5f,12.6f,12.7f,12.6f,12.7f,21.0f,34.1f,56.2f,2.3f,78.4f};
-                tablesView.updateTableData(date,data);
-                tablesView.invalidate();*/
                 break;
             case R.id.layout2:
                 if(localServerManager.isConnect()) {
@@ -242,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
-
     }
 
     @Override
@@ -280,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnLocalServerResult(boolean result) {
         connectResult = result;
+        if(result){
+            lastDevicesInfo.saveConfig();
+        }
         handler.sendEmptyMessage(msgConnectResult);
     }
 
