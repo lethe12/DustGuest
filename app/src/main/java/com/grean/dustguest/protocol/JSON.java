@@ -29,13 +29,29 @@ public class JSON {
     public static RealTimeDataFormat getRealTimeData(JSONObject jsonObject) throws JSONException {
         RealTimeDataFormat format = new RealTimeDataFormat();
         format.setState(jsonObject.getString("state"));
-        JSONArray array = jsonObject.getJSONArray("realTimeData");
+
         if(jsonObject.has("alarm")) {
             format.setAlarm(jsonObject.getBoolean("alarm"));
         }
         if(jsonObject.has("serverConnected")){
             format.setServerConnected(jsonObject.getBoolean("serverConnected"));
         }
+        if(jsonObject.has("acOk")){
+            format.setAcOk(jsonObject.getBoolean("acOk"));
+        }
+        if(jsonObject.has("batteryLow")){
+            format.setAcOk(jsonObject.getBoolean("batteryLow"));
+        }
+        if(jsonObject.has("heatPwm")){
+            format.setHeatParams(jsonObject.getInt("heatPwm"));
+        }
+        format.setRelays(1,jsonObject.getBoolean("relay1"));
+        format.setRelays(2,jsonObject.getBoolean("relay2"));
+        format.setRelays(3,jsonObject.getBoolean("relay3"));
+        format.setRelays(4,jsonObject.getBoolean("relay4"));
+        format.setRelays(5,jsonObject.getBoolean("relay5"));
+        format.setDustMeterRun(jsonObject.getBoolean("dustMeterRun"));
+        JSONArray array = jsonObject.getJSONArray("realTimeData");
         for(int i=0; i <array.length();i++){
             JSONObject item = array.getJSONObject(i);
             if(item.getString("name").equals("dust")){
@@ -54,9 +70,9 @@ public class JSON {
                 format.setNoise((float) item.getDouble("value"));
             }else if(item.getString("name").equals("value")){
                 format.setValue((float) item.getDouble("value"));
-            }else if(item.getString("name").equals("entranceDewPoint")){
+            }else if(item.getString("name").equals("highDew")){
                 format.setEntranceDewPoint((float) item.getDouble("value"));
-            }else if(item.getString("name").equals("exitDewPoint")){
+            }else if(item.getString("name").equals("lowDew")){
                 format.setExitDewPoint((float) item.getDouble("value"));
             }else if(item.getString("name").equals("heatParams")){
                 format.setHeatParams((float) item.getDouble("value"));
@@ -64,6 +80,8 @@ public class JSON {
                 format.setExitHumidity((float) item.getDouble("value"));
             }else if(item.getString("name").equals("exitTemperature")){
                 format.setExitTemperature((float) item.getDouble("value"));
+            }else{
+
             }
         }
         return format;
@@ -79,6 +97,14 @@ public class JSON {
 
     public static void getDustName(JSONObject jsonObject,GeneralConfig config) throws JSONException {
         config.setDustNameContent(jsonObject);
+    }
+
+    public static byte[] operateDustSetParaK(float parameter) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterSetParaK",true);
+        object.put("DustMeterParaK",parameter);
+        return object.toString().getBytes();
     }
 
     public static byte[] readHistoryData(long startDate,long endDate) throws JSONException {

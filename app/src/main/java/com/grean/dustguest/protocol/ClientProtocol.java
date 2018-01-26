@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.grean.dustguest.SocketTask;
 import com.grean.dustguest.presenter.RealTimeDataDisplay;
+import com.grean.dustguest.presenter.RealTimeSettingDisplay;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ public class ClientProtocol implements GeneralClientProtocol{
     private static final String tag = "ClientProtocol";
     private SocketTask socketTask;
     private RealTimeDataDisplay realTimeDataDisplay;
+    private RealTimeSettingDisplay realTimeSettingDisplay;
     private HistoryDataListener historyDataListener;
     private GeneralHistoryData historyData;
     private GeneralConfig config;
@@ -29,10 +31,13 @@ public class ClientProtocol implements GeneralClientProtocol{
             JSONObject jsonObject = new JSONObject(rec);
             String type = JSON.getProtocolType(jsonObject);
             if(type.equals("realTimeData")){
-               // Log.d(tag,"实时");
+                //Log.d(tag,"实时"+rec);
                 RealTimeDataFormat dataFormat = JSON.getRealTimeData(jsonObject);
                 if(realTimeDataDisplay!=null) {
                     realTimeDataDisplay.show(dataFormat);
+                }
+                if(realTimeSettingDisplay!=null){
+                    realTimeSettingDisplay.show(dataFormat);
                 }
             }else if(type.equals("operateInit")){
                 if((realTimeDataDisplay!=null)&&(config!=null)){
@@ -93,6 +98,10 @@ public class ClientProtocol implements GeneralClientProtocol{
         realTimeDataDisplay = display;
     }
 
+    @Override
+    public void setRealTimeSettingDisplay(RealTimeSettingDisplay display) {
+        realTimeSettingDisplay = display;
+    }
 
 
     @Override

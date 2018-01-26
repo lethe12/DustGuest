@@ -227,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="采样温度:" />
+                        android:text="出口温度:" />
 
                     <TextView
                         android:id="@+id/tvRealTimeValue9"
@@ -247,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="采样湿度:" />
+                        android:text="出口湿度:" />
 
                     <TextView
                         android:id="@+id/tvRealTimeValue10"
@@ -335,7 +335,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="电池电压:" />
+                        android:text="电池异常:" />
 
                     <TextView
                         android:id="@+id/tvRealTimeValue14"
@@ -502,7 +502,6 @@
                         android:id="@+id/textView22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:text="时间:"
                         android:textSize="24sp" />
 
@@ -510,7 +509,6 @@
                         android:id="@+id/tvOperateAutoCalDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:text="2017-09-11 00:00"
                         android:textSize="24sp" />
 
@@ -527,7 +525,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:autoSizeMaxTextSize="4dp"
-                        android:ems="4"
+                        android:ems="2"
                         android:inputType="number"
                         android:maxEms="4"
                         android:text="24"
@@ -542,10 +540,9 @@
 
                     <Button
                         android:id="@+id/btnOperateSaveAutoCal"
-                        android:layout_width="120dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="35dp"
                         android:text="保存"
                         android:textSize="18sp" />
 

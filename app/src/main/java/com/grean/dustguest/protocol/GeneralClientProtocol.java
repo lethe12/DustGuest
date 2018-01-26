@@ -1,6 +1,7 @@
 package com.grean.dustguest.protocol;
 
 import com.grean.dustguest.presenter.RealTimeDataDisplay;
+import com.grean.dustguest.presenter.RealTimeSettingDisplay;
 
 /**
  * Created by weifeng on 2018/1/23.
@@ -12,10 +13,12 @@ public interface GeneralClientProtocol {
     boolean sendScanCommand();
 
     void setRealTimeDisplay(RealTimeDataDisplay display);
+    void setRealTimeSettingDisplay(RealTimeSettingDisplay display);
     void sendLastData(long startDate,long endDate,HistoryDataListener listener,GeneralHistoryData historyData);
     void sendLoadSetting(GeneralConfig config);
     void sendDustMeterInfo(GeneralConfig config);
     boolean sendGetOperateInit(GeneralConfig config);
+    void sendSetDustMeterParaK(float parameter);
     /*void sendCalDust(ShowOperateInfo info,float target);
     void sendSetDustMeterParaK(float parameter);
     void sendUploadSetting(SettingFormat format);

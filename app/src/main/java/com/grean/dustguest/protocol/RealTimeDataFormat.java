@@ -8,10 +8,35 @@ public class RealTimeDataFormat {
     private float dust,temperature,humidity,pressure,windForce,windDirection,noise,value,
             entranceDewPoint,exitDewPoint,heatParams,exitTemperature,exitHumidity;
     private String state;
-    boolean alarm,serverConnected;
+    boolean alarm,serverConnected,acOk,BatteryLow,dustMeterRun;
+    boolean [] relays = new boolean[5];
 
     public RealTimeDataFormat(){
 
+    }
+
+    public boolean isDustMeterRun() {
+        return dustMeterRun;
+    }
+
+    public void setDustMeterRun(boolean dustMeterRun) {
+        this.dustMeterRun = dustMeterRun;
+    }
+
+    public boolean isAcOk() {
+        return acOk;
+    }
+
+    public void setAcOk(boolean acOk) {
+        this.acOk = acOk;
+    }
+
+    public boolean isBatteryLow() {
+        return BatteryLow;
+    }
+
+    public void setBatteryLow(boolean batteryLow) {
+        BatteryLow = batteryLow;
     }
 
     public boolean isServerConnected() {
@@ -140,5 +165,19 @@ public class RealTimeDataFormat {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public boolean getRelays(int i) {
+        if((i<=5)&&(i >0)) {
+            return relays[i - 1];
+        }else{
+            return false;
+        }
+    }
+
+    public void setRelays(int num,boolean key) {
+        if((num<=5)&&(num >0)) {
+            this.relays[num-1] = key;
+        }
     }
 }

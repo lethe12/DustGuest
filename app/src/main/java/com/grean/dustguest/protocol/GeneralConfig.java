@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 public class GeneralConfig {
     private String[] dustNames,clientProtocolNames;
-    private int dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName;
+    private int dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName,MotorTime,MotorStep;
     private float dustParaK,alarmDust;
     private boolean autoCalEnable;
     private long autoCalTime,autoCalInterval;
@@ -149,5 +149,13 @@ public class GeneralConfig {
 
     public String getMnCode() {
         return mnCode;
+    }
+
+    public int getMotorTime() {
+        return MotorTime;
+    }
+
+    public int getMotorStep() {
+        return MotorStep;
     }
 }
