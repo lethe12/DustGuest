@@ -3,8 +3,12 @@ package com.grean.dustguest.protocol;
 import android.util.Log;
 
 import com.grean.dustguest.SocketTask;
+import com.grean.dustguest.model.DustMeterCalCtrl;
+import com.grean.dustguest.model.DustMeterCalProcessFormat;
+import com.grean.dustguest.presenter.NotifyProcessDialogInfo;
 import com.grean.dustguest.presenter.RealTimeDataDisplay;
 import com.grean.dustguest.presenter.RealTimeSettingDisplay;
+import com.grean.dustguest.presenter.SettingDisplay;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +25,10 @@ public class ClientProtocol implements GeneralClientProtocol{
     private HistoryDataListener historyDataListener;
     private GeneralHistoryData historyData;
     private GeneralConfig config;
+    private SettingDisplay settingDisplay;
+    private NotifyProcessDialogInfo dialogInfo;
+    private DustMeterCalCtrl dustMeterCalCtrl;
+
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
     }
@@ -55,12 +63,34 @@ public class ClientProtocol implements GeneralClientProtocol{
                 if(config!=null){
                     JSON.getSetting(jsonObject,config);
                 }
+                if(settingDisplay!=null){
+                    settingDisplay.show(config);
+                }
             }else if(type.equals("operate")){
                 if(jsonObject.has("DustMeterInfo")){
                     if(config!=null){
                         JSON.getDustMeterInfo(jsonObject,config);
                     }
                 }
+
+                if(jsonObject.has("DustMeterCalProcess")){
+                    DustMeterCalProcessFormat format = JSON.getDustMeterCalProcess(jsonObject);
+                    if(dialogInfo!=null){
+                        dialogInfo.showInfo(format.getString());
+                    }
+                    if(format.getProcess() == 100) {
+                        if (dustMeterCalCtrl != null) {
+                            dustMeterCalCtrl.onFinish();
+                        }
+                    }
+                }else if(jsonObject.has("DustMeterCalResult")){
+                    String string =  JSON.getDustMeterCalResult(jsonObject);
+                    if(dustMeterCalCtrl!=null){
+                        dustMeterCalCtrl.onResult(string);
+                    }
+                }
+
+
             }else{
                 Log.d(tag,"协议异常"+rec);
             }
@@ -94,6 +124,107 @@ public class ClientProtocol implements GeneralClientProtocol{
     }
 
     @Override
+    public void sendSetDustMeterParaK(float parameter) {
+        try {
+            socketTask.send(JSON.operateDustSetParaK(parameter));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendUploadConfig(GeneralConfig config) {
+        try {
+            socketTask.send(JSON.uploadConfig(config));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendDustMeterCalStart(NotifyProcessDialogInfo dialogInfo) {
+        this.dialogInfo = dialogInfo;
+        try {
+            socketTask.send(JSON.operateDustMeterCal());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendDustMeterCalProcess(DustMeterCalCtrl ctrl) {
+        this.dustMeterCalCtrl = ctrl;
+        try {
+            socketTask.send(JSON.operateDustMeterCalProcess());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendDustMeterCalResult() {
+        try {
+            socketTask.send(JSON.operateDustMeterCalResult());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlDustMeter(boolean key) {
+        try {
+            socketTask.send(JSON.ctrlDustMeter(key));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlRelay(int num, boolean key) {
+        try {
+            socketTask.send(JSON.ctrlRelay(num,key));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlMotorForwardTest() {
+        try {
+            socketTask.send(JSON.ctrlMotorForwardTest());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlMotorBackwardTest() {
+        try {
+            socketTask.send(JSON.ctrlMotorBackwardTest());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlMotorForwardStep() {
+        try {
+            socketTask.send(JSON.ctrlMotorForwardStep());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCtrlMotorBackwardStep() {
+        try {
+            socketTask.send(JSON.ctrlMotorBackwardStep());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void setRealTimeDisplay(RealTimeDataDisplay display) {
         realTimeDataDisplay = display;
     }
@@ -119,6 +250,17 @@ public class ClientProtocol implements GeneralClientProtocol{
     public void sendLoadSetting(GeneralConfig config) {
         try {
             this.config = config;
+            socketTask.send(JSON.readSetting());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendLoadSetting(GeneralConfig config, SettingDisplay display) {
+        try {
+            this.config = config;
+            this.settingDisplay = display;
             socketTask.send(JSON.readSetting());
         } catch (JSONException e) {
             e.printStackTrace();

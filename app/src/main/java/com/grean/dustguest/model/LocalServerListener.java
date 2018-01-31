@@ -6,4 +6,5 @@ package com.grean.dustguest.model;
 
 public interface LocalServerListener {
     void OnLocalServerResult(boolean result);
+    void OnDisconnectServer();
 }

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -49,15 +50,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView [] tvNames = new TextView[8],tvValues = new TextView[8],tvUnits=new TextView[8];
     private View [] layouts = new View[7];
     //@BindView(R.id.btnTestScan)private Button btnTestScan;
-    private TextView tvTableInfo,tvState,tvLocalServer;
+    private TextView tvTableInfo,tvState,tvLocalServer,tvScanResult;
     private LocalServerManager localServerManager;
     private LastDataInfo dataInfo;
     private AlertDialog dialog;
     private ProgressBar pb;
     private boolean connectResult;
     private RealTimeDataFormat dataFormat;
-    private String dustName;
-    private static final int msgConnectResult = 1,msgShowRealTimeData=2,msgShowDustName=3;
+    private String dustName,idString;
+    private static final int msgConnectResult = 1,msgShowRealTimeData=2,msgShowDustName=3,
+    msgDisconnect = 4;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -69,11 +71,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     if(connectResult){
                         tvLocalServer.setText("已连接设备");
+                        tvScanResult.setText(idString);
                         Toast.makeText(MainActivity.this,"已连接成功！",Toast.LENGTH_SHORT).show();
                     }else{
                         tvLocalServer.setText("未连接设备");
                         Toast.makeText(MainActivity.this,"连接失败，请重试！",Toast.LENGTH_SHORT).show();
+                        tvScanResult.setText("设备ID:");
+                        tvState.setText("当前状态:");
                     }
+                    break;
+                case msgDisconnect:
+                    tvLocalServer.setText("未连接设备");
+                    tvScanResult.setText("设备ID:");
+                    tvState.setText("当前状态:");
                     break;
                 case msgShowRealTimeData:
                     String serverConnectString;
@@ -107,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
 
         setContentView(R.layout.activity_main);
@@ -125,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView(){
+        tvScanResult = findViewById(R.id.tvScanResult);
         tablesView = findViewById(R.id.tableView);
         tvTableInfo = findViewById(R.id.tvTableInfo);
         tvState = findViewById(R.id.tvState);
@@ -258,10 +270,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void OnInputIdComplete(String string) {
-
         startNewLocalServer(string);
+        idString = "设备ID: "+string;
+        tvScanResult.setText(idString);
 
-        //tvState.setText(string);
     }
 
     @Override
@@ -278,6 +290,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lastDevicesInfo.saveConfig();
         }
         handler.sendEmptyMessage(msgConnectResult);
+    }
+
+    @Override
+    public void OnDisconnectServer() {
+        connectResult = false;
+        handler.sendEmptyMessage(msgDisconnect);
+
     }
 
 

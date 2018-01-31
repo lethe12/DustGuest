@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.grean.dustguest.model.ScanDeviceState;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
 
 import java.io.IOException;
@@ -171,6 +172,8 @@ public class SocketTask {
                 }*/
                 e.printStackTrace();
             }
+            Log.d(tag,"断开连接");
+            ScanDeviceState.getInstance().stopRun();
             /*if(show!=null){
                 show.showLocal(false);
             }*/
@@ -270,6 +273,7 @@ public class SocketTask {
             Log.d(tag,"IP=V"+getIpAddressString());
             //getAllIp();
             while ((!interrupted())&&(heartRun)){
+                //Log.d(tag,"heartRun");
                 if (connected){//已连接服务器
 
                     try {

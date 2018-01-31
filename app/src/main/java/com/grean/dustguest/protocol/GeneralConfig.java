@@ -20,6 +20,54 @@ public class GeneralConfig {
 
     }
 
+    public void setDustName(int dustName) {
+        this.dustName = dustName;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public void setClientProtocolName(int clientProtocolName) {
+        this.clientProtocolName = clientProtocolName;
+    }
+
+    public void setMotorTime(int motorTime) {
+        MotorTime = motorTime;
+    }
+
+    public void setMotorStep(int motorStep) {
+        MotorStep = motorStep;
+    }
+
+    public void setDustParaK(float dustParaK) {
+        this.dustParaK = dustParaK;
+    }
+
+    public void setAlarmDust(float alarmDust) {
+        this.alarmDust = alarmDust;
+    }
+
+    public void setAutoCalEnable(boolean autoCalEnable) {
+        this.autoCalEnable = autoCalEnable;
+    }
+
+    public void setAutoCalTime(long autoCalTime) {
+        this.autoCalTime = autoCalTime;
+    }
+
+    public void setAutoCalInterval(long autoCalInterval) {
+        this.autoCalInterval = autoCalInterval;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
+    }
+
+    public void setMnCode(String mnCode) {
+        this.mnCode = mnCode;
+    }
+
     public String getDevicesId() {
         return devicesId;
     }
@@ -69,6 +117,14 @@ public class GeneralConfig {
                     clientProtocolNames[i] = array.getString(i);
                 }
             }
+            if(jsonObject.has("motorTime")){
+                MotorTime = jsonObject.getInt("motorTime");
+            }
+
+            if(jsonObject.has("motorStep")){
+                MotorStep = jsonObject.getInt("motorStep");
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

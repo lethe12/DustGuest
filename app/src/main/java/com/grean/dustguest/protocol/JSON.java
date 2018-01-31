@@ -2,6 +2,7 @@ package com.grean.dustguest.protocol;
 
 import android.util.Log;
 
+import com.grean.dustguest.model.DustMeterCalProcessFormat;
 import com.tools;
 
 import org.json.JSONArray;
@@ -95,6 +96,71 @@ public class JSON {
         }
     }
 
+    public static byte[] operateDustMeterCal() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterCal",true);
+        return object.toString().getBytes();
+    }
+
+    public static byte[] operateDustMeterCalProcess() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterCalProcess",true);
+        return object.toString().getBytes();
+    }
+
+    public static byte[] operateDustMeterCalResult() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterCalResult",true);
+        return object.toString().getBytes();
+    }
+
+    public static String getDustMeterCalResult(JSONObject jsonObject) throws JSONException {
+        boolean bg = jsonObject.getBoolean("DustMeterCalBg");
+        boolean span = jsonObject.getBoolean("DustMeterCalSpan");
+        String string;
+        if(bg){
+            string = "校零成功，";
+        }else{
+            string = "校零失败，";
+        }
+        if(span){
+            string += "校跨成功。";
+        }else{
+            string += "校跨失败。";
+        }
+        return string;
+    }
+
+    public static DustMeterCalProcessFormat getDustMeterCalProcess(JSONObject jsonObject) throws JSONException {
+        DustMeterCalProcessFormat format = new DustMeterCalProcessFormat();
+        String string = jsonObject.getString("DustMeterCalInfo");
+        int process = jsonObject.getInt("DustMeterCalProcessInt");
+        string += "..."+String.valueOf(process)+"%";
+        format.setProcess(process);
+        format.setString(string);
+        return format;
+    }
+
+    public static byte[] uploadConfig(GeneralConfig config) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","uploadSetting");
+        object.put("autoCalEnable",config.isAutoCalEnable());
+        object.put("autoCalTime",config.getAutoCalTime());
+        object.put("autoCalInterval",config.getAutoCalInterval());
+        object.put("serverIp",config.getServerIp());
+        object.put("serverPort",config.getServerPort());
+        object.put("mnCode",config.getMnCode());
+        object.put("alarmDust",config.getAlarmDust());
+        object.put("clientProtocolName",config.getClientProtocolName());
+        object.put("motorTime",config.getMotorTime());
+        object.put("motorStep",config.getMotorStep());
+        object.put("dustName",config.getDustName());
+        return object.toString().getBytes();
+    }
+
     public static void getDustName(JSONObject jsonObject,GeneralConfig config) throws JSONException {
         config.setDustNameContent(jsonObject);
     }
@@ -125,6 +191,83 @@ public class JSON {
         JSONObject object = new JSONObject();
         object.put("protocolType","operate");
         object.put("DustMeterInfo",true);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 控制粉尘仪，开启或关闭
+     * @param key
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlDustMeter(boolean key) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("DustMeterRun",key);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 控制继电器
+     * @param num
+     * @param key
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlRelay(int num,boolean key) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("RelayCtrl",true);
+        object.put("num",num);
+        object.put("key",key);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 正转测试
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlMotorForwardTest() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("MotorForwardTest",true);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 反转测试
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlMotorBackwardTest() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("MotorBackwardTest",true);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 正转100步
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlMotorForwardStep() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("MotorForwardStep",true);
+        return object.toString().getBytes();
+    }
+
+    /**
+     * 反转100步
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] ctrlMotorBackwardStep() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("MotorBackwardStep",true);
         return object.toString().getBytes();
     }
 

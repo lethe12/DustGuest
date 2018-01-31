@@ -1,11 +1,14 @@
 package com.grean.dustguest.presenter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -16,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.grean.dustguest.R;
 import com.grean.dustguest.model.SettingManager;
@@ -24,22 +28,30 @@ import com.grean.dustguest.protocol.ProtocolLib;
 import com.grean.dustguest.protocol.RealTimeDataFormat;
 import com.tools;
 
+import java.util.Calendar;
+
 /**
  * Created by weifeng on 2018/1/22.
  */
 
-public class SettingActivity extends Activity implements View.OnClickListener,AdapterView.OnItemSelectedListener,SettingManagerListener,RealTimeSettingDisplay{
+public class SettingActivity extends Activity implements View.OnClickListener,AdapterView.OnItemSelectedListener,
+        SettingManagerListener,RealTimeSettingDisplay,SettingDisplay,DialogTimeSelected{
+    private static final String tag = "SettingActivity";
     private EditText etDustParaK,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState;
     private TextView[] tvRealTimeValue=new TextView[16];
     private Spinner spDustName,spProtocols;
     private LinearLayout motorSet1,MotorSet2,RelaySet,passwordSet,realTimeDisplay;
-    private Button btnSaveDustPara;
+    private Button btnSaveDustPara,btnSaveAutoCal;
     private SettingManager manager;
     private int dustName,protocolName;
+    private String toastString;
     private RealTimeDataFormat format;
-    private static final int msgShowRealTime = 1;
+    private GeneralConfig config;
+    private ProcessDialogFragment dialogFragment;
+    private static final int msgShowRealTime = 1,msgShowSetting = 2,msgDismissDialogWithToast=3,
+    msgDismissDialog=4;
 
     private Handler handler = new Handler(){
         @Override
@@ -72,6 +84,22 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                         swDustMeter.setChecked(format.isDustMeterRun());
                     }
                     break;
+                case msgShowSetting:
+                    if(config!=null){
+                        showContent(config);
+                    }
+                    break;
+                case msgDismissDialogWithToast:
+                    if(dialogFragment!=null){
+                        dialogFragment.dismiss();
+                        Toast.makeText(SettingActivity.this,toastString,Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case msgDismissDialog:
+                    if(dialogFragment!=null){
+                        dialogFragment.dismiss();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -82,6 +110,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_setting);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         findViewById(R.id.setting_toolbar_back).setOnClickListener(new View.OnClickListener() {
@@ -118,7 +147,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         swDustMeter = findViewById(R.id.swDustMeter);
         swRelay1 = findViewById(R.id.swRelay1);
         swRelay2 = findViewById(R.id.swRelay2);
-        swRelay3 = findViewById(R.id.swRealy3);
+        swRelay3 = findViewById(R.id.swRelay3);
         swRelay4 = findViewById(R.id.swRelay4);
         swRelay5 = findViewById(R.id.swRelay5);
         spDustName = findViewById(R.id.spDustType);
@@ -158,6 +187,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         findViewById(R.id.btnBackwardTest).setOnClickListener(this);
         findViewById(R.id.btnForwardStep).setOnClickListener(this);
         findViewById(R.id.btnBackwardStep).setOnClickListener(this);
+        btnSaveAutoCal = findViewById(R.id.btnOperateSaveAutoCal);
+        btnSaveAutoCal.setOnClickListener(this);
+        findViewById(R.id.btnOperateSaveAlarm).setOnClickListener(this);
         swAutoCalEnable.setOnClickListener(this);
         swDustMeter.setOnClickListener(this);
         swRelay1.setOnClickListener(this);
@@ -170,12 +202,129 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnOperateDustSetParaK:
+                manager.setDustParams(Float.valueOf( etDustParaK.getText().toString()));
+                break;
+            case R.id.btnOperateSaveAutoCal:
+                manager.setAutoDate(tvAutoCalTime.getText().toString(),etAutoInterval.getText().toString());
+                break;
+            case R.id.swOperateAutoCal:
+                boolean enable = swAutoCalEnable.isChecked();
+                if(!enable){
+                    tvAutoCalTime.setVisibility(View.INVISIBLE);
+                    etAutoInterval.setVisibility(View.INVISIBLE);
+                    btnSaveAutoCal.setVisibility(View.INVISIBLE);
+                }else{
+                    tvAutoCalTime.setVisibility(View.VISIBLE);
+                    etAutoInterval.setVisibility(View.VISIBLE);
+                    btnSaveAutoCal.setVisibility(View.VISIBLE);
+                }
+                manager.setAutoCalEnable(enable);
+                break;
+            case R.id.btnSaveMotorParams:
+                manager.setMotorParams(etMotorTime.getText().toString(),etMotorStep.getText().toString());
+                break;
+            case R.id.btnOperateSaveAlarm:
+                manager.setAlarmValue(etAlarmValue.getText().toString());
+                break;
+            case R.id.btnOperateSaveServer:
+                manager.setProtocol(etMnCode.getText().toString(),protocolName,
+                        etServerIp.getText().toString(),Integer.valueOf(etServerPort.getText().toString()));
+                break;
+            case R.id.btnSaveDustType:
+                manager.setDustName(dustName);
+                break;
+            case R.id.btnOperateUpdateSetting:
+                manager.updateSetting(this);
+                break;
+            case R.id.tvOperateAutoCalDate:
+                Calendar calendar = Calendar.getInstance();
+                DialogTimeChoose choose = new DialogTimeChoose(this,"设置下次自动校准时间");
+                choose.showDialog(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),0,0,this);
+                break;
+            case R.id.btnOperateCalMan:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(false);
+                dialogFragment.show(getFragmentManager(),"Calibration");
+                manager.startDustMeterCal(dialogFragment,this);
+                break;
+            case R.id.btnOperateUpdateSoftware:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"DownLoadSoftware");
+                manager.startDownLoadSoftware(this,etUpdateUrl.getText().toString(),dialogFragment,this);
+                break;
+            case R.id.btnOperateVideoSetting:
+                Uri uri = Uri.parse("http://192.168.1.64");
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                startActivity(intent);
+                break;
+            case R.id.swDustMeter:
+                manager.ctrlDustMeter(swDustMeter.isChecked());
+                break;
+            case R.id.swRelay1:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"CtrlRelay");
+                manager.ctrlRelay(1,swRelay1.isChecked(),this);
+                break;
+            case R.id.swRelay2:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"CtrlRelay");
+                manager.ctrlRelay(2,swRelay2.isChecked(),this);
+                break;
+            case R.id.swRelay3:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"CtrlRelay");
+                manager.ctrlRelay(3,swRelay3.isChecked(),this);
+                break;
+            case R.id.swRelay4:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"CtrlRelay");
+                manager.ctrlRelay(4,swRelay4.isChecked(),this);
+                break;
+            case R.id.swRelay5:
+                dialogFragment = new ProcessDialogFragment();
+                dialogFragment.setCancelable(true);
+                dialogFragment.show(getFragmentManager(),"CtrlRelay");
+                manager.ctrlRelay(5,swRelay5.isChecked(),this);
+                break;
+            case R.id.btnForwardTest:
+                manager.ctrlMotorForwardTest();
+                break;
+            case R.id.btnBackwardTest:
+                manager.ctrlMotorBackwardTest();
+                break;
+            case R.id.btnForwardStep:
+                manager.ctrlMotorForwardStep();
+                break;
+            case R.id.btnBackwardStep:
+                manager.ctrlMotorBackwardStep();
+                break;
+            default:
 
+                break;
+
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            switch (parent.getId()){
+                case R.id.spDustType:
+                    Log.d(tag,String.valueOf(position));
+                    dustName = position;
+                    break;
+                case R.id.spOperateProticol:
+                    protocolName = position;
+                    break;
+                default:
+                    break;
+            }
     }
 
     @Override
@@ -192,6 +341,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         if(!config.isAutoCalEnable()){
             tvAutoCalTime.setVisibility(View.INVISIBLE);
             etAutoInterval.setVisibility(View.INVISIBLE);
+            btnSaveAutoCal.setVisibility(View.INVISIBLE);
         }
         tvDustMeterInfo.setText("气泵累计运行时间"+String.valueOf(config.getDustMeterPumpTime())+
                 "小时,激光器累计运行时间"+String.valueOf(config.getDustMeterLaserTime())+"小时");
@@ -218,5 +368,28 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     public void show(RealTimeDataFormat format) {
         this.format = format;
         handler.sendEmptyMessage(msgShowRealTime);
+    }
+
+    @Override
+    public void show(GeneralConfig config) {
+        this.config = config;
+        handler.sendEmptyMessage(msgShowSetting);
+    }
+
+    @Override
+    public void cancelDialogWithToast(String string) {
+        toastString = string;
+        handler.sendEmptyMessage(msgDismissDialogWithToast);
+    }
+
+    @Override
+    public void cancelDialog() {
+        Log.d(tag,"cancelDialog");
+        handler.sendEmptyMessage(msgDismissDialog);
+    }
+
+    @Override
+    public void onComplete(String string) {
+        tvAutoCalTime.setText(manager.calcNextDate(string,etAutoInterval.getText().toString()));
     }
 }

@@ -53,7 +53,7 @@ public class LastDevicesInfo {
         values.put("date", tools.nowtime2timestamp());
         values.put("dustName", config.getDustNameContent());
         values.put("config", config.getConfigContent());
-        values.put("dustMeter", config.getDustNameContent());
+        values.put("dustMeter", config.getDustMeterInfoContent());
         if(cursor.getCount()!=0){//有重复的
             Log.d(tag,"有重复"+String.valueOf(cursor.getCount()));
             db.update("devices",values,"id=?",new String[]{config.getDevicesId()});

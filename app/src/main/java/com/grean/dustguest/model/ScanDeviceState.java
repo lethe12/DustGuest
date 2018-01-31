@@ -18,6 +18,7 @@ public class ScanDeviceState {
     private GeneralConfig config = new GeneralConfig();
     private boolean run;
     private GeneralClientProtocol clientProtocol;
+    private LocalServerListener listener;
     private ScanDeviceState() {
 
     }
@@ -30,15 +31,21 @@ public class ScanDeviceState {
         return instance;
     }
 
+    public void setLocalServerListener (LocalServerListener listener){
+        this.listener = listener;
+    }
+
     /**
      * 启动扫描
      *
      */
-    public void startScan(Context context,String id){
+    synchronized public void startScan(Context context,String id){
         config.setDevicesId(id);
         clientProtocol = ProtocolLib.getInstance().getClientProtocol();
         SocketTask.getInstance().startSocketHeart("192.168.1.100",8888,context, clientProtocol);
-        new ScanRealTimeData().start();
+        if(!run) {
+            new ScanRealTimeData().start();
+        }
 
     }
 
@@ -71,7 +78,7 @@ public class ScanDeviceState {
     /**
      * 重启扫描
      */
-    public void restartScan(){
+    synchronized public void restartScan(){
         if(!run) {
             new ScanRealTimeData().start();
         }
@@ -123,6 +130,9 @@ public class ScanDeviceState {
                 clientProtocol.sendScanCommand();
             }
             run = false;
+            if(listener!=null) {
+                listener.OnDisconnectServer();
+            }
         }
     }
 

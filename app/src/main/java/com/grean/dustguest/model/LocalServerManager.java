@@ -52,6 +52,7 @@ public class LocalServerManager {
 
         public StartLocalServer(ScanDeviceState state){
             this.state = state;
+            state.setLocalServerListener(listener);
         }
 
         @Override
