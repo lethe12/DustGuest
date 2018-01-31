@@ -279,7 +279,7 @@ public class JSON {
     }
 
     public static void getHistoryData(JSONObject jsonObject,GeneralHistoryData historyData) throws JSONException {
-        historyData.clear();
+        //historyData.clear();
         int arraySize = jsonObject.getInt("DateSize");
         if(arraySize>0) {
             JSONArray array = jsonObject.getJSONArray("ArrayData");

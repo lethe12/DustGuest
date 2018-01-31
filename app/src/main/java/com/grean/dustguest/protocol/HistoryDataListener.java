@@ -5,5 +5,8 @@ package com.grean.dustguest.protocol;
  */
 
 public interface HistoryDataListener {
+    /**
+     * 查询完成后回调，取出数据
+     */
     void setHistoryData();
 }
