@@ -28,6 +28,8 @@ public class ClientProtocol implements GeneralClientProtocol{
     private SettingDisplay settingDisplay;
     private NotifyProcessDialogInfo dialogInfo;
     private DustMeterCalCtrl dustMeterCalCtrl;
+    private GeneralLogFormat logFormat;
+    private LogListener logListener;
 
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
@@ -59,6 +61,13 @@ public class ClientProtocol implements GeneralClientProtocol{
                     JSON.getHistoryData(jsonObject,historyData);
                     historyDataListener.setHistoryData();
                 }
+            }else if(type.equals("log")){
+                Log.d(tag,rec);
+                if((logListener!=null)&&(logFormat!=null)){
+                    JSON.getLog(jsonObject,logFormat);
+                    Log.d(tag,"log size="+String.valueOf(logFormat.getSize()));
+                    logListener.onReadLogComplete();
+                }
             }else if(type.equals("downloadSetting")){
                 if(config!=null){
                     JSON.getSetting(jsonObject,config);
@@ -68,6 +77,7 @@ public class ClientProtocol implements GeneralClientProtocol{
                 }
             }else if(type.equals("operate")){
                 if(jsonObject.has("DustMeterInfo")){
+                    Log.d(tag,rec);
                     if(config!=null){
                         JSON.getDustMeterInfo(jsonObject,config);
                     }
@@ -219,6 +229,17 @@ public class ClientProtocol implements GeneralClientProtocol{
     public void sendCtrlMotorBackwardStep() {
         try {
             socketTask.send(JSON.ctrlMotorBackwardStep());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendReadLog(long startDate,long endDate,LogListener logListener,GeneralLogFormat logFormat) {
+        this.logFormat = logFormat;
+        this.logListener = logListener;
+        try {
+            socketTask.send(JSON.readLog(startDate,endDate));
         } catch (JSONException e) {
             e.printStackTrace();
         }

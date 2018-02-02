@@ -1,6 +1,7 @@
 package com.grean.dustguest.protocol;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import com.grean.dustguest.model.DustMeterCalProcessFormat;
 import com.tools;
@@ -181,6 +182,21 @@ public class JSON {
         return object.toString().getBytes();
     }
 
+    /**
+     * 请求日志信息
+     * @param startDate 查询的起始时间
+     * @param endDate 查询的截止时间
+     * @return
+     * @throws JSONException
+     */
+    public static byte[] readLog(long startDate,long endDate) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","log");
+        object.put("startDate",startDate);
+        object.put("endDate",endDate);
+        return object.toString().getBytes();
+    }
+
     public static byte[] readSetting() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("protocolType","downloadSetting");
@@ -278,6 +294,23 @@ public class JSON {
         config.setConfigContent(jsonObject);
     }
 
+    public static void getLog(JSONObject jsonObject,GeneralLogFormat format) throws JSONException {
+        if(jsonObject.has("ArrayData")){
+            JSONArray array = jsonObject.getJSONArray("ArrayData");
+            int size = array.length();
+            for(int i=0; i <size ;i ++){
+                format.addOneItem(i,array.getString(i));
+
+            }
+        }
+    }
+
+    /**
+     * 获取历史数据
+     * @param jsonObject
+     * @param historyData
+     * @throws JSONException
+     */
     public static void getHistoryData(JSONObject jsonObject,GeneralHistoryData historyData) throws JSONException {
         //historyData.clear();
         int arraySize = jsonObject.getInt("DateSize");

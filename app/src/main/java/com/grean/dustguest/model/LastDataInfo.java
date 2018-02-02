@@ -29,7 +29,7 @@ public class LastDataInfo implements HistoryDataListener{
         if((now - latsSearchTime)>60000) {//超过1min，需要重新查询
             thisSearchTime = now;
             historyData.clear();
-            ScanDeviceState.getInstance().getHistoryData(now - 15 * 60000, now, this, historyData);
+            ScanDeviceState.getInstance().getHistoryData(now - 15 * 60000l, now, this, historyData);
         }else {//直接绘图
             showLastData();
         }

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     if(connectResult){
                         tvLocalServer.setText("已连接设备");
-                        tvScanResult.setText(idString);
+                        tvScanResult.setText("设备ID:  "+idString);
                         Toast.makeText(MainActivity.this,"已连接成功！",Toast.LENGTH_SHORT).show();
                     }else{
                         tvLocalServer.setText("未连接设备");
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnMoreFunction:
-                PopWindow popWindow = new PopWindow(this,this,this,localServerManager.isConnect());
+                PopWindow popWindow = new PopWindow(this,this,this,localServerManager.isConnect(),idString);
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             case R.id.layout1:
@@ -271,8 +271,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnInputIdComplete(String string) {
         startNewLocalServer(string);
-        idString = "设备ID: "+string;
-        tvScanResult.setText(idString);
+        idString = string;
+        tvScanResult.setText("设备ID: "+idString);
 
     }
 

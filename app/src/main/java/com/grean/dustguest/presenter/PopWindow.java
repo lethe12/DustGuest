@@ -26,15 +26,17 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
     private View conentView;
     private Context mContext;
     private PopWindowListener listener;
+    private String idString;
 
     private StartScanForResult startScanForResult;
-    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener,boolean isConnect){
+    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener,boolean isConnect,String id){
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         conentView = inflater.inflate(R.layout.popup_window, null);
         this.mContext = context;
         this.startScanForResult = startScanForResult;
         this.listener = listener;
+        this.idString = id;
         int h = context.getWindowManager().getDefaultDisplay().getHeight();
         int w = context.getWindowManager().getDefaultDisplay().getWidth();
         // 设置SelectPicPopupWindow的View
@@ -134,6 +136,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
             case R.id.tvSearchData:
                 intent = new Intent();
                 intent.setClass(mContext,DataActivity.class);
+                intent.putExtra("id",idString);
                 mContext.startActivity(intent);
                 break;
             case R.id.tvSearchLog:

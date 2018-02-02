@@ -9,5 +9,5 @@ import java.util.List;
 public interface DataSearchListener {
     void searchData(long start,long end);
     void showAllData(List<String> date,List<List<String>> data);
-
+    void saveDataComplete(boolean success,String fileName);
 }

@@ -38,8 +38,12 @@ public class LastDevicesInfo {
                     ids[i] = cursor.getString(1);
                 }
             }
+            db.close();
+            dbTask.close();
             return ids;
         }else{
+            db.close();
+            dbTask.close();
             return null;
         }
     }

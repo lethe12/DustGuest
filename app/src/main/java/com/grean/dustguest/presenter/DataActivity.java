@@ -43,9 +43,10 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
     private SearchData searchData;
     private EndDialogTimeSelected endDialogTimeSelected;
     private StartDialogTimeSelected startDialogTimeSelected;
+    private String fileName,idString;
     private static final String[] elementNames = {"扬尘","温度","湿度","气压","风速","风向","噪声"},
             getElementUnit = {"mg/m³","℃","%","hPa","m/s","°","dB"};
-    private static final int msgShowAllHistory = 1,msgNoneData = 2;
+    private static final int msgShowAllHistory = 1,msgNoneData = 2,msgFailToSaveFile=3,msgSuccessToSaveFile=4;
 
     private Handler handler = new Handler(){
         @Override
@@ -60,6 +61,18 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
                     break;
                 case msgNoneData:
                     Toast.makeText(DataActivity.this,"该时段没有历史数据",Toast.LENGTH_SHORT).show();
+                    break;
+                case msgFailToSaveFile:
+                    if(dialog!=null){
+                        dialog.dismiss();
+                    }
+                    Toast.makeText(DataActivity.this,"保存失败! "+fileName,Toast.LENGTH_SHORT).show();
+                    break;
+                case msgSuccessToSaveFile:
+                    if(dialog!=null){
+                        dialog.dismiss();
+                    }
+                    Toast.makeText(DataActivity.this,"保存成功,文件路径为:"+fileName,Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -86,7 +99,7 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         long now = tools.nowtime2timestamp();
         tvDataEnd.setText(tools.timestamp2string(now));
         tvDataStart.setText(tools.timestamp2string(now - 3600000l));
-        searchData = new SearchData(this);
+        searchData = new SearchData(this,this);
         startDialogTimeSelected = new StartDialogTimeSelected(this);
         endDialogTimeSelected = new EndDialogTimeSelected(this);
         findViewById(R.id.data_toolbar_back).setOnClickListener(new View.OnClickListener() {
@@ -95,6 +108,11 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
                 finish();
             }
         });
+
+        idString = getIntent().getStringExtra("id");
+        if(idString==null){
+            idString = "TestID";
+        }
     }
 
     @Override
@@ -112,7 +130,9 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
                         .showDialog(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),endDialogTimeSelected);
                 break;
             case R.id.btnSaveDataToLocal:
-
+                final ProgressBar pb = new ProgressBar(this);
+                dialog = new AlertDialog.Builder(this).setTitle("正在保存历史数据").setView(pb).setCancelable(false).show();
+                searchData.saveDataToFiles(idString);
                 break;
             default:
                 break;
@@ -168,6 +188,17 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         }else{
             handler.sendEmptyMessage(msgNoneData);
         }
+    }
+
+    @Override
+    public void saveDataComplete(boolean success, String fileName) {
+        if(success){
+
+            handler.sendEmptyMessage(msgSuccessToSaveFile);
+        }else{
+            handler.sendEmptyMessage(msgFailToSaveFile);
+        }
+        this.fileName = fileName;
     }
 
     private class StartDialogTimeSelected implements DialogTimeSelected{

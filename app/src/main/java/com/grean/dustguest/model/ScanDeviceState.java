@@ -6,7 +6,9 @@ import com.grean.dustguest.SocketTask;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
 import com.grean.dustguest.protocol.GeneralConfig;
 import com.grean.dustguest.protocol.GeneralHistoryData;
+import com.grean.dustguest.protocol.GeneralLogFormat;
 import com.grean.dustguest.protocol.HistoryDataListener;
+import com.grean.dustguest.protocol.LogListener;
 import com.grean.dustguest.protocol.ProtocolLib;
 
 /**
@@ -57,6 +59,9 @@ public class ScanDeviceState {
         clientProtocol.sendLastData(startDate,endDate,historyDataListener,historyData);
     }
 
+    public void getLog(long startDate, long endDate, LogListener logListener, GeneralLogFormat logFormat){
+        clientProtocol.sendReadLog(startDate,endDate,logListener,logFormat);
+    }
 
     /**
      * 停止查询实时数据，断开本地服务链接

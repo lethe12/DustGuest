@@ -34,6 +34,8 @@ public interface GeneralClientProtocol {
     void sendCtrlMotorBackwardTest();
     void sendCtrlMotorForwardStep();
     void sendCtrlMotorBackwardStep();
+    void sendReadLog(long startDate,long endDate,LogListener logListener,GeneralLogFormat logFormat);
+
     /*void sendCalDust(ShowOperateInfo info,float target);
     void sendSetDustMeterParaK(float parameter);
 
