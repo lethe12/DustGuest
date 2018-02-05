@@ -28,15 +28,17 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
     private Context mContext;
     private PopWindowListener listener;
     private String idString;
+    private boolean online = false;
 
     private StartScanForResult startScanForResult;
-    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener,boolean isConnect,String id){
+    public PopWindow(final Activity context,StartScanForResult startScanForResult,PopWindowListener listener,boolean enable,boolean online,String id){
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         conentView = inflater.inflate(R.layout.popup_window, null);
         this.mContext = context;
         this.startScanForResult = startScanForResult;
         this.listener = listener;
+        this.online = online;
         this.idString = id;
         int h = context.getWindowManager().getDefaultDisplay().getHeight();
         int w = context.getWindowManager().getDefaultDisplay().getWidth();
@@ -63,7 +65,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
         conentView.findViewById(R.id.tvInputID).setOnClickListener(this);
         conentView.findViewById(R.id.tvLastId).setOnClickListener(this);
         conentView.findViewById(R.id.about).setOnClickListener(this);
-        if(isConnect) {
+        if(enable) {
             conentView.findViewById(R.id.tvSearchData).setOnClickListener(this);
             conentView.findViewById(R.id.tvSearchLog).setOnClickListener(this);
             conentView.findViewById(R.id.tvAdvanceSetting).setOnClickListener(this);
@@ -138,18 +140,21 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                 intent = new Intent();
                 intent.setClass(mContext,DataActivity.class);
                 intent.putExtra("id",idString);
+                intent.putExtra("online",online);
                 mContext.startActivity(intent);
                 break;
             case R.id.tvSearchLog:
                 intent = new Intent();
                 intent.setClass(mContext,LogActivity.class);
                 intent.putExtra("id",idString);
+                intent.putExtra("online",online);
                 mContext.startActivity(intent);
                 break;
             case R.id.settings:
                 intent = new Intent();
                 intent.setClass(mContext,SettingActivity.class);
                 intent.putExtra("id",idString);
+                intent.putExtra("online",online);
                 mContext.startActivity(intent);
                 break;
             case R.id.tvAdvanceSetting:
@@ -164,11 +169,12 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                                 if(passwordString == null){
                                     passwordString = "q";
                                 }
-                                if(password.getText().toString().equals(passwordString)){
+                                if((password.getText().toString().equals(passwordString))||(password.getText().toString().equals(SystemConfig.SuperPassword))){
                                     Intent intent = new Intent();
                                     intent.setClass(mContext,SettingActivity.class);
                                     intent.putExtra("isAdvance",true);
                                     intent.putExtra("id",idString);
+                                    intent.putExtra("online",online);
                                     mContext.startActivity(intent);
                                 }else{
                                     Toast.makeText(mContext,"密码错误",Toast.LENGTH_SHORT).show();

@@ -1,8 +1,11 @@
 package com.grean.dustguest.model;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.grean.dustguest.DbTask;
 import com.grean.dustguest.protocol.HistoryDataListener;
 import com.wifi.WifiAdmin;
 
@@ -19,7 +22,8 @@ public class LocalServerManager {
     private LocalServerListener listener;
     private WifiAdmin wifiAdmin;
     private boolean connect = false;
-    private String deviceId;
+    private String deviceId,dustName,config,dustMeterInfo;
+    private long lastConnectDate;
 
     public LocalServerManager(Context context,LocalServerListener listener){
         this.listener = listener;
@@ -30,6 +34,49 @@ public class LocalServerManager {
         return connect;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public String getDustName() {
+        return dustName;
+    }
+
+    public String getConfig() {
+        return config;
+    }
+
+    public String getDustMeterInfo() {
+        return dustMeterInfo;
+    }
+
+    public long getLastConnectDate() {
+        return lastConnectDate;
+    }
+
+    /**
+     * 本地是否拥有该ID的信息，
+     * @return
+     */
+    public boolean hasDevicesInfo(String id){
+        boolean hasSameDevice = false;
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from devices",null);
+        while (cursor.moveToNext()){
+            if(id.equals(cursor.getString(1))){//如果已经连接过的设备
+                lastConnectDate = cursor.getLong(0);
+                dustName = cursor.getString(2);
+                config = cursor.getString(3);
+                dustMeterInfo = cursor.getString(4);
+                hasSameDevice = true;
+                break;
+            }
+        }
+        db.close();
+        dbTask.close();
+        return hasSameDevice;
+    }
 
 
     /**
@@ -43,7 +90,9 @@ public class LocalServerManager {
             wifiAdmin = new WifiAdmin(context);
         }
         wifiAdmin.openWifi();
-        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
+
+        //wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
+        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("greanYc"+id,"1234567890",3));
         new StartLocalServer(ScanDeviceState.getInstance()).start();
     }
 

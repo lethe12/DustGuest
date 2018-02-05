@@ -58,8 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean connectResult;
     private RealTimeDataFormat dataFormat;
     private String dustName,idString;
+    private boolean menuEnable = false;
     private static final int msgConnectResult = 1,msgShowRealTimeData=2,msgShowDustName=3,
-    msgDisconnect = 4;
+    msgDisconnect = 4,msgOfflineDevices = 5;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -76,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }else{
                         tvLocalServer.setText("未连接设备");
                         Toast.makeText(MainActivity.this,"连接失败，请重试！",Toast.LENGTH_SHORT).show();
-                        tvScanResult.setText("设备ID:");
-                        tvState.setText("当前状态:");
                     }
                     break;
                 case msgDisconnect:
@@ -108,6 +107,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case msgShowDustName:
                     tvNames[0].setText(dustName);
+                    break;
+                case msgOfflineDevices:
+                    tvScanResult.setText("设备ID:   "+idString);
+                    tvState.setText("当前状态:");
+                    break;
+                default:
+
                     break;
             }
         }
@@ -191,8 +197,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String scanResult = bundle.getString("qr_scan_result");
             //将扫描出的信息显示出来
             //Log.d(tag,scanResult);
+            idString = scanResult;
             //tvScanResult.setText(scanResult);
-            startNewLocalServer(scanResult);
+            startNewLocalServer(idString);
         }
     }
 
@@ -200,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnMoreFunction:
-                PopWindow popWindow = new PopWindow(this,this,this,localServerManager.isConnect(),idString);
+                PopWindow popWindow = new PopWindow(this,this,this,menuEnable,localServerManager.isConnect(),idString);
                 popWindow.showPopupWindow(findViewById(R.id.btnMoreFunction));
                 break;
             case R.id.layout1:
@@ -265,6 +272,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pb = new ProgressBar(this);
         dialog = new AlertDialog.Builder(this).setTitle("正在连接设备").setView(pb).setCancelable(false).show();
         Log.d(tag,"获取ID为:"+id);
+        tvScanResult.setText("设备ID:");
+        tvState.setText("当前状态:");
         localServerManager.startLocalServer(id);
     }
 
@@ -272,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void OnInputIdComplete(String string) {
         startNewLocalServer(string);
         idString = string;
-        tvScanResult.setText("设备ID: "+idString);
+        //tvScanResult.setText("设备ID: "+idString);
 
     }
 
@@ -287,7 +296,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void OnLocalServerResult(boolean result) {
         connectResult = result;
         if(result){
+            menuEnable = true;
             lastDevicesInfo.saveConfig();
+        }else{//未连接设备
+            if(localServerManager.hasDevicesInfo(idString)){//已连接过的设备
+                menuEnable = true;
+                lastDevicesInfo.loadDeviceConfig(localServerManager.getDustName(),
+                        localServerManager.getConfig(),localServerManager.getDustMeterInfo());
+                handler.sendEmptyMessage(msgOfflineDevices);
+            }else{
+                menuEnable = false;
+            }
         }
         handler.sendEmptyMessage(msgConnectResult);
     }

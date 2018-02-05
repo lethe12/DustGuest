@@ -242,6 +242,49 @@ public class SearchData implements HistoryDataListener {
         }
     }
 
+    public boolean hasDataTable(String id){
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        String tableName = id+"_data";
+        Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
+        while (cursor.moveToNext()){
+            Log.d(tag,cursor.getString(0));
+            if(cursor.getString(0).equals(tableName)){
+                dbTask.close();
+                db.close();
+                return true;
+            }
+        }
+        db.close();
+        dbTask.close();
+        return false;
+    }
+
+    public void loadDatFromDatabase(String id){
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        String tableName = id+"_data";
+        Cursor cursor = db.rawQuery("SELECT * FROM "+tableName+" ORDER BY date desc",null);
+        GeneralMinData minData;
+        while (cursor.moveToNext()){
+            minData = new GeneralMinData();
+            minData.setDate(cursor.getLong(0));
+            minData.setDust(cursor.getFloat(1));
+            minData.setTemperate(cursor.getFloat(3));
+            minData.setHumidity(cursor.getFloat(4));
+            minData.setPressure(cursor.getFloat(5));
+            minData.setWindForce(cursor.getFloat(6));
+            minData.setWindDirection(cursor.getFloat(7));
+            minData.setNoise(cursor.getFloat(8));
+            historyData.add(minData);
+        }
+        cursor.close();
+        db.close();
+        dbTask.close();
+        dataSearchListener.showAllData(historyData.getDate(),historyData.getData());
+
+    }
+
     @Override
     public void setHistoryData() {
         Log.d(tag,"收到新的历史数据");

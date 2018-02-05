@@ -90,15 +90,13 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         tvDataEnd = findViewById(R.id.tvDataEnd);
         btnSaveDataToLocal = findViewById(R.id.btnSaveDataToLocal);
         scrollablePanel = findViewById(R.id.scrollable_panel);
-        tvDataEnd.setOnClickListener(this);
-        tvDataStart.setOnClickListener(this);
+
         btnSaveDataToLocal.setOnClickListener(this);
         historyDataPanelAdapter = new HistoryDataPanelAdapter();
         setElement(historyDataPanelAdapter);
         scrollablePanel.setPanelAdapter(historyDataPanelAdapter);
         long now = tools.nowtime2timestamp();
-        tvDataEnd.setText(tools.timestamp2string(now));
-        tvDataStart.setText(tools.timestamp2string(now - 3600000l));
+
         searchData = new SearchData(this,this);
         startDialogTimeSelected = new StartDialogTimeSelected(this);
         endDialogTimeSelected = new EndDialogTimeSelected(this);
@@ -112,6 +110,20 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         idString = getIntent().getStringExtra("id");
         if(idString==null){
             idString = "TestID";
+        }
+
+        if(!getIntent().getBooleanExtra("online",true)){//离线
+            tvDataEnd.setText("-");
+            tvDataStart.setText("-");
+            btnSaveDataToLocal.setEnabled(false);
+            if(searchData.hasDataTable(idString)){
+                searchData.loadDatFromDatabase(idString);
+            }
+        }else{
+            tvDataEnd.setOnClickListener(this);
+            tvDataStart.setOnClickListener(this);
+            tvDataEnd.setText(tools.timestamp2string(now));
+            tvDataStart.setText(tools.timestamp2string(now - 3600000l));
         }
     }
 
@@ -193,7 +205,6 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
     @Override
     public void saveDataComplete(boolean success, String fileName) {
         if(success){
-
             handler.sendEmptyMessage(msgSuccessToSaveFile);
         }else{
             handler.sendEmptyMessage(msgFailToSaveFile);

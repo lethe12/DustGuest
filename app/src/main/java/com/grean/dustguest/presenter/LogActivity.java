@@ -61,13 +61,8 @@ public class LogActivity extends Activity implements SwipeRefreshLayout.OnRefres
         tvEndDate = findViewById(R.id.tvLogEnd);
         tvStartDate = findViewById(R.id.tvLogStart);
         btnSaveLog = findViewById(R.id.btnSaveLogToLocal);
-        btnSaveLog.setOnClickListener(this);
-        tvStartDate.setOnClickListener(this);
         tvEndDate.setOnClickListener(this);
-
         long now = tools.nowtime2timestamp();
-        tvEndDate.setText(tools.timestamp2string(now));
-        tvStartDate.setText(tools.timestamp2string(now-3600000l*24));
 
         findViewById(R.id.log_toolbar_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +89,7 @@ public class LogActivity extends Activity implements SwipeRefreshLayout.OnRefres
 
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_orange_light, android.R.color.holo_red_light);
-        swipeRefreshLayout.setOnRefreshListener(this);
+
         /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,6 +100,24 @@ public class LogActivity extends Activity implements SwipeRefreshLayout.OnRefres
         idString = getIntent().getStringExtra("id");
         if(idString==null){
             idString = "TestID";
+        }
+
+        if(!getIntent().getBooleanExtra("online",true)){
+            tvEndDate.setText("-");
+            tvStartDate.setText("-");
+            btnSaveLog.setEnabled(false);
+            swipeRefreshLayout.setEnabled(false);
+            if(log.hasLogTable(idString)){
+                log.loadLogFromDatabase(idString,list);
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);//设置不刷新
+            }
+        }else{
+            btnSaveLog.setOnClickListener(this);
+            tvStartDate.setOnClickListener(this);
+            swipeRefreshLayout.setOnRefreshListener(this);
+            tvEndDate.setText(tools.timestamp2string(now));
+            tvStartDate.setText(tools.timestamp2string(now-3600000l*24));
         }
     }
 

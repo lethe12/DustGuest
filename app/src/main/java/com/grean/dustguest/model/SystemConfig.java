@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
  */
 
 public class SystemConfig {
+    public static final String SuperPassword = "Grean473267";//超级密码
     private Context context;
     SharedPreferences sp;
     SharedPreferences.Editor editor;

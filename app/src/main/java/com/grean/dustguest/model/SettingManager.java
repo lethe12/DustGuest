@@ -3,11 +3,13 @@ package com.grean.dustguest.model;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Process;
 import android.util.Log;
 
+import com.grean.dustguest.DbTask;
 import com.grean.dustguest.presenter.NotifyProcessDialogInfo;
 import com.grean.dustguest.presenter.SettingDisplay;
 import com.grean.dustguest.presenter.SettingManagerListener;
@@ -289,6 +291,18 @@ public class SettingManager implements DustMeterCalCtrl{
     public void savePassword(Context context,String value){
         SystemConfig config = new SystemConfig(context);
         config.saveConfig("Password",value);
+    }
+
+    /**
+     * 清理数据库
+     * @param context
+     */
+    public void clearRecentDevices(Context context){
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        db.execSQL("drop table devices");
+        db.execSQL(DbTask.devicesSqlString);
+        db.close();
     }
 
 }

@@ -45,6 +45,7 @@ public class ScanDeviceState {
         config.setDevicesId(id);
         clientProtocol = ProtocolLib.getInstance().getClientProtocol();
         SocketTask.getInstance().startSocketHeart("192.168.1.100",8888,context, clientProtocol);
+        //SocketTask.getInstance().startSocketHeart("192.168.1.200",8888,context, clientProtocol);//test offline
         if(!run) {
             new ScanRealTimeData().start();
         }

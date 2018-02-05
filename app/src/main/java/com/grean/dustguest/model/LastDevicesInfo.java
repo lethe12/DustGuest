@@ -12,6 +12,9 @@ import com.grean.dustguest.DbTask;
 import com.grean.dustguest.protocol.GeneralConfig;
 import com.tools;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -45,6 +48,18 @@ public class LastDevicesInfo {
             db.close();
             dbTask.close();
             return null;
+        }
+    }
+
+    public void loadDeviceConfig(String dustName,String configContent,String dustMeterInfo){
+        GeneralConfig config = ScanDeviceState.getInstance().getConfig();
+        try {
+            config.setDustNameContent(new JSONObject(dustName));
+            config.setConfigContent(new JSONObject(configContent));
+            config.setDustMeterInfoContent(new JSONObject(dustMeterInfo));
+        } catch (JSONException e) {
+            Log.d(tag,"解析出错");
+            e.printStackTrace();
         }
     }
 

@@ -168,6 +168,36 @@ public class SearchLog implements LogListener{
 
     }
 
+    public boolean hasLogTable(String id){
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        String tableName = id+"_log";
+        Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
+        while (cursor.moveToNext()){
+            Log.d(tag,cursor.getString(0));
+            if(cursor.getString(0).equals(tableName)){
+                db.close();
+                dbTask.close();
+                return true;
+            }
+        }
+        db.close();
+        dbTask.close();
+        return false;
+    }
+
+    public void loadLogFromDatabase(String id,List<String> list){
+        DbTask dbTask = new DbTask(context,1);
+        SQLiteDatabase db = dbTask.getWritableDatabase();
+        String tableName = id+"_log";
+        Cursor cursor = db.rawQuery("SELECT * FROM "+tableName+" ORDER BY num asc", null);
+        while (cursor.moveToNext()){
+            list.add(cursor.getString(1));
+        }
+        db.close();
+        dbTask.close();
+    }
+
 
     /**
      * 下拉刷新时，调用的方法

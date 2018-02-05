@@ -39,7 +39,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     private static final String tag = "SettingActivity";
     private EditText etDustParaK,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
-    private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState;
+    private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
     private TextView[] tvRealTimeValue=new TextView[16];
     private Spinner spDustName,spProtocols;
     private LinearLayout motorSet1,MotorSet2,RelaySet,passwordSet,realTimeDisplay;
@@ -128,6 +128,12 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
             btnSaveDustPara.setEnabled(false);
         }
 
+        if(getIntent().getBooleanExtra("online",true)){//在线状态
+            tvDeviceId.setText("当前设备ID: "+getIntent().getStringExtra("id")+" 在线");
+        }else {
+            tvDeviceId.setText("当前设备ID: "+getIntent().getStringExtra("id")+" 离线");
+        }
+
         manager = new SettingManager(this);
         manager.loadSetting();
         ProtocolLib.getInstance().getClientProtocol().setRealTimeSettingDisplay(this);
@@ -169,7 +175,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         tvRealTimeValue[14] = findViewById(R.id.tvRealTimeValue15);
         tvRealTimeValue[15] = findViewById(R.id.tvRealTimeValue16);
         etPassword = findViewById(R.id.etPassWord);
-
+        tvDeviceId = findViewById(R.id.tvDeviceId);
         tvRealTimeState = findViewById(R.id.tvSettingState);
         tvDustMeterInfo = findViewById(R.id.tvOperateDustMeterInfo);
         tvAutoCalTime = findViewById(R.id.tvOperateAutoCalDate);
@@ -188,6 +194,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         findViewById(R.id.btnBackwardTest).setOnClickListener(this);
         findViewById(R.id.btnForwardStep).setOnClickListener(this);
         findViewById(R.id.btnBackwardStep).setOnClickListener(this);
+        findViewById(R.id.btnClearRecentDevices).setOnClickListener(this);
         btnSaveAutoCal = findViewById(R.id.btnOperateSaveAutoCal);
         btnSaveAutoCal.setOnClickListener(this);
         findViewById(R.id.btnOperateSaveAlarm).setOnClickListener(this);
@@ -313,6 +320,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                     manager.savePassword(this,etPassword.getText().toString());
                     Toast.makeText(this,"密码修改成功!",Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.btnClearRecentDevices:
+                manager.clearRecentDevices(this);
                 break;
             default:
 
