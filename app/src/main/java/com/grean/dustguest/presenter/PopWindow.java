@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.zxing.StartScanForResult;
 import com.grean.dustguest.MainActivity;
 import com.grean.dustguest.R;
+import com.grean.dustguest.model.SystemConfig;
 
 /**
  * Created by weifeng on 2018/1/21.
@@ -142,11 +143,13 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
             case R.id.tvSearchLog:
                 intent = new Intent();
                 intent.setClass(mContext,LogActivity.class);
+                intent.putExtra("id",idString);
                 mContext.startActivity(intent);
                 break;
             case R.id.settings:
                 intent = new Intent();
                 intent.setClass(mContext,SettingActivity.class);
+                intent.putExtra("id",idString);
                 mContext.startActivity(intent);
                 break;
             case R.id.tvAdvanceSetting:
@@ -156,10 +159,16 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                         setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(password.getText().toString().equals("q")){
+                                SystemConfig config = new SystemConfig(mContext);
+                                String passwordString = config.getString("Password");
+                                if(passwordString == null){
+                                    passwordString = "q";
+                                }
+                                if(password.getText().toString().equals(passwordString)){
                                     Intent intent = new Intent();
                                     intent.setClass(mContext,SettingActivity.class);
                                     intent.putExtra("isAdvance",true);
+                                    intent.putExtra("id",idString);
                                     mContext.startActivity(intent);
                                 }else{
                                     Toast.makeText(mContext,"密码错误",Toast.LENGTH_SHORT).show();

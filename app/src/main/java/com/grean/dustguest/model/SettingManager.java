@@ -286,5 +286,9 @@ public class SettingManager implements DustMeterCalCtrl{
         }
     }
 
+    public void savePassword(Context context,String value){
+        SystemConfig config = new SystemConfig(context);
+        config.saveConfig("Password",value);
+    }
 
 }

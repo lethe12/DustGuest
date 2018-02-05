@@ -168,6 +168,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         tvRealTimeValue[13] = findViewById(R.id.tvRealTimeValue14);
         tvRealTimeValue[14] = findViewById(R.id.tvRealTimeValue15);
         tvRealTimeValue[15] = findViewById(R.id.tvRealTimeValue16);
+        etPassword = findViewById(R.id.etPassWord);
 
         tvRealTimeState = findViewById(R.id.tvSettingState);
         tvDustMeterInfo = findViewById(R.id.tvOperateDustMeterInfo);
@@ -304,6 +305,14 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 break;
             case R.id.btnBackwardStep:
                 manager.ctrlMotorBackwardStep();
+                break;
+            case R.id.btnSavePassword:
+                if(etPassword.getText().toString().isEmpty()){
+                    Toast.makeText(this,"新密码不能为空",Toast.LENGTH_SHORT).show();
+                }else{
+                    manager.savePassword(this,etPassword.getText().toString());
+                    Toast.makeText(this,"密码修改成功!",Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
 

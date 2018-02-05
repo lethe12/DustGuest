@@ -9,4 +9,5 @@ import java.util.List;
 public interface LogSearchListener {
     void showNewLog(List<String> log);
     void showRefreshLog(List<String> log,int index);
+    void saveLogComplete(boolean success,String fileName);
 }
