@@ -37,12 +37,15 @@ import java.util.Calendar;
 public class SettingActivity extends Activity implements View.OnClickListener,AdapterView.OnItemSelectedListener,
         SettingManagerListener,RealTimeSettingDisplay,SettingDisplay,DialogTimeSelected{
     private static final String tag = "SettingActivity";
-    private EditText etDustParaK,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
+    private EditText etDustParaK,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,
+            etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
     private TextView[] tvRealTimeValue=new TextView[16];
     private Spinner spDustName,spProtocols;
-    private LinearLayout motorSet1,MotorSet2,RelaySet,passwordSet,realTimeDisplay;
+    private LinearLayout motorSet,motorTest,relaysSet,passwordSet,realTimeDisplay0,
+            realTimeDisplay1,realTimeDisplay2,realTimeDisplay3,realTimeDisplay4,
+            realTimeDisplay5,clearDevicesList,dustMeterInfo,dustNameList,softwareUpdate;
     private Button btnSaveDustPara,btnSaveAutoCal;
     private SettingManager manager;
     private int dustName,protocolName;
@@ -126,6 +129,20 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         }else{
             etDustParaK.setEnabled(false);
             btnSaveDustPara.setEnabled(false);
+            realTimeDisplay0.setVisibility(View.GONE);
+            motorSet.setVisibility(View.GONE);
+            motorTest.setVisibility(View.GONE);
+            relaysSet.setVisibility(View.GONE);
+            passwordSet.setVisibility(View.GONE);
+            realTimeDisplay1.setVisibility(View.GONE);
+            realTimeDisplay2.setVisibility(View.GONE);
+            realTimeDisplay3.setVisibility(View.GONE);
+            realTimeDisplay4.setVisibility(View.GONE);
+            realTimeDisplay5.setVisibility(View.GONE);
+            clearDevicesList.setVisibility(View.GONE);
+            dustMeterInfo.setVisibility(View.GONE);
+            dustNameList.setVisibility(View.GONE);
+            softwareUpdate.setVisibility(View.GONE);
         }
 
         if(getIntent().getBooleanExtra("online",true)){//在线状态
@@ -174,6 +191,20 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         tvRealTimeValue[13] = findViewById(R.id.tvRealTimeValue14);
         tvRealTimeValue[14] = findViewById(R.id.tvRealTimeValue15);
         tvRealTimeValue[15] = findViewById(R.id.tvRealTimeValue16);
+        realTimeDisplay0 = findViewById(R.id.layoutRealTimeDisplay0);
+        realTimeDisplay1 = findViewById(R.id.layoutRealTimeDisplay1);
+        realTimeDisplay2 = findViewById(R.id.layoutRealTimeDisplay2);
+        realTimeDisplay3 = findViewById(R.id.layoutRealTimeDisplay3);
+        realTimeDisplay4 = findViewById(R.id.layoutRealTimeDisplay4);
+        realTimeDisplay5 = findViewById(R.id.layoutRealTimeDisplay5);
+        motorSet = findViewById(R.id.layoutMotorSetting);
+        motorTest = findViewById(R.id.layoutMotorTest);
+        relaysSet = findViewById(R.id.layoutRelays);
+        dustMeterInfo = findViewById(R.id.layoutOperateDustMeter);
+        passwordSet = findViewById(R.id.layoutPassword);
+        clearDevicesList = findViewById(R.id.layoutClearDevicesList);
+        dustNameList = findViewById(R.id.layoutDustName);
+        softwareUpdate = findViewById(R.id.layoutOperateUpdateSoftware);
         etPassword = findViewById(R.id.etPassWord);
         tvDeviceId = findViewById(R.id.tvDeviceId);
         tvRealTimeState = findViewById(R.id.tvSettingState);
@@ -353,7 +384,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
 
     @Override
     public void showContent(GeneralConfig config) {
-        etDustParaK.setText(tools.float2String4(config.getDustParaK()));
+        etDustParaK.setText(String.valueOf(config.getDustParaK()));
         swAutoCalEnable.setChecked(config.isAutoCalEnable());
         tvAutoCalTime.setText(tools.timestamp2string(config.getAutoCalTime()));
         etAutoInterval.setText(String.valueOf(config.getAutoCalInterval()/3600000l));

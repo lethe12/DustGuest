@@ -92,7 +92,7 @@ public class SearchData implements HistoryDataListener {
          * @return 有
          */
         private boolean hasDataBaseTable(String id,SQLiteDatabase db){
-            String tableName = id+"_data";
+            String tableName = "data_"+id;
             Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
             while (cursor.moveToNext()){
                 Log.d(tag,cursor.getString(0));
@@ -109,7 +109,7 @@ public class SearchData implements HistoryDataListener {
          * @param db
          */
         private void deleteTable(String id,SQLiteDatabase db){
-            String tableName = id+"_data";
+            String tableName = "data_"+id;
             db.execSQL("drop table "+tableName);
 
         }
@@ -120,7 +120,7 @@ public class SearchData implements HistoryDataListener {
          * @param db
          */
         private void saveData2DataBase(String id,SQLiteDatabase db){
-            String tableName = id+"_data";
+            String tableName = "data_"+id;
             db.execSQL("CREATE TABLE "+tableName+" (date LONG,dust FLOAT,value FLOAT,temperature FLOAT,humidity FLOAT,pressure FLOAT,windforce FLOAT,winddirection FLOAT,noise FLOAT)");
             ContentValues values;
             GeneralMinData minData;
@@ -245,7 +245,7 @@ public class SearchData implements HistoryDataListener {
     public boolean hasDataTable(String id){
         DbTask dbTask = new DbTask(context,1);
         SQLiteDatabase db = dbTask.getWritableDatabase();
-        String tableName = id+"_data";
+        String tableName = "data_"+id;
         Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
         while (cursor.moveToNext()){
             Log.d(tag,cursor.getString(0));
@@ -263,7 +263,7 @@ public class SearchData implements HistoryDataListener {
     public void loadDatFromDatabase(String id){
         DbTask dbTask = new DbTask(context,1);
         SQLiteDatabase db = dbTask.getWritableDatabase();
-        String tableName = id+"_data";
+        String tableName = "data_"+id;
         Cursor cursor = db.rawQuery("SELECT * FROM "+tableName+" ORDER BY date desc",null);
         GeneralMinData minData;
         while (cursor.moveToNext()){

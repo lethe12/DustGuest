@@ -54,6 +54,10 @@ public class LocalServerManager {
         return lastConnectDate;
     }
 
+    public void stopScan(){
+        ScanDeviceState.getInstance().stopScan();
+    }
+
     /**
      * 本地是否拥有该ID的信息，
      * @return
@@ -65,11 +69,13 @@ public class LocalServerManager {
         Cursor cursor = db.rawQuery("select * from devices",null);
         while (cursor.moveToNext()){
             if(id.equals(cursor.getString(1))){//如果已经连接过的设备
+                Log.d(tag,"已连接设备");
                 lastConnectDate = cursor.getLong(0);
                 dustName = cursor.getString(2);
                 config = cursor.getString(3);
                 dustMeterInfo = cursor.getString(4);
                 hasSameDevice = true;
+                Log.d(tag,"dustName:"+dustName+";config:"+config+";dustMeterInfo:"+dustMeterInfo);
                 break;
             }
         }
@@ -132,7 +138,7 @@ public class LocalServerManager {
                 }
             }
             try {
-                sleep(8000);
+                sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

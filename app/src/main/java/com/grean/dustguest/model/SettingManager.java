@@ -217,7 +217,8 @@ public class SettingManager implements DustMeterCalCtrl{
         @Override
         public void run() {
             dialogInfo.showInfo("开始校准...0%");
-            ScanDeviceState.getInstance().stopScan();
+            //ScanDeviceState.getInstance().stopScan();
+            ScanDeviceState.getInstance().pauseScan();
             try {
                 Thread.sleep(4000);
             } catch (InterruptedException e) {
@@ -237,7 +238,8 @@ public class SettingManager implements DustMeterCalCtrl{
 
             protocol.sendDustMeterCalResult();
             Log.d(tag,"end DustMeterCal");
-            ScanDeviceState.getInstance().restartScan();
+            //ScanDeviceState.getInstance().restartScan();
+            ScanDeviceState.getInstance().resumeScan();
         }
     }
 

@@ -102,7 +102,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     tvValues[2].setText(tools.float2String1(dataFormat.getHumidity()));
                     tvValues[3].setText(tools.float2String0(dataFormat.getPressure()));
                     tvValues[4].setText(tools.float2String1(dataFormat.getWindForce()));
-                    tvValues[5].setText(tools.float2String0(dataFormat.getWindDirection()));
+                    tvValues[5].setText(tools.float2String0(dataFormat.getWindDirection())+" "
+                            +tools.windDirection2String(dataFormat.getWindDirection()));
                     tvValues[6].setText(tools.float2String1(dataFormat.getNoise()));
                     break;
                 case msgShowDustName:
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         localServerManager = new LocalServerManager(this,this);
         ProtocolLib.getInstance().getClientProtocol().setRealTimeDisplay(this);
         dataInfo = new LastDataInfo(this);
+        Log.d(tag,"重载activity");
         //tablesView.invalidate();//跟新view
     }
 
@@ -201,6 +203,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //tvScanResult.setText(scanResult);
             startNewLocalServer(idString);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        localServerManager.stopScan();//停止扫描，防止幽灵进程
+        super.onDestroy();
     }
 
     @Override
@@ -313,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void OnDisconnectServer() {
+        Log.d(tag,"断内网");
         connectResult = false;
         handler.sendEmptyMessage(msgDisconnect);
 

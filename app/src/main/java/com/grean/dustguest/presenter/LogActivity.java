@@ -195,6 +195,7 @@ public class LogActivity extends Activity implements SwipeRefreshLayout.OnRefres
 
     @Override
     public void saveLogComplete(boolean success, String fileName) {
+        Log.d(tag,"导出完"+String.valueOf(success));
         if(success){
             handler.sendEmptyMessage(msgSuccessToSaveFile);
         }else{

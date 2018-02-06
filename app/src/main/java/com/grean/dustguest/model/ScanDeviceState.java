@@ -1,6 +1,7 @@
 package com.grean.dustguest.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.grean.dustguest.SocketTask;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
@@ -16,9 +17,10 @@ import com.grean.dustguest.protocol.ProtocolLib;
  */
 
 public class ScanDeviceState {
+    private static final String tag = "ScanDeviceState";
     private static ScanDeviceState instance = new ScanDeviceState();
     private GeneralConfig config = new GeneralConfig();
-    private boolean run;
+    private boolean run,pause;
     private GeneralClientProtocol clientProtocol;
     private LocalServerListener listener;
     private ScanDeviceState() {
@@ -54,6 +56,14 @@ public class ScanDeviceState {
 
     public boolean isConnect(){
         return run;
+    }
+
+    synchronized public void pauseScan(){
+        pause = true;
+    }
+
+    synchronized public void resumeScan(){
+        pause = false;
     }
 
     public void getHistoryData(long startDate, long endDate, HistoryDataListener historyDataListener, GeneralHistoryData historyData){
@@ -94,7 +104,7 @@ public class ScanDeviceState {
         private int times;
         @Override
         public void run() {
-
+            boolean connect = false;
             times = 0;
             while (!interrupted()) {
                 try {
@@ -105,13 +115,13 @@ public class ScanDeviceState {
                 if (!clientProtocol.sendGetOperateInit(config)) {
                     times++;
                     if(times > 3){
-                        run = false;
+                        connect = false;
                         break;
                     }
                 }else {
 
                     clientProtocol.sendScanCommand();
-                    run = true;
+                    connect = true;
                     break;
                 }
             }
@@ -121,19 +131,25 @@ public class ScanDeviceState {
                 e.printStackTrace();
             }
             clientProtocol.sendLoadSetting(config);
+            Log.d(tag,"查询配置");
             try {
                 sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             clientProtocol.sendDustMeterInfo(config);
+            Log.d(tag,"查询粉尘仪信息");
+            run = connect;
+            pause = false;
             while (run&&(!interrupted())){
                 try {
                     sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                clientProtocol.sendScanCommand();
+                if(!pause) {
+                    clientProtocol.sendScanCommand();
+                }
             }
             run = false;
             if(listener!=null) {

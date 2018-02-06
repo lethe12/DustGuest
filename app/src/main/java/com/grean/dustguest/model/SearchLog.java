@@ -92,7 +92,7 @@ public class SearchLog implements LogListener{
          * @return 有
          */
         private boolean hasLogBaseTable(String id,SQLiteDatabase db){
-            String tableName = id+"_log";
+            String tableName = "log_"+id;
             Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
             while (cursor.moveToNext()){
                 Log.d(tag,cursor.getString(0));
@@ -109,7 +109,7 @@ public class SearchLog implements LogListener{
          * @param db
          */
         private void deleteTable(String id,SQLiteDatabase db){
-            String tableName = id+"_log";
+            String tableName = "log_"+id;
             db.execSQL("drop table "+tableName);
 
         }
@@ -120,7 +120,7 @@ public class SearchLog implements LogListener{
          * @param db
          */
         private void saveLog2DataBase(String id,SQLiteDatabase db){
-            String tableName = id+"_log";
+            String tableName = "log_"+id;
             db.execSQL("CREATE TABLE "+tableName+" (num INTEGER PRIMARY KEY AUTOINCREMENT,content TEXT)");
             ContentValues values;
             List<String> list = format.getContent();
@@ -171,7 +171,7 @@ public class SearchLog implements LogListener{
     public boolean hasLogTable(String id){
         DbTask dbTask = new DbTask(context,1);
         SQLiteDatabase db = dbTask.getWritableDatabase();
-        String tableName = id+"_log";
+        String tableName = "log_"+id;
         Cursor cursor = db.rawQuery("select name from sqlite_master where type='table' order by name",null);
         while (cursor.moveToNext()){
             Log.d(tag,cursor.getString(0));
@@ -189,7 +189,7 @@ public class SearchLog implements LogListener{
     public void loadLogFromDatabase(String id,List<String> list){
         DbTask dbTask = new DbTask(context,1);
         SQLiteDatabase db = dbTask.getWritableDatabase();
-        String tableName = id+"_log";
+        String tableName = "log_"+id;
         Cursor cursor = db.rawQuery("SELECT * FROM "+tableName+" ORDER BY num asc", null);
         while (cursor.moveToNext()){
             list.add(cursor.getString(1));
