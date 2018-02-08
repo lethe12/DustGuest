@@ -15,34 +15,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="起始时间:" />
+            android:text="起始时间:"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvDataStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2018-02-01 00:00" />
+            android:text="2018-02-01 00:00"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="结束时间:" />
+            android:text="结束时间:"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvDataEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2018-02-02 23:59" />
+            android:text="2018-02-02 23:59"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnSaveDataToLocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="保存" />
+            android:text="保存"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <com.ScrollablePanel.ScrollablePanel

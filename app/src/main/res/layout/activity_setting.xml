@@ -387,7 +387,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Nan" />
+                        android:text="-" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -462,7 +462,8 @@
                         android:ems="6"
                         android:focusedByDefault="false"
                         android:inputType="numberDecimal"
-                        android:maxEms="6" />
+                        android:maxEms="6"
+                        android:maxLength="10" />
 
                     <Button
                         android:id="@+id/btnOperateDustSetParaK"
@@ -478,7 +479,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:orientation="horizontal">
 
                     <Button
@@ -542,6 +543,7 @@
                         android:ems="2"
                         android:inputType="number"
                         android:maxEms="4"
+                        android:maxLength="4"
                         android:text="24"
                         android:textSize="18sp" />
 
@@ -579,7 +581,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="仪器信息:气泵累计运行时间-小时，激光器累计运行时间-H。"
-                    android:textSize="24sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -611,22 +613,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:text="当前测量参数:" />
+                    android:text="当前测量参数:"
+                    android:textSize="18sp" />
 
                 <Spinner
                     android:id="@+id/spDustType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1" />
+                    android:layout_marginLeft="20dp" />
 
                 <Button
                     android:id="@+id/btnSaveDustType"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="保存" />
+                    android:layout_marginLeft="20dp"
+                    android:text="保存"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -643,7 +645,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="粉尘仪" />
+                    android:text="粉尘仪"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/swRelay1"
@@ -651,7 +654,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="球阀" />
+                    android:text="球阀"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/swRelay2"
@@ -659,7 +663,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="风扇" />
+                    android:text="风扇"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/swRelay3"
@@ -667,7 +672,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="Ext1" />
+                    android:text="Ext1"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/swRelay4"
@@ -675,7 +681,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="Ext2" />
+                    android:text="Ext2"
+                    android:textSize="18sp" />
 
                 <Switch
                     android:id="@+id/swRelay5"
@@ -684,7 +691,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
-                    android:text="BackUp" />
+                    android:text="BackUp"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -701,7 +709,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="步进电机参数: 角度" />
+                    android:text="步进电机参数: 角度"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/etMotorSetp"
@@ -710,13 +719,15 @@
                     android:layout_weight="1"
                     android:ems="4"
                     android:inputType="number"
-                    android:maxEms="4" />
+                    android:maxEms="4"
+                    android:maxLength="4" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="步(1.8°); 时间：" />
+                    android:text="步(1.8°); 时间："
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/etMotorTime"
@@ -725,20 +736,23 @@
                     android:layout_weight="1"
                     android:ems="2"
                     android:inputType="number"
-                    android:maxEms="2" />
+                    android:maxEms="2"
+                    android:maxLength="2" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="S" />
+                    android:text="S"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btnSaveMotorParams"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="保存" />
+                    android:text="保存"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -754,7 +768,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="正转测试" />
+                    android:text="正转测试"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btnBackwardTest"
@@ -762,7 +777,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="反转测试" />
+                    android:text="反转测试"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btnForwardStep"
@@ -770,7 +786,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="正转100步" />
+                    android:text="正转100步"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/btnBackwardStep"
@@ -778,7 +795,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="反转100步" />
+                    android:text="反转100步"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -809,6 +827,7 @@
                         android:ems="3"
                         android:inputType="numberDecimal"
                         android:maxEms="3"
+                        android:maxLength="4"
                         android:text="100"
                         android:textSize="18sp" />
 
@@ -825,7 +844,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     android:orientation="horizontal">
 
                     <Button
@@ -857,16 +876,17 @@
                     android:id="@+id/etOperateMnCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="45dp"
+                    android:layout_marginLeft="35dp"
                     android:ems="8"
                     android:inputType="textPersonName"
-                    android:text="888888" />
+                    android:maxLength="20"
+                    android:text="3301000099" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="10dp"
                     android:text="协议:"
                     android:textSize="24sp" />
 
@@ -903,16 +923,17 @@
                         android:id="@+id/etOperateServerIp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:ems="10"
+                        android:layout_marginLeft="10dp"
+                        android:ems="8"
                         android:inputType="textPersonName"
-                        android:text="192.168.168.134" />
+                        android:maxLength="20"
+                        android:text="117.149.30.221" />
 
                     <TextView
                         android:id="@+id/textView27"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:text="端口:"
                         android:textSize="24sp" />
 
@@ -920,10 +941,11 @@
                         android:id="@+id/etOperateServerPort"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:ems="5"
+                        android:layout_marginLeft="10dp"
+                        android:ems="3"
                         android:inputType="number"
-                        android:text="12803" />
+                        android:maxLength="5"
+                        android:text="203" />
 
                 </LinearLayout>
 
@@ -931,7 +953,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     android:orientation="horizontal">
 
                     <Button
@@ -957,7 +979,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <TextView
@@ -966,15 +988,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="当前版本:V1.0"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/etOperateUpdateSoftwareUrl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:ems="20"
+                        android:ems="14"
                         android:inputType="textPersonName"
+                        android:maxLength="50"
                         android:text="http://117.149.30.221:12599/DustGuest.apk" />
 
                 </LinearLayout>
@@ -983,7 +1006,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
-                    android:layout_weight="5"
+                    android:layout_weight="3"
                     android:orientation="horizontal">
 
                     <Button
@@ -1002,7 +1025,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp"
                 android:background="@android:color/background_light"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1012,37 +1035,69 @@
                     android:background="@android:color/background_light"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView17"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="其他"
-                        android:textSize="36sp" />
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="其他"
+                            android:textSize="36sp" />
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/layoutPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/etPassWord"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="textPassword" />
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btnSavePassword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        <Button
+                            android:id="@+id/btnOperateUpdateSetting"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:text="更新设置"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="保存密码" />
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnOperateVideoSetting"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:text="视频设置"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnOperateRouterSetting"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:text="路由设置"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -1051,48 +1106,51 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btnOperateUpdateSetting"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/layoutPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:text="更新设置"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/etPassWord"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:ems="6"
+                            android:inputType="textPassword"
+                            android:maxLength="10" />
 
-                    <Button
-                        android:id="@+id/btnOperateVideoSetting"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        <Button
+                            android:id="@+id/btnSavePassword"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:text="修改密码"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutClearDevicesList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:text="视频设置"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/layoutClearDevicesList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btnClearRecentDevices"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="20dp"
+                            android:text="清理列表"
+                            android:textSize="18sp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/btnClearRecentDevices"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
-                        android:text="清理最近使用"
-                        android:textSize="18sp" />
                 </LinearLayout>
 
             </LinearLayout>

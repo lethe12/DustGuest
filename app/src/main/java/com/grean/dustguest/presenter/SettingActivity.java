@@ -226,6 +226,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         findViewById(R.id.btnForwardStep).setOnClickListener(this);
         findViewById(R.id.btnBackwardStep).setOnClickListener(this);
         findViewById(R.id.btnClearRecentDevices).setOnClickListener(this);
+        findViewById(R.id.btnOperateRouterSetting).setOnClickListener(this);
         btnSaveAutoCal = findViewById(R.id.btnOperateSaveAutoCal);
         btnSaveAutoCal.setOnClickListener(this);
         findViewById(R.id.btnOperateSaveAlarm).setOnClickListener(this);
@@ -295,7 +296,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 manager.startDownLoadSoftware(this,etUpdateUrl.getText().toString(),dialogFragment,this);
                 break;
             case R.id.btnOperateVideoSetting:
-                Uri uri = Uri.parse("http://192.168.1.64");
+                Uri uri = Uri.parse("http://192.168.1.64:80");
                 Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                 startActivity(intent);
                 break;
@@ -355,10 +356,14 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
             case R.id.btnClearRecentDevices:
                 manager.clearRecentDevices(this);
                 break;
+            case R.id.btnOperateRouterSetting:
+                Uri uriRouter = Uri.parse("http://192.168.1.1");
+                Intent intentRouter = new Intent(Intent.ACTION_VIEW,uriRouter);
+                startActivity(intentRouter);
+                break;
             default:
 
                 break;
-
         }
     }
 

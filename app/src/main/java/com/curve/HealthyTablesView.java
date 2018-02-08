@@ -355,7 +355,7 @@ public class HealthyTablesView extends View{
             }
 
             //String text = String.valueOf(values[i]);
-            String text = tools.float2String3(values[i]);
+            String text = tools.float2String2(values[i]);//写折线上的值
             textPaint.getTextBounds(text, 0, text.length(), textBound);
             canvas.drawText(text,
                     getPaddingLeft() + (XScale * i) - textBound.width() / 2,

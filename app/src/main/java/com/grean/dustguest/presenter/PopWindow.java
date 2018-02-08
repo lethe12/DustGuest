@@ -72,11 +72,16 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
             conentView.findViewById(R.id.settings).setOnClickListener(this);
             conentView.findViewById(R.id.tvVideoPreView).setOnClickListener(this);
         }else{
-            conentView.findViewById(R.id.tvSearchData).setClickable(false);
+            conentView.findViewById(R.id.tvSearchData).setVisibility(View.GONE);
+            conentView.findViewById(R.id.tvSearchLog).setVisibility(View.GONE);
+            conentView.findViewById(R.id.tvAdvanceSetting).setVisibility(View.GONE);
+            conentView.findViewById(R.id.settings).setVisibility(View.GONE);
+            conentView.findViewById(R.id.tvVideoPreView).setVisibility(View.GONE);
+            /*conentView.findViewById(R.id.tvSearchData).setClickable(false);
             conentView.findViewById(R.id.tvSearchLog).setClickable(false);
             conentView.findViewById(R.id.tvAdvanceSetting).setClickable(false);
             conentView.findViewById(R.id.settings).setClickable(false);
-            conentView.findViewById(R.id.tvVideoPreView).setClickable(false);
+            conentView.findViewById(R.id.tvVideoPreView).setClickable(false);*/
         }
         conentView.findViewById(R.id.ability_logout).setOnClickListener(new View.OnClickListener() {
 
