@@ -142,7 +142,19 @@ public class LocalServerManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            connect = state.isConnect();
+            String [] wifiInfo = wifiAdmin.getWifiInfo().split(",");
+            Log.d(tag,"id="+deviceId+";ssid="+wifiInfo[0]);
+            if((wifiInfo[0].equals("SSID: greanYc"+deviceId))&&state.isConnect()) {
+                Log.d(tag,"已连接");
+                connect = true;
+            }else{
+                if(state.isConnect()) {
+                    Log.d(tag,"停扫描");
+                    state.stopScan();
+                }
+                Log.d(tag,"未连接");
+                connect = false;
+            }
             listener.OnLocalServerResult(connect);
         }
     }
