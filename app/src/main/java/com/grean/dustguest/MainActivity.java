@@ -322,8 +322,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnDisconnectServer() {
         Log.d(tag,"断内网");
-        connectResult = false;
-        handler.sendEmptyMessage(msgDisconnect);
+        if(connectResult) {//已经连接的
+            connectResult = false;
+            handler.sendEmptyMessage(msgDisconnect);
+        }
 
     }
 

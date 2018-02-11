@@ -147,6 +147,7 @@ public class LocalServerManager {
             if((wifiInfo[0].equals("SSID: greanYc"+deviceId))&&state.isConnect()) {
                 Log.d(tag,"已连接");
                 connect = true;
+                state.resumeScan();
             }else{
                 if(state.isConnect()) {
                     Log.d(tag,"停扫描");

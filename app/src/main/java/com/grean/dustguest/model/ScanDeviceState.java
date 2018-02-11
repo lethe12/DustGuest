@@ -105,6 +105,7 @@ public class ScanDeviceState {
         @Override
         public void run() {
             boolean connect = false;
+            pause = true;
             times = 0;
             while (!interrupted()) {
                 try {
@@ -120,7 +121,7 @@ public class ScanDeviceState {
                     }
                 }else {
 
-                    clientProtocol.sendScanCommand();
+                    //clientProtocol.sendScanCommand();
                     connect = true;
                     break;
                 }
@@ -140,7 +141,7 @@ public class ScanDeviceState {
             clientProtocol.sendDustMeterInfo(config);
             Log.d(tag,"查询粉尘仪信息");
             run = connect;
-            pause = false;
+            //pause = false;
             while (run&&(!interrupted())){
                 try {
                     sleep(2000);
@@ -149,6 +150,7 @@ public class ScanDeviceState {
                 }
                 if(!pause) {
                     clientProtocol.sendScanCommand();
+                    //Log.d(tag,"实时查询");
                 }
             }
             run = false;

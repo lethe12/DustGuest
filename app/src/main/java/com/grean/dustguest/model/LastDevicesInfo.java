@@ -54,9 +54,15 @@ public class LastDevicesInfo {
     public void loadDeviceConfig(String dustName,String configContent,String dustMeterInfo){
         GeneralConfig config = ScanDeviceState.getInstance().getConfig();
         try {
-            config.setDustNameContent(new JSONObject(dustName));
-            config.setConfigContent(new JSONObject(configContent));
-            config.setDustMeterInfoContent(new JSONObject(dustMeterInfo));
+            if(dustName!=null) {
+                config.setDustNameContent(new JSONObject(dustName));
+            }
+            if(configContent!=null) {
+                config.setConfigContent(new JSONObject(configContent));
+            }
+            if(dustMeterInfo!=null) {
+                config.setDustMeterInfoContent(new JSONObject(dustMeterInfo));
+            }
         } catch (JSONException e) {
             Log.d(tag,"解析出错");
             e.printStackTrace();
