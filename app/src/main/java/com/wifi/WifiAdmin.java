@@ -136,7 +136,14 @@ public class WifiAdmin {
 
     // 得到WifiInfo的所有信息包
     public String getWifiInfo() {
-        return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
+        if(mWifiInfo == null){
+            return "NULL";
+        }else {
+            mWifiInfo = mWifiManager.getConnectionInfo();
+            return mWifiInfo.toString();
+        }
+
+        //return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
     }
 
     // 添加一个网络并连接
