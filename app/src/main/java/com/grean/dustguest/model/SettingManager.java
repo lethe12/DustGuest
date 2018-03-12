@@ -39,9 +39,10 @@ public class SettingManager implements DustMeterCalCtrl{
         listener.showContent(config);
     }
 
-    public void setDustParams(float params){
-        config.setDustParaK(params);
-        protocol.sendSetDustMeterParaK(params);
+    public void setDustParams(float k,float b){
+        config.setDustParaK(k);
+        config.setDustParaB(b);
+        protocol.sendSetDustMeterParaK(k,b);
     }
 
     public void setAutoCalEnable(boolean key){

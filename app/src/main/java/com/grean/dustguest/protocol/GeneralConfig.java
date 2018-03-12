@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class GeneralConfig {
     private String[] dustNames,clientProtocolNames;
     private int dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName,MotorTime,MotorStep;
-    private float dustParaK,alarmDust;
+    private float dustParaK,dustParaB,alarmDust;
     private boolean autoCalEnable;
     private long autoCalTime,autoCalInterval;
     private String serverIp,mnCode,configContent,dustNameContent,dustMeterInfoContent,devicesId;
@@ -42,6 +42,14 @@ public class GeneralConfig {
 
     public void setDustParaK(float dustParaK) {
         this.dustParaK = dustParaK;
+    }
+
+    public float getDustParaB() {
+        return dustParaB;
+    }
+
+    public void setDustParaB(float dustParaB) {
+        this.dustParaB = dustParaB;
     }
 
     public void setAlarmDust(float alarmDust) {
@@ -107,6 +115,9 @@ public class GeneralConfig {
             serverPort = jsonObject.getInt("serverPort");
             mnCode = jsonObject.getString("mnCode");
             dustParaK = (float) jsonObject.getDouble("dustParaK");
+            if(jsonObject.has("dustParaB")) {
+                dustParaB = (float) jsonObject.getDouble("dustParaB");
+            }
             alarmDust = (float) jsonObject.getDouble("alarmDust");
             clientProtocolName = jsonObject.getInt("clientProtocolName");
             JSONArray array = jsonObject.getJSONArray("clientProtocolNames");

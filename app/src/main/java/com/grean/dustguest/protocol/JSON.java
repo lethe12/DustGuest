@@ -166,11 +166,12 @@ public class JSON {
         config.setDustNameContent(jsonObject);
     }
 
-    public static byte[] operateDustSetParaK(float parameter) throws JSONException {
+    public static byte[] operateDustSetParaK(float k,float b) throws JSONException {
         JSONObject object = new JSONObject();
         object.put("protocolType","operate");
         object.put("DustMeterSetParaK",true);
-        object.put("DustMeterParaK",parameter);
+        object.put("DustMeterParaK",k);
+        object.put("DustMeterParaB",b);
         return object.toString().getBytes();
     }
 

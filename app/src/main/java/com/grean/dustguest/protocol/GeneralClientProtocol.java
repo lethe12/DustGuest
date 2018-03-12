@@ -22,7 +22,7 @@ public interface GeneralClientProtocol {
     void sendLoadSetting(GeneralConfig config, SettingDisplay display);
     void sendDustMeterInfo(GeneralConfig config);
     boolean sendGetOperateInit(GeneralConfig config);
-    void sendSetDustMeterParaK(float parameter);
+    void sendSetDustMeterParaK(float paraK,float paraB);
     void sendUploadConfig(GeneralConfig config);
     void sendDustMeterCalStart(NotifyProcessDialogInfo dialogInfo);
     void sendDustMeterCalProcess(DustMeterCalCtrl ctrl);

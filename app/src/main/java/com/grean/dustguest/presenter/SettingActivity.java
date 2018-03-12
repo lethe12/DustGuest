@@ -37,7 +37,7 @@ import java.util.Calendar;
 public class SettingActivity extends Activity implements View.OnClickListener,AdapterView.OnItemSelectedListener,
         SettingManagerListener,RealTimeSettingDisplay,SettingDisplay,DialogTimeSelected{
     private static final String tag = "SettingActivity";
-    private EditText etDustParaK,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,
+    private EditText etDustParaK,etDustParaB,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,
             etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
@@ -125,9 +125,11 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         initView();
         if(getIntent().getBooleanExtra("isAdvance",false)){//高级设置
             etDustParaK.setEnabled(true);
+            etDustParaB.setEnabled(true);
             btnSaveDustPara.setEnabled(true);
         }else{
             etDustParaK.setEnabled(false);
+            etDustParaB.setEnabled(false);
             btnSaveDustPara.setEnabled(false);
             realTimeDisplay0.setVisibility(View.GONE);
             motorSet.setVisibility(View.GONE);
@@ -158,6 +160,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
 
     private void initView(){
         etDustParaK = findViewById(R.id.etOperateDustParaK);
+        etDustParaB = findViewById(R.id.etOperateDustParaB);
         etAutoInterval = findViewById(R.id.etOperateAutoCalInterval);
         etMotorStep = findViewById(R.id.etMotorSetp);
         etMotorTime = findViewById(R.id.etMotorTime);
@@ -244,7 +247,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnOperateDustSetParaK:
-                manager.setDustParams(Float.valueOf( etDustParaK.getText().toString()));
+                manager.setDustParams(Float.valueOf( etDustParaK.getText().toString()),Float.valueOf( etDustParaB.getText().toString()));
                 break;
             case R.id.btnOperateSaveAutoCal:
                 manager.setAutoDate(tvAutoCalTime.getText().toString(),etAutoInterval.getText().toString());
@@ -390,6 +393,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     @Override
     public void showContent(GeneralConfig config) {
         etDustParaK.setText(String.valueOf(config.getDustParaK()));
+        etDustParaB.setText(String.valueOf(config.getDustParaB()));
         swAutoCalEnable.setChecked(config.isAutoCalEnable());
         tvAutoCalTime.setText(tools.timestamp2string(config.getAutoCalTime()));
         etAutoInterval.setText(String.valueOf(config.getAutoCalInterval()/3600000l));

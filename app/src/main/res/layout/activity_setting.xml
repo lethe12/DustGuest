@@ -458,19 +458,31 @@
                         android:id="@+id/etOperateDustParaK"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:ems="6"
+                        android:ems="4"
                         android:focusedByDefault="false"
                         android:inputType="numberDecimal"
                         android:maxEms="6"
                         android:maxLength="10" />
 
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="截距:"
+                        android:textSize="24sp" />
+
+                    <EditText
+                        android:id="@+id/etOperateDustParaB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="3"
+                        android:inputType="numberSigned|numberDecimal" />
+
                     <Button
                         android:id="@+id/btnOperateDustSetParaK"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="保存斜率"
+                        android:text="保存系数"
                         android:textSize="18sp" />
 
                 </LinearLayout>
