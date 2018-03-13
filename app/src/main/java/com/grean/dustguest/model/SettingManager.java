@@ -114,7 +114,7 @@ public class SettingManager implements DustMeterCalCtrl{
 
     @Override
     public void onResult(String info) {
-        this.info.cancelDialogWithToast(info);
+        this.info.cancelDialogBarStyleWithToast(info);
     }
 
     private class DownloadRunnable implements Runnable{
@@ -218,6 +218,7 @@ public class SettingManager implements DustMeterCalCtrl{
         @Override
         public void run() {
             dialogInfo.showInfo("开始校准...0%");
+            dialogInfo.showProcess(0);
             //ScanDeviceState.getInstance().stopScan();
             ScanDeviceState.getInstance().pauseScan();
             try {

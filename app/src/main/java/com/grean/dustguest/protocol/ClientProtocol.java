@@ -87,6 +87,7 @@ public class ClientProtocol implements GeneralClientProtocol{
                     DustMeterCalProcessFormat format = JSON.getDustMeterCalProcess(jsonObject);
                     if(dialogInfo!=null){
                         dialogInfo.showInfo(format.getString());
+                        dialogInfo.showProcess(format.getProcess());
                     }
                     if(format.getProcess() == 100) {
                         if (dustMeterCalCtrl != null) {

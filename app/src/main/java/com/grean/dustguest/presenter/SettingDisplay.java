@@ -9,5 +9,6 @@ import com.grean.dustguest.protocol.GeneralConfig;
 public interface SettingDisplay {
     void show(GeneralConfig config);
     void cancelDialogWithToast(String string);
+    void cancelDialogBarStyleWithToast(String string);
     void cancelDialog();
 }

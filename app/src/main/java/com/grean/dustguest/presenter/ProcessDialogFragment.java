@@ -59,4 +59,9 @@ public class ProcessDialogFragment extends DialogFragment implements NotifyProce
         this.string = string;
         handler.sendEmptyMessage(1);
     }
+
+    @Override
+    public void showProcess(int process) {
+
+    }
 }

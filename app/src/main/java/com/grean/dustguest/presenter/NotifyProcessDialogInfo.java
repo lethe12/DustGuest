@@ -7,4 +7,5 @@ package com.grean.dustguest.presenter;
 
 public interface NotifyProcessDialogInfo {
     void showInfo(String string);
+    void showProcess(int process);
 }

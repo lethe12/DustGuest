@@ -53,8 +53,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     private RealTimeDataFormat format;
     private GeneralConfig config;
     private ProcessDialogFragment dialogFragment;
+    private DialogProcessFragmentBarStyle dialogProcessFragmentBarStyle;
     private static final int msgShowRealTime = 1,msgShowSetting = 2,msgDismissDialogWithToast=3,
-    msgDismissDialog=4;
+    msgDismissDialog=4,msgDismissDialogBarStyle =5;
 
     private Handler handler = new Handler(){
         @Override
@@ -95,6 +96,12 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 case msgDismissDialogWithToast:
                     if(dialogFragment!=null){
                         dialogFragment.dismiss();
+                        Toast.makeText(SettingActivity.this,toastString,Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case msgDismissDialogBarStyle:
+                    if(dialogProcessFragmentBarStyle!=null){
+                        dialogProcessFragmentBarStyle.dismiss();
                         Toast.makeText(SettingActivity.this,toastString,Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -287,10 +294,13 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 choose.showDialog(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),0,0,this);
                 break;
             case R.id.btnOperateCalMan:
-                dialogFragment = new ProcessDialogFragment();
+                dialogProcessFragmentBarStyle = new DialogProcessFragmentBarStyle();
+                dialogProcessFragmentBarStyle.setCancelable(false);
+                dialogProcessFragmentBarStyle.show(getFragmentManager(),"Calibration");
+                /*dialogFragment = new ProcessDialogFragment();
                 dialogFragment.setCancelable(false);
-                dialogFragment.show(getFragmentManager(),"Calibration");
-                manager.startDustMeterCal(dialogFragment,this);
+                dialogFragment.show(getFragmentManager(),"Calibration");*/
+                manager.startDustMeterCal(dialogProcessFragmentBarStyle,this);
                 break;
             case R.id.btnOperateUpdateSoftware:
                 dialogFragment = new ProcessDialogFragment();
@@ -439,6 +449,12 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     public void cancelDialogWithToast(String string) {
         toastString = string;
         handler.sendEmptyMessage(msgDismissDialogWithToast);
+    }
+
+    @Override
+    public void cancelDialogBarStyleWithToast(String string) {
+        toastString = string;
+        handler.sendEmptyMessage(msgDismissDialogBarStyle);
     }
 
     @Override
