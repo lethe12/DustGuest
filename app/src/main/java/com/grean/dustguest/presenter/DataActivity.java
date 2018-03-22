@@ -40,6 +40,7 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
     /*private List<String> date;
     private List<List<String>> data;*/
     private AlertDialog dialog;
+    private DialogProcessFragmentBarStyle dialogProcess;
     private SearchData searchData;
     private EndDialogTimeSelected endDialogTimeSelected;
     private StartDialogTimeSelected startDialogTimeSelected;
@@ -55,8 +56,8 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
             switch (msg.what){
                 case msgShowAllHistory:
                     scrollablePanel.setPanelAdapter(historyDataPanelAdapter);
-                    if(dialog!=null){
-                        dialog.dismiss();
+                    if(dialogProcess!=null){
+                        dialogProcess.dismiss();
                     }
                     break;
                 case msgNoneData:
@@ -182,8 +183,12 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
 
     @Override
     public void searchData(long start, long end) {
-        final ProgressBar pb = new ProgressBar(this);
-        dialog = new AlertDialog.Builder(this).setTitle("正在查询历史数据").setView(pb).setCancelable(true).show();
+        /*final ProgressBar pb = new ProgressBar(this);
+        dialog = new AlertDialog.Builder(this).setTitle("正在查询历史数据").setView(pb).setCancelable(true).show();*/
+        dialogProcess = new DialogProcessFragmentBarStyle();
+        dialogProcess.setCancelable(true);
+        dialogProcess.show(getFragmentManager(),"search history data");
+        dialogProcess.showInfo("正在下载数据...");
         searchData.readyToSearchData(start,end);
     }
 
@@ -210,6 +215,13 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
             handler.sendEmptyMessage(msgFailToSaveFile);
         }
         this.fileName = fileName;
+    }
+
+    @Override
+    public void showDataDownLoadProcess(int process) {
+        if(dialogProcess!=null){
+            dialogProcess.showProcess(process);
+        }
     }
 
     private class StartDialogTimeSelected implements DialogTimeSelected{

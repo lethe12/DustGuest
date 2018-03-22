@@ -323,6 +323,8 @@ public class SearchData implements HistoryDataListener {
             long next = index + SearchInterval;
             int times = 0;
             historyData.clear();
+            int process;// = (int) ((next - startDate)*100/(endDate - startDate));
+
             while (next <= endDate) {
                 hasNewData = false;
                 state.getHistoryData(index, next, listener, historyData);
@@ -332,6 +334,8 @@ public class SearchData implements HistoryDataListener {
                     e.printStackTrace();
                 }
                 if(hasNewData){
+                    process = (int) ((next - startDate)*100/(endDate - startDate));
+                    dataSearchListener.showDataDownLoadProcess(process);
                     times = 0;
                     index = next;
                     next = index+SearchInterval;
@@ -344,7 +348,7 @@ public class SearchData implements HistoryDataListener {
                     break;
                 }
             }
-
+            dataSearchListener.showDataDownLoadProcess(99);
             if(hasNewData){
                 if(index < endDate){
                     state.getHistoryData(index, endDate, listener, historyData);
