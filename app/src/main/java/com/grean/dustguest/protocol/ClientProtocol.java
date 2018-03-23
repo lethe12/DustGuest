@@ -30,6 +30,7 @@ public class ClientProtocol implements GeneralClientProtocol{
     private DustMeterCalCtrl dustMeterCalCtrl;
     private GeneralLogFormat logFormat;
     private LogListener logListener;
+    private NoiseCalibrationStateListener noiseCalibrationStateListener;
 
     public ClientProtocol(){
         socketTask = SocketTask.getInstance();
@@ -80,6 +81,14 @@ public class ClientProtocol implements GeneralClientProtocol{
                     Log.d(tag,rec);
                     if(config!=null){
                         JSON.getDustMeterInfo(jsonObject,config);
+                    }
+                }
+
+                if(jsonObject.has("NoiseCalibrationState")){
+                    if(jsonObject.has("state")){
+                        if(noiseCalibrationStateListener!=null){
+                            noiseCalibrationStateListener.onState(jsonObject.getInt("state"));
+                        }
                     }
                 }
 
@@ -241,6 +250,25 @@ public class ClientProtocol implements GeneralClientProtocol{
         this.logListener = logListener;
         try {
             socketTask.send(JSON.readLog(startDate,endDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendNoiseCalibration() {
+        try {
+            socketTask.send(JSON.operateNoiseCalibration());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendNoiseCalibrationState(NoiseCalibrationStateListener listener) {
+        try {
+            this.noiseCalibrationStateListener = listener;
+            socketTask.send(JSON.getNoiseCalibrationState());
         } catch (JSONException e) {
             e.printStackTrace();
         }

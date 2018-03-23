@@ -237,6 +237,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         findViewById(R.id.btnBackwardStep).setOnClickListener(this);
         findViewById(R.id.btnClearRecentDevices).setOnClickListener(this);
         findViewById(R.id.btnOperateRouterSetting).setOnClickListener(this);
+        findViewById(R.id.btnOperateNoiseCalibration).setOnClickListener(this);
         btnSaveAutoCal = findViewById(R.id.btnOperateSaveAutoCal);
         btnSaveAutoCal.setOnClickListener(this);
         findViewById(R.id.btnOperateSaveAlarm).setOnClickListener(this);
@@ -373,6 +374,12 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 Uri uriRouter = Uri.parse("http://192.168.1.1");
                 Intent intentRouter = new Intent(Intent.ACTION_VIEW,uriRouter);
                 startActivity(intentRouter);
+                break;
+            case R.id.btnOperateNoiseCalibration:
+                dialogProcessFragmentBarStyle = new DialogProcessFragmentBarStyle();
+                dialogProcessFragmentBarStyle.setCancelable(false);
+                dialogProcessFragmentBarStyle.show(getFragmentManager(),"Noise Calibration");
+                manager.startNoiseCalibration(dialogProcessFragmentBarStyle,this);
                 break;
             default:
 

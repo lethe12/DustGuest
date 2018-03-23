@@ -97,6 +97,20 @@ public class JSON {
         }
     }
 
+    public static byte[] operateNoiseCalibration() throws JSONException{
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("NoiseCalibration",true);
+        return object.toString().getBytes();
+    }
+
+    public static byte[] getNoiseCalibrationState() throws JSONException{
+        JSONObject object = new JSONObject();
+        object.put("protocolType","operate");
+        object.put("NoiseCalibrationState",true);
+        return object.toString().getBytes();
+    }
+
     public static byte[] operateDustMeterCal() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("protocolType","operate");

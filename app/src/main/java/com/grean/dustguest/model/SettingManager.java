@@ -15,6 +15,7 @@ import com.grean.dustguest.presenter.SettingDisplay;
 import com.grean.dustguest.presenter.SettingManagerListener;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
 import com.grean.dustguest.protocol.GeneralConfig;
+import com.grean.dustguest.protocol.NoiseCalibrationStateListener;
 import com.grean.dustguest.protocol.ProtocolLib;
 import com.tools;
 
@@ -203,6 +204,53 @@ public class SettingManager implements DustMeterCalCtrl{
         public void run() {
             android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
             startDownload();
+        }
+    }
+
+    public void startNoiseCalibration(NotifyProcessDialogInfo dialogInfo,SettingDisplay info){
+        this.info = info;
+        new NoiseCalibrationThread(dialogInfo).start();
+    }
+
+    private class NoiseCalibrationThread extends Thread implements NoiseCalibrationStateListener{
+        private int state;
+        private NotifyProcessDialogInfo dialogInfo;
+        public NoiseCalibrationThread(NotifyProcessDialogInfo dialogInfo){
+            state = 0;
+            this.dialogInfo = dialogInfo;
+            protocol.sendNoiseCalibration();
+        }
+
+        @Override
+        public void run() {
+            dialogInfo.showInfo("正在校准声级计");
+            for(int i=0;i<10;i++){
+                dialogInfo.showProcess(i*10);
+                protocol.sendNoiseCalibrationState(this);
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(state!=0){
+                    break;
+                }
+            }
+
+            if(state ==0){
+                info.cancelDialogBarStyleWithToast("声级计无响应");
+            }else if(state == 1){
+                info.cancelDialogBarStyleWithToast("校准成功!");
+            }else if(state == 2){
+                info.cancelDialogBarStyleWithToast("校准失败!");
+            }else{
+
+            }
+        }
+
+        @Override
+        public void onState(int state) {
+            this.state = state;
         }
     }
 
