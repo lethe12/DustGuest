@@ -1,5 +1,7 @@
 package com.grean.dustguest.protocol;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,8 +11,8 @@ import org.json.JSONObject;
  */
 
 public class GeneralConfig {
-    private String[] dustNames,clientProtocolNames;
-    private int dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName,MotorTime,MotorStep;
+    private String[] dustNames,clientProtocolNames,dustMeterNames;
+    private int dustMeter,dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName,MotorTime,MotorStep;
     private float dustParaK,dustParaB,alarmDust;
     private boolean autoCalEnable;
     private long autoCalTime,autoCalInterval;
@@ -18,6 +20,10 @@ public class GeneralConfig {
 
     public GeneralConfig(){
 
+    }
+
+    public int getDustMeter() {
+        return dustMeter;
     }
 
     public void setDustName(int dustName) {
@@ -128,6 +134,7 @@ public class GeneralConfig {
                     clientProtocolNames[i] = array.getString(i);
                 }
             }
+
             if(jsonObject.has("motorTime")){
                 MotorTime = jsonObject.getInt("motorTime");
             }
@@ -136,13 +143,18 @@ public class GeneralConfig {
                 MotorStep = jsonObject.getInt("motorStep");
             }
 
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         configContent = jsonObject.toString();
     }
 
+
+
     public void setDustNameContent(JSONObject jsonObject) {
+        Log.d("config","粉尘仪");
         try {
             JSONArray array = jsonObject.getJSONArray("dustNames");
             int size = array.length();
@@ -156,6 +168,26 @@ public class GeneralConfig {
                 dustNames = new String[]{"TSP"};
                 dustName = 0;
             }
+            Log.d("config","配置粉尘仪");
+            if(jsonObject.has("dustMeterNames")){
+                array = jsonObject.getJSONArray("dustMeterNames");
+
+                if(array.length() >0) {
+                    dustMeterNames = new String[array.length()];
+                    for (int i = 0; i < dustMeterNames.length; i++) {
+                        dustMeterNames[i] = array.getString(i);
+                        Log.d("config",dustMeterNames[i]);
+                    }
+                }else{
+                    dustMeterNames = new String[] {"default"};
+                }
+            }
+
+            if(jsonObject.has("dustMeter")){
+                dustMeter = jsonObject.getInt("dustMeter");
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

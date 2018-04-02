@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.grean.dustguest.model.ScanDeviceState;
 import com.grean.dustguest.protocol.GeneralClientProtocol;
+import com.grean.dustguest.protocol.JSON;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,7 +118,7 @@ public class SocketTask {
                         String content=null;
                         int index=0;
                         while ((count = receive.read(readBuff))!=-1 && connected){
-                            if(readBuff[count-1]=='}') {//正常结尾
+                            if((readBuff[count-2]=='\r')&&(readBuff[count-1]=='\n')) {//正常结尾
 
                                 if(content==null) {
                                     //Log.d(tag,"处理一");
@@ -128,12 +129,13 @@ public class SocketTask {
                                 }
                                 index = 0;
                                 //Log.d(tag,"TCP Content:"+content);
-
-                                clientProtocol.handleReceiveData(content);
-                                content=null;
+                                if(JSON.isFrameRight(content)) {
+                                    clientProtocol.handleReceiveData(content.substring(content.indexOf("$$")+2,content.indexOf("\r\n")));
+                                }
+                                content = null;
                             }else{
                                 Log.d(tag,"异常");
-                                if(readBuff[0]=='{'){//正常包头，异常包尾
+                                if((readBuff[0]=='#')&&(readBuff[1]=='#')){//正常包头，异常包尾
                                     content = new String(readBuff, 0, count);
                                     index = count;
                                 }else{//包头、包尾皆异常

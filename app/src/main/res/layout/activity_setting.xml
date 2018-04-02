@@ -593,7 +593,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="仪器信息:气泵累计运行时间-小时，激光器累计运行时间-H。"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -636,11 +636,11 @@
 
                 <Button
                     android:id="@+id/btnSaveDustType"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="保存"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -658,7 +658,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="粉尘仪"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <Switch
                     android:id="@+id/swRelay1"
@@ -667,7 +667,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="球阀"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <Switch
                     android:id="@+id/swRelay2"
@@ -676,7 +676,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="风扇"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <Switch
                     android:id="@+id/swRelay3"
@@ -685,7 +685,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="Ext1"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <Switch
                     android:id="@+id/swRelay4"
@@ -694,7 +694,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="Ext2"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
                 <Switch
                     android:id="@+id/swRelay5"
@@ -704,7 +704,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:text="BackUp"
-                    android:textSize="18sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -764,7 +764,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="保存"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -781,7 +781,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="正转测试"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnBackwardTest"
@@ -790,7 +790,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="反转测试"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnForwardStep"
@@ -799,7 +799,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="正转100步"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnBackwardStep"
@@ -808,7 +808,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:text="反转100步"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -998,7 +998,7 @@
                         android:id="@+id/tvOperateSoftwareVerison"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:text="当前版本:V1.0"
                         android:textSize="18sp" />
 
@@ -1010,7 +1010,8 @@
                         android:ems="14"
                         android:inputType="textPersonName"
                         android:maxLength="50"
-                        android:text="http://117.149.30.221:12599/DustGuest.apk" />
+                        android:text="http://117.149.30.221:12599/DustGuest.apk"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -1153,12 +1154,12 @@
 
                         <Button
                             android:id="@+id/btnSavePassword"
-                            android:layout_width="120dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="20dp"
                             android:text="修改密码"
-                            android:textSize="18sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -1166,17 +1167,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/btnClearRecentDevices"
-                            android:layout_width="120dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="20dp"
                             android:text="清理列表"
-                            android:textSize="18sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </LinearLayout>
