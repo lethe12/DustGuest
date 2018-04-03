@@ -30,6 +30,10 @@ public class GeneralConfig {
         this.dustName = dustName;
     }
 
+    public void setDustMeter(int dustMeter) {
+        this.dustMeter = dustMeter;
+    }
+
     public void setServerPort(int serverPort) {
         this.serverPort = serverPort;
     }
@@ -154,7 +158,7 @@ public class GeneralConfig {
 
 
     public void setDustNameContent(JSONObject jsonObject) {
-        Log.d("config","粉尘仪");
+        //Log.d("config","粉尘仪");
         try {
             JSONArray array = jsonObject.getJSONArray("dustNames");
             int size = array.length();
@@ -176,6 +180,7 @@ public class GeneralConfig {
                     dustMeterNames = new String[array.length()];
                     for (int i = 0; i < dustMeterNames.length; i++) {
                         dustMeterNames[i] = array.getString(i);
+
                         Log.d("config",dustMeterNames[i]);
                     }
                 }else{
@@ -196,6 +201,10 @@ public class GeneralConfig {
 
     public String[] getDustNames() {
         return dustNames;
+    }
+
+    public String[] getDustMeterNames() {
+        return dustMeterNames;
     }
 
     public String[] getClientProtocolNames() {

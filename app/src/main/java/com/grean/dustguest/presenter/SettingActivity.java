@@ -42,13 +42,13 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
     private TextView[] tvRealTimeValue=new TextView[16];
-    private Spinner spDustName,spProtocols;
+    private Spinner spDustName,spProtocols,spDustMeter;
     private LinearLayout motorSet,motorTest,relaysSet,passwordSet,realTimeDisplay0,
             realTimeDisplay1,realTimeDisplay2,realTimeDisplay3,realTimeDisplay4,
             realTimeDisplay5,clearDevicesList,dustMeterInfo,dustNameList,softwareUpdate;
     private Button btnSaveDustPara,btnSaveAutoCal;
     private SettingManager manager;
-    private int dustName,protocolName;
+    private int dustName,protocolName,dustMeter;
     private String toastString;
     private RealTimeDataFormat format;
     private GeneralConfig config;
@@ -184,6 +184,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         swRelay4 = findViewById(R.id.swRelay4);
         swRelay5 = findViewById(R.id.swRelay5);
         spDustName = findViewById(R.id.spDustType);
+        spDustMeter = findViewById(R.id.spDustMeter);
         spProtocols = findViewById(R.id.spOperateProticol);
         tvRealTimeValue[0] = findViewById(R.id.tvRealTimeValue1);
         tvRealTimeValue[1] = findViewById(R.id.tvRealTimeValue2);
@@ -284,7 +285,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                         etServerIp.getText().toString(),Integer.valueOf(etServerPort.getText().toString()));
                 break;
             case R.id.btnSaveDustType:
-                manager.setDustName(dustName);
+                manager.setDustName(dustName,dustMeter);
                 break;
             case R.id.btnOperateUpdateSetting:
                 manager.updateSetting(this);
@@ -394,6 +395,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                     Log.d(tag,String.valueOf(position));
                     dustName = position;
                     break;
+                case R.id.spDustMeter:
+                    dustMeter = position;
+                    break;
                 case R.id.spOperateProticol:
                     protocolName = position;
                     break;
@@ -426,6 +430,13 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         dustName = config.getDustName();
         spDustName.setSelection(dustName);
         spDustName.setOnItemSelectedListener(this);
+
+        ArrayAdapter<String>adapterDustMeter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,config.getDustMeterNames());
+        spDustMeter.setAdapter(adapterDustMeter);
+        dustMeter = config.getDustMeter();
+        spDustMeter.setSelection(dustMeter);
+        spDustMeter.setOnItemSelectedListener(this);
+
         ArrayAdapter<String> adapterProtocols = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,config.getClientProtocolNames());
         spProtocols.setAdapter(adapterProtocols);
         protocolName = config.getClientProtocolName();

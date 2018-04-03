@@ -80,8 +80,9 @@ public class SettingManager implements DustMeterCalCtrl{
         protocol.sendUploadConfig(config);
     }
 
-    public void setDustName(int dustName){
+    public void setDustName(int dustName,int dustMeter){
         config.setDustName(dustName);
+        config.setDustMeter(dustMeter);
         protocol.sendUploadConfig(config);
     }
 

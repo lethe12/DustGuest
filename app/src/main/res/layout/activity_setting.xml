@@ -629,6 +629,12 @@
                     android:textSize="18sp" />
 
                 <Spinner
+                    android:id="@+id/spDustMeter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp" />
+
+                <Spinner
                     android:id="@+id/spDustType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
