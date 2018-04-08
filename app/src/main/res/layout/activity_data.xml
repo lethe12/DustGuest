@@ -7,14 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="8"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight=".5"
             android:text="起始时间:"
             android:textSize="18sp" />
 
@@ -23,13 +22,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ellipsize="marquee"
             android:text="2018-02-01 00:00"
             android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:text="结束时间:"
             android:textSize="18sp" />
 
@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:ellipsize="marquee"
             android:text="2018-02-02 23:59"
             android:textSize="18sp" />
 
@@ -45,16 +46,14 @@
             android:id="@+id/btnSaveDataToLocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="保存"
-            android:textSize="18sp" />
+            android:layout_weight="0.5"
+            android:text="保存" />
     </LinearLayout>
 
     <com.ScrollablePanel.ScrollablePanel
         android:id="@+id/scrollable_panel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
     </com.ScrollablePanel.ScrollablePanel>
 </LinearLayout>

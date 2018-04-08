@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -174,6 +175,7 @@ public class PopWindow extends PopupWindow implements View.OnClickListener{
                                 if(passwordString == null){
                                     passwordString = "q";
                                 }
+                                Log.d("password",passwordString);
                                 if((password.getText().toString().equals(passwordString))||(password.getText().toString().equals(SystemConfig.SuperPassword))){
                                     Intent intent = new Intent();
                                     intent.setClass(mContext,SettingActivity.class);

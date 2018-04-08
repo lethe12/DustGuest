@@ -9,7 +9,7 @@
         android:layout_height="60dp"
         android:gravity="center_vertical"
         android:text="剩余时间:"
-        android:textSize="30sp" />
+        android:textSize="18sp" />
 
     <ProgressBar
         android:id="@+id/pbProcessDialog"

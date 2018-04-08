@@ -1,6 +1,7 @@
 package com.grean.dustguest.presenter;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -8,6 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +28,7 @@ import android.widget.Toast;
 
 import com.grean.dustguest.R;
 import com.grean.dustguest.model.SettingManager;
+import com.grean.dustguest.model.SystemConfig;
 import com.grean.dustguest.protocol.GeneralConfig;
 import com.grean.dustguest.protocol.ProtocolLib;
 import com.grean.dustguest.protocol.RealTimeDataFormat;
@@ -38,14 +44,16 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         SettingManagerListener,RealTimeSettingDisplay,SettingDisplay,DialogTimeSelected{
     private static final String tag = "SettingActivity";
     private EditText etDustParaK,etDustParaB,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,
-            etMnCode,etServerIp,etServerPort,etPassword,etUpdateUrl;
+            etMnCode,etServerIp,etServerPort,etUpdateUrl;
     private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
     private TextView[] tvRealTimeValue=new TextView[16];
     private Spinner spDustName,spProtocols,spDustMeter;
-    private LinearLayout motorSet,motorTest,relaysSet,passwordSet,realTimeDisplay0,
+   /* private LinearLayout motorSet,motorTest,relaysSet,passwordSet,realTimeDisplay0,
             realTimeDisplay1,realTimeDisplay2,realTimeDisplay3,realTimeDisplay4,
-            realTimeDisplay5,clearDevicesList,dustMeterInfo,dustNameList,softwareUpdate;
+            realTimeDisplay5,clearDevicesList,dustMeterInfo,softwareUpdate;*/
+    //private ConstraintLayout dustNameList;
+    private ConstraintLayout realTimeLayout,maintainingLayout;
     private Button btnSaveDustPara,btnSaveAutoCal;
     private SettingManager manager;
     private int dustName,protocolName,dustMeter;
@@ -121,7 +129,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制竖屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_setting);
+        setContentView(R.layout.activity_setting_advance);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         findViewById(R.id.setting_toolbar_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +146,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
             etDustParaK.setEnabled(false);
             etDustParaB.setEnabled(false);
             btnSaveDustPara.setEnabled(false);
-            realTimeDisplay0.setVisibility(View.GONE);
+            realTimeLayout.setVisibility(View.GONE);
+            maintainingLayout.setVisibility(View.GONE);
+            /*realTimeDisplay0.setVisibility(View.GONE);
             motorSet.setVisibility(View.GONE);
             motorTest.setVisibility(View.GONE);
             relaysSet.setVisibility(View.GONE);
@@ -150,8 +160,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
             realTimeDisplay5.setVisibility(View.GONE);
             clearDevicesList.setVisibility(View.GONE);
             dustMeterInfo.setVisibility(View.GONE);
+
             dustNameList.setVisibility(View.GONE);
-            softwareUpdate.setVisibility(View.GONE);
+            softwareUpdate.setVisibility(View.GONE);*/
         }
 
         if(getIntent().getBooleanExtra("online",true)){//在线状态
@@ -202,7 +213,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         tvRealTimeValue[13] = findViewById(R.id.tvRealTimeValue14);
         tvRealTimeValue[14] = findViewById(R.id.tvRealTimeValue15);
         tvRealTimeValue[15] = findViewById(R.id.tvRealTimeValue16);
-        realTimeDisplay0 = findViewById(R.id.layoutRealTimeDisplay0);
+        /*realTimeDisplay0 = findViewById(R.id.layoutRealTimeDisplay0);
         realTimeDisplay1 = findViewById(R.id.layoutRealTimeDisplay1);
         realTimeDisplay2 = findViewById(R.id.layoutRealTimeDisplay2);
         realTimeDisplay3 = findViewById(R.id.layoutRealTimeDisplay3);
@@ -213,10 +224,12 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         relaysSet = findViewById(R.id.layoutRelays);
         dustMeterInfo = findViewById(R.id.layoutOperateDustMeter);
         passwordSet = findViewById(R.id.layoutPassword);
-        clearDevicesList = findViewById(R.id.layoutClearDevicesList);
-        dustNameList = findViewById(R.id.layoutDustName);
-        softwareUpdate = findViewById(R.id.layoutOperateUpdateSoftware);
-        etPassword = findViewById(R.id.etPassWord);
+        clearDevicesList = findViewById(R.id.layoutClearDevicesList);*/
+        //dustNameList = findViewById(R.id.layoutDustName);
+        realTimeLayout = findViewById(R.id.layoutRealTimeDisplay);
+        maintainingLayout = findViewById(R.id.layoutMaintaining);
+
+        //softwareUpdate = findViewById(R.id.layoutOperateUpdateSoftware);
         tvDeviceId = findViewById(R.id.tvDeviceId);
         tvRealTimeState = findViewById(R.id.tvSettingState);
         tvDustMeterInfo = findViewById(R.id.tvOperateDustMeterInfo);
@@ -361,12 +374,22 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 manager.ctrlMotorBackwardStep();
                 break;
             case R.id.btnSavePassword:
-                if(etPassword.getText().toString().isEmpty()){
-                    Toast.makeText(this,"新密码不能为空",Toast.LENGTH_SHORT).show();
-                }else{
-                    manager.savePassword(this,etPassword.getText().toString());
-                    Toast.makeText(this,"密码修改成功!",Toast.LENGTH_SHORT).show();
-                }
+                final EditText password = new EditText(this);
+                password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                new AlertDialog.Builder(this).setTitle("请新输入密码").setView(password).
+                        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(password.getText().toString().isEmpty()){
+                                    Toast.makeText(SettingActivity.this,"新密码不能为空",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    manager.savePassword(SettingActivity.this,password.getText().toString());
+                                    Toast.makeText(SettingActivity.this,"密码修改成功!",Toast.LENGTH_SHORT).show();
+                                }
+                                dialog.dismiss();
+                            }
+                        }).setNegativeButton("取消",null).show();
+
                 break;
             case R.id.btnClearRecentDevices:
                 manager.clearRecentDevices(this);

@@ -29,6 +29,7 @@ import com.grean.dustguest.model.LastDevicesInfo;
 import com.grean.dustguest.model.LocalServerListener;
 import com.grean.dustguest.model.LocalServerManager;
 import com.grean.dustguest.presenter.DataActivity;
+import com.grean.dustguest.presenter.DialogProcessFragmentBarStyle;
 import com.grean.dustguest.presenter.PopWindow;
 import com.grean.dustguest.presenter.PopWindowListener;
 import com.grean.dustguest.presenter.RealTimeDataDisplay;
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvTableInfo,tvState,tvLocalServer,tvScanResult;
     private LocalServerManager localServerManager;
     private LastDataInfo dataInfo;
-    private AlertDialog dialog;
-    private ProgressBar pb;
+    private DialogProcessFragmentBarStyle dialog;
+   // private ProgressBar pb;
     private boolean connectResult;
     private RealTimeDataFormat dataFormat;
     private String dustName,idString;
@@ -277,12 +278,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startNewLocalServer(String id){
-        pb = new ProgressBar(this);
-        dialog = new AlertDialog.Builder(this).setTitle("正在连接设备").setView(pb).setCancelable(false).show();
+        //pb = new ProgressBar(this);
+        //dialog = new AlertDialog.Builder(this).setTitle("正在连接设备").setView(pb).setCancelable(false).show();
+        dialog = new DialogProcessFragmentBarStyle();
+        dialog.setCancelable(false);
+        dialog.show(getFragmentManager(),"startLocalServer");
+
+        dialog.showInfo("正在连接设备");
         Log.d(tag,"获取ID为:"+id);
         tvScanResult.setText("设备ID:");
         tvState.setText("当前状态:");
-        localServerManager.startLocalServer(id);
+        localServerManager.startLocalServer(id,dialog);
     }
 
     @Override
