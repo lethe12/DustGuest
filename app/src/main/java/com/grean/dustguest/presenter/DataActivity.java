@@ -11,8 +11,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +34,7 @@ import java.util.List;
  * Created by weifeng on 2018/1/22.
  */
 
-public class DataActivity extends Activity implements View.OnClickListener ,DataSearchListener{
+public class DataActivity extends Activity implements View.OnClickListener ,DataSearchListener,AdapterView.OnItemSelectedListener{
     private static final String tag = "DataActivity";
     private TextView tvDataStart,tvDataEnd;
     private Button btnSaveDataToLocal;
@@ -40,11 +43,13 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
     /*private List<String> date;
     private List<List<String>> data;*/
     private AlertDialog dialog;
+    private Spinner spDataTile;
     private DialogProcessFragmentBarStyle dialogProcess;
     private SearchData searchData;
     private EndDialogTimeSelected endDialogTimeSelected;
     private StartDialogTimeSelected startDialogTimeSelected;
     private String fileName,idString;
+    private int dataTileName=0;
     private static final String[] elementNames = {"扬尘","温度","湿度","气压","风速","风向","噪声"},
             getElementUnit = {"mg/m³","℃","%","hPa","m/s","°","dB"};
     private static final int msgShowAllHistory = 1,msgNoneData = 2,msgFailToSaveFile=3,msgSuccessToSaveFile=4;
@@ -61,6 +66,9 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
                     }
                     break;
                 case msgNoneData:
+                    if(dialogProcess!=null){
+                        dialogProcess.dismiss();
+                    }
                     Toast.makeText(DataActivity.this,"该时段没有历史数据",Toast.LENGTH_SHORT).show();
                     break;
                 case msgFailToSaveFile:
@@ -91,6 +99,7 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         tvDataEnd = findViewById(R.id.tvDataEnd);
         btnSaveDataToLocal = findViewById(R.id.btnSaveDataToLocal);
         scrollablePanel = findViewById(R.id.scrollable_panel);
+        spDataTile = findViewById(R.id.spSearchDataTitle);
 
         btnSaveDataToLocal.setOnClickListener(this);
         historyDataPanelAdapter = new HistoryDataPanelAdapter();
@@ -126,6 +135,12 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
             tvDataEnd.setText(tools.timestamp2string(now));
             tvDataStart.setText(tools.timestamp2string(now - 3600000l));
         }
+
+        ArrayAdapter<String> adapterDataTitles = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,searchData.getDataTitleStrings());
+        spDataTile.setAdapter(adapterDataTitles);
+        dataTileName = searchData.getDataTileName();
+        spDataTile.setSelection(dataTileName);
+        spDataTile.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -189,7 +204,7 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         dialogProcess.setCancelable(true);
         dialogProcess.show(getFragmentManager(),"search history data");
         dialogProcess.showInfo("正在下载数据...");
-        searchData.readyToSearchData(start,end);
+        searchData.readyToSearchData(start,end,dataTileName);
     }
 
     @Override
@@ -222,6 +237,16 @@ public class DataActivity extends Activity implements View.OnClickListener ,Data
         if(dialogProcess!=null){
             dialogProcess.showProcess(process);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        dataTileName = position;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     private class StartDialogTimeSelected implements DialogTimeSelected{

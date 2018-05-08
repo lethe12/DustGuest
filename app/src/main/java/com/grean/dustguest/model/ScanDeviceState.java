@@ -70,6 +70,10 @@ public class ScanDeviceState {
         clientProtocol.sendLastData(startDate,endDate,historyDataListener,historyData);
     }
 
+    public void getHistoryHourData(long startDate, long endDate, HistoryDataListener historyDataListener, GeneralHistoryData historyData){
+        clientProtocol.sendLastHourData(startDate,endDate,historyDataListener,historyData);
+    }
+
     public void getLog(long startDate, long endDate, LogListener logListener, GeneralLogFormat logFormat){
         clientProtocol.sendReadLog(startDate,endDate,logListener,logFormat);
     }

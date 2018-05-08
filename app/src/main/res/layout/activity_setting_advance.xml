@@ -335,12 +335,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="7dp"
                     android:layout_weight="1"
-                    android:text="电池异常:"
+                    android:text="散光板:"
                     app:layout_constraintLeft_toRightOf="@+id/tvRealTimeValue13"
-                    app:layout_constraintTop_toBottomOf="@+id/textView20"
-                    android:layout_marginStart="8dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
                 <TextView
                     android:id="@+id/tvRealTimeValue14"
@@ -358,12 +358,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:text="外接电源:"
+                    android:text="电源:"
                     app:layout_constraintLeft_toRightOf="@+id/tvRealTimeValue14"
-                    app:layout_constraintTop_toBottomOf="@+id/textView20"
-                    android:layout_marginStart="8dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
                 <TextView
                     android:id="@+id/tvRealTimeValue15"
@@ -504,12 +504,12 @@
                     android:id="@+id/btnOperateDustSetParaK"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
                     android:layout_weight="1"
                     android:text="保存系数"
                     app:layout_constraintTop_toBottomOf="@+id/tvOperateDustMeterTitle"
                     android:layout_marginRight="8dp"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginEnd="8dp" />
 
                 <Button
                     android:id="@+id/btnOperateCalMan"
@@ -539,25 +539,21 @@
                     android:text="时间:"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/swOperateAutoCal"
-                    android:layout_marginLeft="0dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/swOperateAutoCal" />
 
                 <TextView
                     android:id="@+id/tvOperateAutoCalDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:text="2017-09-11 00:00"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toRightOf="@+id/textView22"
-                    app:layout_constraintTop_toTopOf="@+id/textView22"
-                    android:layout_marginTop="0dp" />
+                    app:layout_constraintTop_toTopOf="@+id/textView22" />
 
                 <TextView
                     android:id="@+id/textView24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:text="间隔:"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toRightOf="@+id/tvOperateAutoCalDate"
@@ -567,7 +563,6 @@
                     android:id="@+id/etOperateAutoCalInterval"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:inputType="number"
@@ -582,7 +577,6 @@
                     android:id="@+id/textView5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:text="H"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toRightOf="@+id/etOperateAutoCalInterval"
@@ -601,7 +595,7 @@
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@color/darkgray"
@@ -629,8 +623,7 @@
                     android:text="扬尘报警上限："
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvOperateSystemTitle"
-                    android:layout_marginLeft="0dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvOperateSystemTitle" />
 
                 <EditText
                     android:id="@+id/etOperateAlarm"
@@ -731,7 +724,6 @@
                     android:id="@+id/etOperateServerIp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
                     android:ems="7"
                     android:inputType="textPersonName"
@@ -745,8 +737,6 @@
                     android:id="@+id/textView27"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
                     android:text="端口:"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toRightOf="@+id/etOperateServerIp"
@@ -756,8 +746,6 @@
                     android:id="@+id/etOperateServerPort"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
                     android:ems="3"
                     android:inputType="number"
                     android:maxLength="5"
@@ -780,7 +768,7 @@
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@color/darkgray"
@@ -806,7 +794,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
                     android:text="校准声级计"
                     android:textSize="14sp"
@@ -822,7 +809,8 @@
                     android:text="更新设置"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toRightOf="@+id/btnOperateNoiseCalibration"
-                    app:layout_constraintTop_toTopOf="@+id/btnOperateNoiseCalibration" />
+                    app:layout_constraintTop_toTopOf="@+id/btnOperateNoiseCalibration"
+                    android:layout_marginStart="8dp" />
 
                 <Button
                     android:id="@+id/btnOperateVideoSetting"
@@ -865,7 +853,8 @@
                     android:textSize="14sp"
                     app:layout_constraintTop_toBottomOf="@+id/tvOperateSoftwareVerison"
                     android:layout_marginLeft="8dp"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginStart="8dp" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -882,7 +871,6 @@
                     android:id="@+id/spDustMeter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     app:layout_constraintLeft_toRightOf="@+id/textView7"
@@ -892,7 +880,6 @@
                     android:id="@+id/spDustType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     app:layout_constraintLeft_toRightOf="@+id/spDustMeter"
@@ -920,8 +907,7 @@
                     android:text="粉尘仪"
                     android:textSize="8sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7"
-                    android:layout_marginLeft="0dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <Switch
                     android:id="@+id/swRelay1"
@@ -1123,7 +1109,6 @@
                     android:textSize="18sp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintTop_toBottomOf="@+id/btnForwardTest"
-                    android:layout_marginLeft="0dp"
                     app:layout_constraintLeft_toLeftOf="parent" />
 
                 <EditText
@@ -1139,7 +1124,8 @@
                     android:layout_marginTop="8dp"
                     app:layout_constraintTop_toBottomOf="@+id/btnForwardTest"
                     app:layout_constraintLeft_toRightOf="@+id/tvOperateSoftwareVerison"
-                    android:layout_marginLeft="8dp" />
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp" />
 
                 <Button
                     android:id="@+id/btnOperateUpdateSoftware"
@@ -1150,18 +1136,19 @@
                     android:layout_marginRight="8dp"
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/btnForwardTest" />
+                    app:layout_constraintTop_toBottomOf="@+id/btnForwardTest"
+                    android:layout_marginEnd="8dp" />
 
                 <Button
                     android:id="@+id/btnClearRecentDevices"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="0dp"
                     android:text="清理列表"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toRightOf="@+id/btnSavePassword"
-                    app:layout_constraintTop_toTopOf="@+id/btnSavePassword" />
+                    app:layout_constraintTop_toTopOf="@+id/btnSavePassword"
+                    android:layout_marginStart="8dp" />
 
             </android.support.constraint.ConstraintLayout>
 

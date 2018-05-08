@@ -42,7 +42,7 @@ public class ClientProtocol implements GeneralClientProtocol{
             JSONObject jsonObject = new JSONObject(rec);
             String type = JSON.getProtocolType(jsonObject);
             if(type.equals("realTimeData")){
-                //Log.d(tag,"实时"+rec);
+                Log.d(tag,"实时"+rec);
                 RealTimeDataFormat dataFormat = JSON.getRealTimeData(jsonObject);
                 if(realTimeDataDisplay!=null) {
                     realTimeDataDisplay.show(dataFormat);
@@ -58,6 +58,12 @@ public class ClientProtocol implements GeneralClientProtocol{
                 }
             }else if(type.equals("historyData")){
                 //Log.d(tag,rec);
+                if((historyDataListener!=null)&&(historyData!=null)){
+                    JSON.getHistoryData(jsonObject,historyData);
+                    historyDataListener.setHistoryData();
+                }
+            }else if(type.equals("historyHourData")){
+                Log.d(tag,rec);
                 if((historyDataListener!=null)&&(historyData!=null)){
                     JSON.getHistoryData(jsonObject,historyData);
                     historyDataListener.setHistoryData();
@@ -291,6 +297,17 @@ public class ClientProtocol implements GeneralClientProtocol{
             this.historyData = historyData;
             this.historyDataListener = listener;
             socketTask.send(JSON.readHistoryData(startDate,endDate));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendLastHourData(long startDate, long endDate, HistoryDataListener listener, GeneralHistoryData historyData) {
+        try {
+            this.historyData = historyData;
+            this.historyDataListener = listener;
+            socketTask.send(JSON.readHistoryHourData(startDate,endDate));
         } catch (JSONException e) {
             e.printStackTrace();
         }

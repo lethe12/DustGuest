@@ -8,11 +8,27 @@ public class RealTimeDataFormat {
     private float dust,temperature,humidity,pressure,windForce,windDirection,noise,value,
             entranceDewPoint,exitDewPoint,heatParams,exitTemperature,exitHumidity;
     private String state;
-    boolean alarm,serverConnected,acOk,BatteryLow,dustMeterRun;
+    boolean alarm,serverConnected,acOk,BatteryLow,dustMeterRun,calPos,measurePos;
     boolean [] relays = new boolean[5];
 
     public RealTimeDataFormat(){
 
+    }
+
+    public boolean isCalPos() {
+        return calPos;
+    }
+
+    public void setCalPos(boolean calPos) {
+        this.calPos = calPos;
+    }
+
+    public boolean isMeasurePos() {
+        return measurePos;
+    }
+
+    public void setMeasurePos(boolean measurePos) {
+        this.measurePos = measurePos;
     }
 
     public boolean isDustMeterRun() {

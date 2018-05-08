@@ -79,6 +79,15 @@ public class JSON {
         if(jsonObject.has("heatPwm")){
             format.setHeatParams(jsonObject.getInt("heatPwm"));
         }
+
+        if(jsonObject.has("calPos")){
+            format.setCalPos(jsonObject.getBoolean("calPos"));
+        }
+
+        if(jsonObject.has("measurePos")){
+            format.setMeasurePos(jsonObject.getBoolean("measurePos"));
+        }
+
         format.setRelays(1,jsonObject.getBoolean("relay1"));
         format.setRelays(2,jsonObject.getBoolean("relay2"));
         format.setRelays(3,jsonObject.getBoolean("relay3"));
@@ -225,6 +234,14 @@ public class JSON {
     public static byte[] readHistoryData(long startDate,long endDate) throws JSONException {
         JSONObject object = new JSONObject();
         object.put("protocolType","historyData");
+        object.put("startDate",startDate);
+        object.put("endDate",endDate);
+        return insertFrame(object.toString());
+    }
+
+    public static byte[] readHistoryHourData(long startDate,long endDate) throws JSONException {
+        JSONObject object = new JSONObject();
+        object.put("protocolType","historyHourData");
         object.put("startDate",startDate);
         object.put("endDate",endDate);
         return insertFrame(object.toString());

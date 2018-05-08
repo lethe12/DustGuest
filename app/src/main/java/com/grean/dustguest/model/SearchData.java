@@ -38,16 +38,27 @@ import jxl.write.biff.RowsExceededException;
 
 public class SearchData implements HistoryDataListener {
     private static final String tag = "SearchData";
+    private static final String[] dataTitle={"分钟数据","小时数据"};
     private DataSearchListener dataSearchListener;
     private GeneralHistoryData historyData = new GeneralHistoryData();
     private long startDate,endDate;//,indexDate;
     private ScanDeviceState state = ScanDeviceState.getInstance();
     private boolean hasNewData;
+    private int dataTileName=0;
     private Context context;
     public SearchData(DataSearchListener listener, Context context){
         this.dataSearchListener = listener;
         this.context = context;
     }
+
+    public int getDataTileName() {
+        return dataTileName;
+    }
+
+    public String[] getDataTitleStrings(){
+        return dataTitle;
+    }
+
     public void saveDataToFiles(String idString){
         if(context.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE")!= PackageManager.PERMISSION_GRANTED){
             dataSearchListener.saveDataComplete(false,"请允许App写入外部存储器权限");
@@ -143,7 +154,11 @@ public class SearchData implements HistoryDataListener {
         private boolean exportData2File(GeneralHistoryData data) {
             boolean exportDataResult=true;
             pathName = "/storage/emulated/0/GREAN/";//"/mnt/user/0/GREAN/"; // /storage/sdcard0/GREAN/
-            fileName = id+"数据"+ tools.nowTime2FileString()+"导出.xls";
+            if(dataTileName == 1) {
+                fileName = id + "小时数据" + tools.nowTime2FileString() + "导出.xls";
+            }else{
+                fileName = id + "分钟数据" + tools.nowTime2FileString() + "导出.xls";
+            }
             File path = new File(pathName);
             File file = new File(path,fileName);
 
@@ -291,7 +306,7 @@ public class SearchData implements HistoryDataListener {
         hasNewData = true;
     }
 
-    public void readyToSearchData(long start,long end){
+    public void readyToSearchData(long start,long end,int name){
         if(start < end){
             startDate = start;
             endDate = end;
@@ -304,18 +319,27 @@ public class SearchData implements HistoryDataListener {
             }
             return;
         }
-        new GetHistoryDataThread(this).start();
+        dataTileName = name;
+        new GetHistoryDataThread(this,name).start();
 
     }
+
+
 
     private class GetHistoryDataThread extends Thread{
         private long index;
         private HistoryDataListener listener;
-        private static final long SearchInterval = 900000l;
+        private long SearchInterval = 900000l;
+        private int titleName = 0;
 
-        public GetHistoryDataThread(HistoryDataListener listener){
+        public GetHistoryDataThread(HistoryDataListener listener,int dataTitleName){
             index = startDate;
             this.listener = listener;
+            if(dataTitleName == 1){
+                SearchInterval = 12*3600000l;
+            }
+
+            titleName = dataTitleName;
         }
         @Override
         public void run() {
@@ -327,7 +351,11 @@ public class SearchData implements HistoryDataListener {
 
             while (next <= endDate) {
                 hasNewData = false;
-                state.getHistoryData(index, next, listener, historyData);
+                if(titleName == 1){
+                   state.getHistoryHourData(index,next,listener,historyData);
+                }else {
+                    state.getHistoryData(index, next, listener, historyData);
+                }
                 try {
                     sleep(500);
                 } catch (InterruptedException e) {
@@ -351,7 +379,11 @@ public class SearchData implements HistoryDataListener {
             dataSearchListener.showDataDownLoadProcess(99);
             if(hasNewData){
                 if(index < endDate){
-                    state.getHistoryData(index, endDate, listener, historyData);
+                    if(titleName == 1){
+                        state.getHistoryHourData(index,endDate,listener,historyData);
+                    }else {
+                        state.getHistoryData(index, endDate, listener, historyData);
+                    }
                 }
                 try {
                     sleep(2000);

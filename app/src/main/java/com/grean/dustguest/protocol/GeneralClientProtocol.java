@@ -18,6 +18,7 @@ public interface GeneralClientProtocol {
     void setRealTimeDisplay(RealTimeDataDisplay display);
     void setRealTimeSettingDisplay(RealTimeSettingDisplay display);
     void sendLastData(long startDate,long endDate,HistoryDataListener listener,GeneralHistoryData historyData);
+    void sendLastHourData(long startDate,long endDate,HistoryDataListener listener,GeneralHistoryData historyData);
     void sendLoadSetting(GeneralConfig config);
     void sendLoadSetting(GeneralConfig config, SettingDisplay display);
     void sendDustMeterInfo(GeneralConfig config);
