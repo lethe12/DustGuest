@@ -46,7 +46,12 @@ public class ScanDeviceState {
     synchronized public void startScan(Context context,String id){
         config.setDevicesId(id);
         clientProtocol = ProtocolLib.getInstance().getClientProtocol();
-        SocketTask.getInstance().startSocketHeart("192.168.1.100",8888,context, clientProtocol);
+        if(id.substring(0,1).equals("s")) {
+            //id以s为开头的为简易版，使用router ip作为服务器ip
+            SocketTask.getInstance().startSocketHeart("RouterIP", 8888, context, clientProtocol);
+        }else{
+            SocketTask.getInstance().startSocketHeart("192.168.1.100", 8888, context, clientProtocol);
+        }
         //SocketTask.getInstance().startSocketHeart("192.168.1.200",8888,context, clientProtocol);//test offline
         if(!run) {
             new ScanRealTimeData().start();

@@ -42,7 +42,7 @@ public class ClientProtocol implements GeneralClientProtocol{
             JSONObject jsonObject = new JSONObject(rec);
             String type = JSON.getProtocolType(jsonObject);
             if(type.equals("realTimeData")){
-                Log.d(tag,"实时"+rec);
+                //Log.d(tag,"实时"+rec);
                 RealTimeDataFormat dataFormat = JSON.getRealTimeData(jsonObject);
                 if(realTimeDataDisplay!=null) {
                     realTimeDataDisplay.show(dataFormat);

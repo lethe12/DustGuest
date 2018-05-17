@@ -2,7 +2,10 @@ package com.grean.dustguest;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import com.grean.dustguest.model.ScanDeviceState;
@@ -55,7 +58,12 @@ public class SocketTask {
     public void startSocketHeart(String ip, int port, Context context, GeneralClientProtocol clientProtocol){
         this.clientProtocol = clientProtocol;
         this.context = context;
-        this.serverIp = ip;
+        if(ip.equals("RouterIP")){
+            this.serverIp = getWifiRouteIPAddress(context);
+        }else {
+            this.serverIp = ip;
+        }
+        Log.d(tag,"server ip = "+serverIp);
         this.serverPort = port;
         if (!heartRun){
             heartThread = new HeartThread();
@@ -91,7 +99,8 @@ public class SocketTask {
                 /*if(notifyProcessDialogInfo!=null){
                     notifyProcessDialogInfo.showInfo("新建链接");
                 }*/
-                Log.d(tag,"IP:"+serverIp+" Port:"+String.valueOf(serverPort));
+                Log.d(tag,"IP:"+serverIp+" Port:"+String.valueOf(serverPort)+"router"+getWifiRouteIPAddress(context));
+                //getAllIp();
                 socketClient.connect(new InetSocketAddress(serverIp,serverPort),5000);
                 socketClient.setTcpNoDelay(true);
                 socketClient.setSoLinger(true,30);
@@ -201,6 +210,26 @@ public class SocketTask {
         return "";
     }
 
+    /**
+     * wifi获取 路由ip地址
+     *
+     * @param context
+     * @return
+     */
+    private static String getWifiRouteIPAddress(Context context) {
+        WifiManager wifi_service = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        DhcpInfo dhcpInfo = wifi_service.getDhcpInfo();
+//        WifiInfo wifiinfo = wifi_service.getConnectionInfo();
+//        System.out.println("Wifi info----->" + wifiinfo.getIpAddress());
+//        System.out.println("DHCP info gateway----->" + Formatter.formatIpAddress(dhcpInfo.gateway));
+//        System.out.println("DHCP info netmask----->" + Formatter.formatIpAddress(dhcpInfo.netmask));
+        //DhcpInfo中的ipAddress是一个int型的变量，通过Formatter将其转化为字符串IP地址
+        String routeIp = Formatter.formatIpAddress(dhcpInfo.gateway);
+        Log.d(tag, "wifi route ip：" + routeIp);
+
+        return routeIp;
+    }
+
     /*作者：A_客
     链接：http://www.jianshu.com/p/be244fb85a4e
     來源：简书
@@ -272,7 +301,7 @@ public class SocketTask {
                     times++;
                 }
             }
-            Log.d(tag,"IP=V"+getIpAddressString());
+           // Log.d(tag,"IP=V"+getIpAddressString()+"router ip ="+getWifiRouteIPAddress(context));
             //getAllIp();
             while ((!interrupted())&&(heartRun)){
                 //Log.d(tag,"heartRun");
