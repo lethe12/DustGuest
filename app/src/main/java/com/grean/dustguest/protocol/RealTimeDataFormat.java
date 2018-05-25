@@ -6,13 +6,29 @@ package com.grean.dustguest.protocol;
 
 public class RealTimeDataFormat {
     private float dust,temperature,humidity,pressure,windForce,windDirection,noise,value,
-            entranceDewPoint,exitDewPoint,heatParams,exitTemperature,exitHumidity;
+            entranceDewPoint,exitDewPoint,heatParams,exitTemperature,exitHumidity,pipeTemperature,targetTemperature;
     private String state;
     boolean alarm,serverConnected,acOk,BatteryLow,dustMeterRun,calPos,measurePos;
     boolean [] relays = new boolean[5];
 
     public RealTimeDataFormat(){
 
+    }
+
+    public float getPipeTemperature() {
+        return pipeTemperature;
+    }
+
+    public void setPipeTemperature(float pipeTemperature) {
+        this.pipeTemperature = pipeTemperature;
+    }
+
+    public float getTargetTemperature() {
+        return targetTemperature;
+    }
+
+    public void setTargetTemperature(float targetTemperature) {
+        this.targetTemperature = targetTemperature;
     }
 
     public boolean isCalPos() {

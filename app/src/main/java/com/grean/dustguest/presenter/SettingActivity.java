@@ -84,11 +84,13 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                         tvRealTimeValue[9].setText(tools.float2String3(format.getExitHumidity()));
                         tvRealTimeValue[10].setText(tools.float2String3(format.getEntranceDewPoint()));
                         tvRealTimeValue[11].setText(tools.float2String3(format.getExitDewPoint()));
-                        tvRealTimeValue[12].setText(tools.float2String3(format.getHeatParams()));
+                        //tvRealTimeValue[12].setText(tools.float2String3(format.getHeatParams()));
                         //tvRealTimeValue[13].setText(String.valueOf(format.isBatteryLow()));
                         //tvRealTimeValue[14].setText(String.valueOf(format.isAcOk()));
                         tvRealTimeValue[13].setText("限位:"+String.valueOf(format.isCalPos())+";测量:"+ String.valueOf(format.isMeasurePos()));
                         tvRealTimeValue[14].setText("电池:"+String.valueOf(format.isBatteryLow())+";外接:"+ String.valueOf(format.isAcOk()));
+                        tvRealTimeValue[15].setText("加热管温度:"+String.valueOf(format.getPipeTemperature())+";预设温度:"
+                                +String.valueOf(format.getTargetTemperature())+";加热系数:"+String.valueOf(format.getHeatParams()));
                         tvRealTimeState.setText(format.getState());
                         swRelay1.setChecked(format.getRelays(1));
                         swRelay2.setChecked(format.getRelays(2));

@@ -123,6 +123,10 @@ public class JSON {
                 format.setExitHumidity((float) item.getDouble("value"));
             }else if(item.getString("name").equals("exitTemperature")){
                 format.setExitTemperature((float) item.getDouble("value"));
+            }else if(item.get("name").equals("pipeTemperature")) {
+                format.setPipeTemperature((float) item.getDouble("value"));
+            }else if(item.getString("name").equals("targetTemperature")){
+                format.setTargetTemperature((float) item.getDouble("value"));
             }else{
 
             }
