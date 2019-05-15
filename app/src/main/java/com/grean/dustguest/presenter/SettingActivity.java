@@ -44,8 +44,9 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         SettingManagerListener,RealTimeSettingDisplay,SettingDisplay,DialogTimeSelected{
     private static final String tag = "SettingActivity";
     private EditText etDustParaK,etDustParaB,etAutoInterval,etMotorStep,etMotorTime,etAlarmValue,
-            etMnCode,etServerIp,etServerPort,etUpdateUrl;
-    private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,swRelay5;
+            etMnCode,etServerIp,etServerPort,etUpdateUrl,etCameraOffset;
+    private Switch swAutoCalEnable,swDustMeter,swRelay1,swRelay2,swRelay3,swRelay4,
+            swRelay5,swCameraFunction;
     private TextView tvAutoCalTime,tvDustMeterInfo,tvRealTimeState,tvDeviceId;
     private TextView[] tvRealTimeValue=new TextView[16];
     private Spinner spDustName,spProtocols,spDustMeter;
@@ -191,6 +192,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         etServerIp = findViewById(R.id.etOperateServerIp);
         etServerPort = findViewById(R.id.etOperateServerPort);
         etUpdateUrl = findViewById(R.id.etOperateUpdateSoftwareUrl);
+        etCameraOffset = findViewById(R.id.etCameraOffset);
         swAutoCalEnable = findViewById(R.id.swOperateAutoCal);
         swDustMeter = findViewById(R.id.swDustMeter);
         swRelay1 = findViewById(R.id.swRelay1);
@@ -201,6 +203,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         spDustName = findViewById(R.id.spDustType);
         spDustMeter = findViewById(R.id.spDustMeter);
         spProtocols = findViewById(R.id.spOperateProticol);
+        swCameraFunction = findViewById(R.id.swCameraFunction);
         tvRealTimeValue[0] = findViewById(R.id.tvRealTimeValue1);
         tvRealTimeValue[1] = findViewById(R.id.tvRealTimeValue2);
         tvRealTimeValue[2] = findViewById(R.id.tvRealTimeValue3);
@@ -256,6 +259,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         findViewById(R.id.btnClearRecentDevices).setOnClickListener(this);
         findViewById(R.id.btnOperateRouterSetting).setOnClickListener(this);
         findViewById(R.id.btnOperateNoiseCalibration).setOnClickListener(this);
+        findViewById(R.id.btnSaveCameraOffset).setOnClickListener(this);
         btnSaveAutoCal = findViewById(R.id.btnOperateSaveAutoCal);
         btnSaveAutoCal.setOnClickListener(this);
         findViewById(R.id.btnOperateSaveAlarm).setOnClickListener(this);
@@ -266,6 +270,7 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         swRelay3.setOnClickListener(this);
         swRelay4.setOnClickListener(this);
         swRelay5.setOnClickListener(this);
+        swCameraFunction.setOnClickListener(this);
     }
 
 
@@ -409,6 +414,27 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
                 dialogProcessFragmentBarStyle.show(getFragmentManager(),"Noise Calibration");
                 manager.startNoiseCalibration(dialogProcessFragmentBarStyle,this);
                 break;
+            case R.id.btnSaveCameraOffset:
+                if(etCameraOffset.getText().toString() != null) {
+                    if(!etCameraOffset.getText().toString().isEmpty()) {
+                        int offset = Integer.valueOf(etCameraOffset.getText().toString());
+                        if((offset < -359)||(offset > 359)){
+                            Toast.makeText(SettingActivity.this,"偏离值,超范围!",Toast.LENGTH_SHORT).show();
+                        }else{
+                            manager.setCameraOffset(offset);
+                            Toast.makeText(SettingActivity.this,"设置成功!",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(SettingActivity.this,"设置失败,无效值!",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(SettingActivity.this,"设置失败,无效值!",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.swCameraFunction:
+                manager.setCameraEnable(swCameraFunction.isChecked());
+                Toast.makeText(SettingActivity.this,"设置成功,重启仪器生效!",Toast.LENGTH_SHORT).show();
+                break;
             default:
 
                 break;
@@ -476,6 +502,8 @@ public class SettingActivity extends Activity implements View.OnClickListener,Ad
         etMnCode.setText(config.getMnCode());
         etServerIp.setText(config.getServerIp());
         etServerPort.setText(String.valueOf(config.getServerPort()));
+        etCameraOffset.setText(String.valueOf(config.getCameraOffset()));
+        swCameraFunction.setChecked(config.isCameraEnable());
     }
 
     @Override

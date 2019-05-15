@@ -245,19 +245,19 @@ import android.annotation.SuppressLint;
 		if(angle<22.5){
 			return "北";
 		}else if(angle < 67.5){
-			return "西北";
+			return "东北";
 		}else if(angle < 112.5){
-			return "西";
+			return "东";
 		}else if(angle < 157.5){
-			return "西南";
+			return "东南";
 		}else if(angle < 202.5){
 			return "南";
 		}else if(angle < 247.5){
-			return "东南";
+			return "西南";
 		}else if(angle < 292.5){
-			return "东";
+			return "西";
 		}else if(angle < 337.5){
-			return "东北";
+			return "西北";
 		}else{
 			return "北";
 		}

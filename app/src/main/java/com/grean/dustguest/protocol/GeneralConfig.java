@@ -12,14 +12,31 @@ import org.json.JSONObject;
 
 public class GeneralConfig {
     private String[] dustNames,clientProtocolNames,dustMeterNames;
-    private int dustMeter,dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,clientProtocolName,MotorTime,MotorStep;
+    private int dustMeter,dustName,dustMeterPumpTime,dustMeterLaserTime,serverPort,
+            clientProtocolName,MotorTime,MotorStep,cameraOffset;
     private float dustParaK,dustParaB,alarmDust;
-    private boolean autoCalEnable;
+    private boolean autoCalEnable,cameraEnable;
     private long autoCalTime,autoCalInterval;
     private String serverIp,mnCode,configContent,dustNameContent,dustMeterInfoContent,devicesId;
 
     public GeneralConfig(){
 
+    }
+
+    public int getCameraOffset() {
+        return cameraOffset;
+    }
+
+    public void setCameraOffset(int cameraOffset) {
+        this.cameraOffset = cameraOffset;
+    }
+
+    public boolean isCameraEnable() {
+        return cameraEnable;
+    }
+
+    public void setCameraEnable(boolean cameraEnable) {
+        this.cameraEnable = cameraEnable;
     }
 
     public int getDustMeter() {
@@ -147,7 +164,13 @@ public class GeneralConfig {
                 MotorStep = jsonObject.getInt("motorStep");
             }
 
+            if(jsonObject.has("cameraEnable")){
+                cameraEnable = jsonObject.getBoolean("cameraEnable");
+            }
 
+            if(jsonObject.has("cameraOffset")){
+                cameraOffset = jsonObject.getInt("cameraOffset");
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

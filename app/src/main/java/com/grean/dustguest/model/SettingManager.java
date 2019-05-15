@@ -59,6 +59,16 @@ public class SettingManager implements DustMeterCalCtrl{
         protocol.sendUploadConfig(config);
     }
 
+    public void setCameraEnable(boolean enable){
+        config.setCameraEnable(enable);
+        protocol.sendUploadConfig(config);
+    }
+
+    public void setCameraOffset(int offset){
+        config.setCameraOffset(offset);
+        protocol.sendUploadConfig(config);
+    }
+
     public void setMotorParams(String timeString,String stepString){
         int time = Integer.valueOf(timeString);
         int step = Integer.valueOf(stepString);

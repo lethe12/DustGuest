@@ -219,6 +219,8 @@ public class JSON {
         object.put("motorStep",config.getMotorStep());
         object.put("dustName",config.getDustName());
         object.put("dustMeter",config.getDustMeter());
+        object.put("cameraEnable",config.isCameraEnable());
+        object.put("cameraOffset",config.getCameraOffset());
         return insertFrame(object.toString());
     }
 
