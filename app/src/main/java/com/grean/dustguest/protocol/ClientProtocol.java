@@ -104,7 +104,7 @@ public class ClientProtocol implements GeneralClientProtocol{
                         dialogInfo.showInfo(format.getString());
                         dialogInfo.showProcess(format.getProcess());
                     }
-                    if(format.getProcess() == 100) {
+                    if(format.getProcess() >= 100) {
                         if (dustMeterCalCtrl != null) {
                             dustMeterCalCtrl.onFinish();
                         }

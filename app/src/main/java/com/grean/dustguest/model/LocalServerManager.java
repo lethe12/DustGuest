@@ -96,10 +96,16 @@ public class LocalServerManager {
         if(wifiAdmin==null){
             wifiAdmin = new WifiAdmin(context);
         }
-        wifiAdmin.openWifi();
 
-        //wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
-        wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("greanYc"+id,"1234567890",3));
+        String [] wifiInfo = wifiAdmin.getWifiInfo().split(",");
+        Log.d(tag,"id="+deviceId+";ssid="+wifiInfo[0]);
+        if(wifiInfo[0].equals("SSID: greanYc"+deviceId)) {
+
+        }else {
+            wifiAdmin.openWifi();
+            //wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("GreanDust","1234567890",3));
+            wifiAdmin.addNetwork(wifiAdmin.CreateWifiInfo("greanYc" + id, "1234567890", 3));
+        }
         new StartLocalServer(ScanDeviceState.getInstance(),dialog).start();
     }
 

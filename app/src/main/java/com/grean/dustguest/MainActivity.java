@@ -1,13 +1,20 @@
 package com.grean.dustguest;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -140,8 +147,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         localServerManager = new LocalServerManager(this,this);
         ProtocolLib.getInstance().getClientProtocol().setRealTimeDisplay(this);
         dataInfo = new LastDataInfo(this);
+
+
         Log.d(tag,"重载activity");
         //tablesView.invalidate();//跟新view
+
+        PackageManager pm = getPackageManager();
+        boolean permission = (PackageManager.PERMISSION_GRANTED ==
+                pm.checkPermission("android.permission.ACCESS_COARSE_LOCATION",
+                        "com.grean.dustguest"));
+        if (!permission) {
+            showDialogTipUserRequestPermission();
+        }
+
+
+
+
+    }
+
+    // 提示用户该请求权限的弹出框
+    private void showDialogTipUserRequestPermission() {
+        new AlertDialog.Builder(this).setTitle("系统权限不可用")
+                .setMessage("由于在线扬尘需要获权限；\n否则，您将无法正常使用")
+                .setPositiveButton("立即开启", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startRequestPermission();
+                        }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+                        }).setCancelable(false).show();
+    }
+    // 开始提交请求权限
+    private void startRequestPermission() {
+        PackageManager pm = getPackageManager();
+        PackageInfo pack = null;
+        try {
+            pack = pm.getPackageInfo("com.grean.dustguest", PackageManager.GET_PERMISSIONS);
+            String[] permissionStrings = pack.requestedPermissions;
+            ActivityCompat.requestPermissions(this, permissionStrings, 321);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initView(){
